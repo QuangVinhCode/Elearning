@@ -1,0 +1,29 @@
+.site-layout-background {
+  background-color: #fff !important;
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+.ant-layout-header span.trigger svg {
+  width: 25px !important;
+  height: 25px !important;
+  margin: 10px !important;
+}
+
+.logo h2 {
+  color: #fff !important;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+.User {
+  cursor: pointer;
+}
+.User:hover {
+  opacity: 80;
+  color: red;
+}
+
