@@ -17,8 +17,6 @@ import DocumentDetails from "./DocumentDetails";
 class ListDocument extends Component {
   constructor(props) {
     super(props);
-    const storedUserSession = sessionStorage.getItem("userSession");
-    const userSession = storedUserSession ? JSON.parse(storedUserSession) : null;
     this.state = {
       open: false,
       document: {

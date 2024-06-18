@@ -8,20 +8,20 @@ import { Avatar, Col, Layout, Menu, Row, message } from "antd";
 import React, { useEffect, useState } from "react";
 import {
   MdAddCircleOutline,
-  MdChat,
   MdClass,
   MdFormatListBulleted,
-  MdGames,
   MdLogout,
   MdOutlineHome,
   MdOutlinePlayLesson,
-  MdSubject,
 } from "react-icons/md";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "../components/home/Home";
 import AddOrEditCategory from "../components/category/AddOrEditCategory";
 import ListCategory from "../components/category/ListCategory";
 import ListDocument from "../components/document/ListDocument";
+import Censoring from "../components/document/Censoring";
+import Censored from "../components/document/Censored";
+import ErrorCensorship from "../components/document/ErrorCensorship";
 import { useDispatch, useSelector } from "react-redux";
 import { LOG_OUT } from "../redux/actions/actionTypes";
 import { setError, setMessage } from "../redux/actions/commonAction";
@@ -116,9 +116,28 @@ function DashboardPage() {
             },
             {
               key: "4",
-              icon: <MdOutlinePlayLesson />,
+              icon: <MdClass />,
               label: "Kiểm duyệt",
-              onClick: () => navigate("/dashboard/document/list"),
+              children: [
+                {
+                  key: "41",
+                  icon: <MdFormatListBulleted />,
+                  label: "Chưa kiểm duyệt",
+                  onClick: () => navigate("/dashboard/document/censoring"),
+                },
+                {
+                  key: "42",
+                  icon: <MdAddCircleOutline />,
+                  label: "Đã kiểm duyệt",
+                  onClick: () => navigate("/dashboard/document/censored"),
+                },
+                {
+                  key: "43",
+                  icon: <MdAddCircleOutline />,
+                  label: "Lỗi kiểm duyệt",
+                  onClick: () => navigate("/dashboard/document/error_censorship"),
+                },
+              ],
             },
             {
               key: "8",
@@ -184,6 +203,18 @@ function DashboardPage() {
               ></Route>
               <Route path="/category/list" element={<ListCategory />}></Route>
               <Route path="/document/list" element={<ListDocument />}></Route>
+              <Route
+                path="/document/censoring"
+                element={<Censoring />}
+              ></Route>
+              <Route
+                path="/document/censored"
+                element={<Censored />}
+              ></Route>
+              <Route
+                path="/document/error_censorship"
+                element={<ErrorCensorship />}
+              ></Route>
             </Routes>
             <Outlet></Outlet>
           </div>

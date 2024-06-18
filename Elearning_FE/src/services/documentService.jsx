@@ -25,11 +25,17 @@ export default class DocumentService {
   getDocuments = async () => {
     return await axios.get(API_DOCUMENT);
   };
-  getLessonsBySubject = async (id) => {
-    return await axios.patch(API_DOCUMENT + "/danhmuc/" + id);
+  getDocumentByCensorship = async (id) => {
+    return await axios.get(API_DOCUMENT + "/censorship/" + id);
   };
   deleteDocument = async (id) => {
     return await axios.delete(API_DOCUMENT + "/" + id);
+  };
+  confirmDocument = async (id) => {
+    return await axios.patch(API_DOCUMENT + "/confirm/" + id);
+  };
+  errorDocument = async (id,note) => {
+    return await axios.patch(API_DOCUMENT + "/error/" + id + "/" + note);
   };
   getDocument = async (id) => {
     return await axios.get(API_DOCUMENT + "/" + id + "/get");

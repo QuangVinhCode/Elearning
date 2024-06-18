@@ -9,6 +9,7 @@ import com.vn.edu.elearning.dto.TailieuDto;
 import com.vn.edu.elearning.exeception.FileNotFoundException;
 import com.vn.edu.elearning.repository.TaikhoandangbantailieuRepository;
 import com.vn.edu.elearning.service.FileStorageService;
+import com.vn.edu.elearning.service.TaiikhoanService;
 import com.vn.edu.elearning.service.MapValidationErrorService;
 import com.vn.edu.elearning.service.TaikhoandangbantailieuService;
 import com.vn.edu.elearning.service.TailieuService;
@@ -121,6 +122,11 @@ public class TailieuController {
         return new ResponseEntity<>(tailieuService.findAll(),HttpStatus.OK);
     }
 
+    @GetMapping("/censorship/{censorship}")
+    public ResponseEntity<?> getDocumentsByCensorship(@PathVariable("censorship") String censorship){
+        return new ResponseEntity<>(tailieuService.findAllByCensorship(censorship),HttpStatus.OK);
+    }
+
 
     @GetMapping("/{id}/get")
     public  ResponseEntity<?> getDocument(@PathVariable("id") Long id){
@@ -133,5 +139,21 @@ public class TailieuController {
         tailieuService.deleteById(id);
 
         return  new ResponseEntity<>("Tài liệu có id " + id + " đã được xóa",HttpStatus.OK);
+    }
+
+    @PatchMapping("/confirm/{id}")
+    public ResponseEntity<?> confirmDocument(@PathVariable("id") Long id)
+    {
+        tailieuService.confirm(id);
+
+        return  new ResponseEntity<>("Đã kiểm duyệt",HttpStatus.OK);
+    }
+
+    @PatchMapping("/error/{id}/{note}")
+    public ResponseEntity<?> errorDocument(@PathVariable("id") Long id,@PathVariable("note") String note)
+    {
+        tailieuService.error(id,note);
+
+        return  new ResponseEntity<>("Đã chuyển sang tài liệu lỗi",HttpStatus.OK);
     }
 }

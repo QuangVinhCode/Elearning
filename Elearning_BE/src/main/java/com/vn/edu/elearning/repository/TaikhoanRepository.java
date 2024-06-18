@@ -10,4 +10,5 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
 
 
     Optional<Taikhoan> findByTendangnhapContains(String tendangnhap);
+
 }

@@ -2,9 +2,11 @@ package com.vn.edu.elearning.service;
 
 
 import com.vn.edu.elearning.domain.Danhmuc;
+import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.domain.Tailieu;
 import com.vn.edu.elearning.dto.TailieuDto;
 import com.vn.edu.elearning.exeception.TailieuException;
+import com.vn.edu.elearning.repository.TaikhoanRepository;
 import com.vn.edu.elearning.repository.TailieuRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class TailieuService {
     private TailieuRepository tailieuRepository;
 
     @Autowired
+    private TaikhoanRepository taikhoanRepository;
+
+    @Autowired
     private FileStorageService fileStorageService;
 
     public Tailieu save(TailieuDto dto) {
@@ -29,13 +34,21 @@ public class TailieuService {
 
         BeanUtils.copyProperties(dto,entity);
 
-//        entity.setTentailieu(dto.getTentailieu());
-//        entity.setMota(dto.getMota());
-//        entity.setGiaban(dto.getGiaban());
         Danhmuc danhmuc = new Danhmuc();
         danhmuc.setMadanhmuc(dto.getMadanhmuc());
         entity.setDanhmuc(danhmuc);
-        System.out.println("entity :" + entity);
+
+        Optional<Taikhoan> taikhoan = taikhoanRepository.findById(dto.getMataikhoan());
+        System.out.println("entity  taikhoan:" + taikhoan.get().getTendangnhap().toString());
+        if (taikhoan.get().isQuyenhan())
+        {
+            entity.setKiemduyet("Đã kiểm duyệt");
+        }
+        else{
+                entity.setKiemduyet("Chưa kiểm duyệt");
+        }
+
+        System.out.println("entity :" + entity.getKiemduyet());
         if (dto.getPdfFile() != null)
         {
             String filename = fileStorageService.storePDFFile(dto.getPdfFile());
@@ -54,6 +67,10 @@ public class TailieuService {
         return tailieuRepository.findAll();
     }
 
+    public List<?> findAllByCensorship(String censorship) {
+        return tailieuRepository.findByKiemduyetContains(censorship);
+    }
+
     public Page<Tailieu> findAll(Pageable pageable){
         return tailieuRepository.findAll(pageable);
     }
@@ -67,7 +84,15 @@ public class TailieuService {
         }
         return found.get();
     }
+    public Taikhoan findTaikhoan(Long id) {
+        Optional<Taikhoan> found = taikhoanRepository.findById(id);
 
+        if (!found.isPresent())
+        {
+            throw new TailieuException("Tài khoản có id "+ id + " không tồn tại");
+        }
+        return found.get();
+    }
     public void  deleteById(Long id){
         Tailieu existed = findById(id);
 
@@ -100,5 +125,21 @@ public class TailieuService {
         }
 
         return tailieuRepository.save(entity);
+    }
+
+    public Tailieu confirm(Long id) {
+        Tailieu tailieu = findById(id);
+
+        tailieu.setKiemduyet("Đã kiểm duyệt");
+
+        return tailieuRepository.save(tailieu);
+    }
+
+    public Tailieu error(Long id,String note) {
+        Tailieu tailieu = findById(id);
+
+        tailieu.setKiemduyet("Lỗi kiểm duyệt");
+        tailieu.setGhichu(note);
+        return tailieuRepository.save(tailieu);
     }
 }

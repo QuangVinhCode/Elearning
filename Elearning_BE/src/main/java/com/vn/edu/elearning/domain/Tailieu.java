@@ -33,8 +33,11 @@ public class Tailieu {
     @Column(name = "diachiluutru", nullable = false, length = 50)
     private String diachiluutru;
 
-    @Column(name = "kiemduyet", nullable = false)
-    private boolean kiemduyet;
+    @Column(name = "kiemduyet", nullable = false,length = 50)
+    private String kiemduyet;
+
+    @Column(name = "ghichu",length = 150)
+    private String ghichu;
 
     @ManyToOne
     @JoinColumn(name = "madanhmuc")
