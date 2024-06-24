@@ -37,6 +37,7 @@ class DocumentForm extends Component {
   }
 
   async componentDidMount() {
+   
     try {
       // Assuming getSubjects is a Redux action
       await this.props.getCategories();
@@ -79,7 +80,7 @@ class DocumentForm extends Component {
 
   handleSubjectChange = (value) => {
     console.log("first in handleSubjectChange");
-   
+
     // Cập nhật giá trị subject_id trong state
     this.setState({
       document: {
@@ -88,8 +89,9 @@ class DocumentForm extends Component {
       },
     });
   };
-
+ 
   render() {
+    
     const { open, onCreate, onCancel } = this.props;
     const { document } = this.props;
     const { categories } = this.props;
@@ -97,6 +99,7 @@ class DocumentForm extends Component {
     const userSession = storedUserSession
       ? JSON.parse(storedUserSession)
       : null;
+     
     let title = "Thêm tài liệu";
     let okText = "Thêm";
     if (document.matailieu) {
@@ -117,7 +120,7 @@ class DocumentForm extends Component {
         cancelText="Hủy"
         onCancel={() => {
           this.form.current.resetFields(); // Reset form fields
-          onCancel();
+          onCancel();        
         }}
         onOk={() => {
           this.form.current
@@ -193,7 +196,7 @@ class DocumentForm extends Component {
           <Form.Item
             label="Tài khoản đăng tài liệu"
             name="mataikhoan"
-            initialValue={userSession.data.mataikhoan}
+            initialValue={userSession ? userSession.data.mataikhoan : ""}
             style={{ paddingLeft: 20 }}
             hidden={true}
           >

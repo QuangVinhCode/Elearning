@@ -11,7 +11,6 @@ import {
 import DocumentService from "../../services/documentService";
 export const insertDocument = (object) => async (dispatch) => {
   const service = new DocumentService();
-
   try {
     console.log("Thêm tài liệu");
 
@@ -21,6 +20,7 @@ export const insertDocument = (object) => async (dispatch) => {
     });
     console.log("thêm object in action");
     console.log(object);
+
     const response = await service.insertDocument(object);
     console.log("response");
     console.log(response);
@@ -39,7 +39,6 @@ export const insertDocument = (object) => async (dispatch) => {
         type: COMMON_MESSAGE_SET,
         payload: "tài liệu đã được thêm",
       });
-      
     } else {
       dispatch({
         type: COMMON_ERROR_SET,
@@ -149,6 +148,7 @@ export const getDocument = (id) => async (dispatch) => {
         type: DOCUMENT_SET,
         payload: response.data,
       });
+      return response.data;
     } else {
       dispatch({
         type: COMMON_ERROR_SET,
@@ -255,7 +255,7 @@ export const confirmDocument = (id) => async (dispatch) => {
   });
 };
 
-export const errorDocument = (id,note) => async (dispatch) => {
+export const errorDocument = (id, note) => async (dispatch) => {
   const service = new DocumentService();
 
   try {
@@ -266,7 +266,7 @@ export const errorDocument = (id,note) => async (dispatch) => {
       payload: true,
     });
 
-    const response = await service.errorDocument(id,note);
+    const response = await service.errorDocument(id, note);
     console.log(response);
     if (response.status === 200) {
       dispatch({
@@ -328,8 +328,7 @@ export const updateDocument = (object) => async (dispatch) => {
       dispatch({
         type: COMMON_MESSAGE_SET,
         payload: "Tài liệu đã được sửa",
-      }); 
-      
+      });
     } else {
       dispatch({
         type: COMMON_ERROR_SET,

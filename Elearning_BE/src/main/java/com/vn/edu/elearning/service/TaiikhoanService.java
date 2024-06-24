@@ -32,7 +32,7 @@ public class TaiikhoanService {
         Random random = new Random();
 
         // Tạo ID ngẫu nhiên trong khoảng từ 1 đến 9999
-        int randomId = random.nextInt(9999) + 1;
+        int randomId = random.nextInt(99) + 1;
 
         // Lấy thời gian hiện tại
         LocalDateTime currentTime = LocalDateTime.now();
@@ -48,6 +48,8 @@ public class TaiikhoanService {
         String password = encryptPassword(dto.getMatkhau());
         System.out.println("MK : " + password);
         entity.setMatkhau(password);
+        entity.setQuyenhan("Người dùng");
+        entity.setSodu(0L);
         return taikhoanRepository.save(entity);
     }
 
@@ -75,10 +77,9 @@ public class TaiikhoanService {
     }
 
     public Taikhoan login(String username,String password) {
-        System.out.println("________________");
         System.out.println(username + password);
         Optional<Taikhoan> found = taikhoanRepository.findByTendangnhapContains(username);
-        if (found.isEmpty())
+        if (!found.isPresent())
         {
             throw new TaikhoanException("Tài khoản không tồn tại");
         }

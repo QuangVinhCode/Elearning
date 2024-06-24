@@ -7,6 +7,7 @@ import Navbar from "../components/home/Navbar";
 import Home from "./Home";
 import Documents from "./Documents";
 import DocumentForm from "../components/document/DocumentForm";
+import UserDocumentDetals from "../components/document/UserDocumentDetals";
 import { insertDocument, updateDocument } from "../redux/actions/documentAction";
 import { setError, setMessage } from "../redux/actions/commonAction";
 import { message } from "antd";
@@ -70,6 +71,7 @@ function Users({ insertDocument, updateDocument }) {
         <Route path="/document" element={<Documents />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/detail/:id" element={<UserDocumentDetals />} />
       </Routes>
 
       {showDocumentForm && (

@@ -40,6 +40,11 @@ public class TaikhoandangbantailieuService {
     }
 
 
-
+    public boolean checkSalesAccount(Long matk,Long matl) {
+        Optional<Taikhoandangbantailieu> found = taikhoandangbantailieuRepository.findByTaikhoan_MataikhoanAndTailieu_Matailieu(matk,matl);
+        if(found.isPresent())
+            return true;
+        return false;
+    }
 
 }

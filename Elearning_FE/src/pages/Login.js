@@ -50,7 +50,7 @@ const Login = () => {
             ]}
           >
             <div className="input-box">
-              <Input />
+              <Input type="text" placeholder="Tên đăng nhập" required />
               <FaUser className="icon" />
             </div>
           </Form.Item>
@@ -65,13 +65,12 @@ const Login = () => {
             ]}
           >
             <div className="input-box">
-              <Input />
+              <Input type="password" placeholder="Mật Khẩu" required />
               <FaLock className="icon" />
             </div>
           </Form.Item>
           <div className="remember-forgot">
-            <label>
-              {" "}
+            <label className="nmk">
               <input type="checkbox" />
               Nhớ mật khẩu
             </label>
@@ -82,8 +81,7 @@ const Login = () => {
             Đăng nhập
           </Button>
           <div className="register-link">
-            <p>
-              {" "}
+            <p className="cctk">
               Chưa có tài khoản ? <a href="/users/register"> Đăng ký</a>
             </p>
           </div>

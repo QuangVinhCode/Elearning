@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Worker, Viewer } from "@react-pdf-viewer/core";
 import DocumentService from "../../services/documentService";
-import "@react-pdf-viewer/core/lib/styles/index.css";
 import { Modal } from "antd";
+import Pdf from "@mikecousins/react-pdf";
 
 class DocumentDetails extends Component {
   render() {
@@ -12,16 +11,16 @@ class DocumentDetails extends Component {
     return (
       <Modal
         title="Chi tiết tài liệu"
-        open={open} // Correct prop is "visible" instead of "open"
+        visible={open}
         onCancel={onCancel}
         cancelText="Đóng"
         okButtonProps={{ style: { display: "none" } }}
+        width="80%"
+        bodyStyle={{ padding: 0, height: '80vh' }}
       >
-        <Worker
-          workerUrl={`https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js`}
-        >
-          <Viewer fileUrl={pdfUrl} />
-        </Worker>
+        <div style={{ height: '100%', overflow: 'auto' }}>
+          <Pdf file={pdfUrl} scale={1.5} />
+        </div>
       </Modal>
     );
   }

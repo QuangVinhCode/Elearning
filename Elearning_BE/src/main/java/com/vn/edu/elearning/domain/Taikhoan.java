@@ -23,7 +23,7 @@ public class Taikhoan {
     @Column(name = "tendangnhap", nullable = false, length = 100)
     private String tendangnhap;
 
-    @Column(name = "Matkhau", nullable = false, length = 100)
+    @Column(name = "matkhau", nullable = false, length = 100)
     private String matkhau;
 
     @Column(name = "sodienthoai", nullable = false, length = 50)
@@ -32,11 +32,11 @@ public class Taikhoan {
     @Column(name = "gmail", nullable = false, length = 50)
     private String gmail;
 
-    @Column(name = "quyenhan", nullable = false)
-    private boolean quyenhan;
+    @Column(name = "quyenhan", nullable = false, length = 50)
+    private String quyenhan;
 
-    @Column(name = "diemtichluy", nullable = false, length = 50)
-    private Long diemtichluy;
+    @Column(name = "sodu", nullable = false, length = 50)
+    private Long sodu;
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     @JsonIgnore

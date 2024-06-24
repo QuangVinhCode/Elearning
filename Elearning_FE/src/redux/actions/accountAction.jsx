@@ -32,7 +32,7 @@ export const loginAccount = (object, navigate) => async (dispatch) => {
       };
       sessionStorage.setItem("userSession", JSON.stringify(userSession));
       console.log(response.data)
-      if (response.data.quyenhan === true) {
+      if (response.data.quyenhan === "Quản trị viên") {
         navigate("/dashboard/*");
       } else {
         navigate("/users");
@@ -78,7 +78,7 @@ export const insertAccount = (object, navigate) => async (dispatch) => {
         type: COMMON_MESSAGE_SET,
         payload: "Tài khoản đã được tạo thành công",
       });
-      navigate("/login");
+      navigate("/users/login");
     } else {
       dispatch({
         type: COMMON_ERROR_SET,

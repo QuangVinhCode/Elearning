@@ -65,18 +65,20 @@ function Navbar({ onUploadClick }) {
                 <DropdownMenu />
               </Link>
             </li>
-            <li className="nav-item">
-              <Link
-                to="#"
-                className="nav-links"
-                onClick={() => {
-                  closeMobileMenu();
-                  onUploadClick();
-                }}
-              >
-                Tải lên
-              </Link>
-            </li>
+            {userSession && (
+              <li className="nav-item">
+                <Link
+                  to="#"
+                  className="nav-links"
+                  onClick={() => {
+                    closeMobileMenu();
+                    onUploadClick();
+                  }}
+                >
+                  Tải lên
+                </Link>
+              </li>
+            )}
             {userSession ? (
               <li className="nav-item">
                 <span className="nav-links">

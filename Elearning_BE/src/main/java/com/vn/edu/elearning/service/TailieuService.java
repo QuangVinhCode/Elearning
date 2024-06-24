@@ -40,7 +40,7 @@ public class TailieuService {
 
         Optional<Taikhoan> taikhoan = taikhoanRepository.findById(dto.getMataikhoan());
         System.out.println("entity  taikhoan:" + taikhoan.get().getTendangnhap().toString());
-        if (taikhoan.get().isQuyenhan())
+        if (taikhoan.get().getQuyenhan().equals("Quản trị viên"))
         {
             entity.setKiemduyet("Đã kiểm duyệt");
         }
@@ -84,15 +84,6 @@ public class TailieuService {
         }
         return found.get();
     }
-    public Taikhoan findTaikhoan(Long id) {
-        Optional<Taikhoan> found = taikhoanRepository.findById(id);
-
-        if (!found.isPresent())
-        {
-            throw new TailieuException("Tài khoản có id "+ id + " không tồn tại");
-        }
-        return found.get();
-    }
     public void  deleteById(Long id){
         Tailieu existed = findById(id);
 
@@ -114,6 +105,17 @@ public class TailieuService {
         danhmuc.setMadanhmuc(dto.getMadanhmuc());
         entity.setDanhmuc(danhmuc);
         entity.setMatailieu(id);
+        Optional<Taikhoan> taikhoan = taikhoanRepository.findById(dto.getMataikhoan());
+        System.out.println("entity  taikhoan:" + taikhoan.get().getTendangnhap().toString());
+        if (taikhoan.get().getQuyenhan().equals("Quản trị viên"))
+        {
+            entity.setKiemduyet("Đã kiểm duyệt");
+        }
+        else{
+            entity.setKiemduyet("Chưa kiểm duyệt");
+        }
+
+        System.out.println("entity :" + entity.getKiemduyet());
         if (dto.getPdfFile() != null)
         {
             String filename = fileStorageService.storePDFFile(dto.getPdfFile());
