@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Pdf from "@mikecousins/react-pdf";
 import withRouter from "../../helpers/withRouter";
-import { getDocument } from "../../redux/actions/documentAction";
+import { getDocument, payDocument } from "../../redux/actions/documentAction";
 import DocumentService from "../../services/documentService";
 import PayService from "../../services/payService";
 import "./UserDocumentDetals.css";
-
+import { Modal } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 class UserDocumentDetails extends Component {
   constructor(props) {
     super(props);
@@ -14,55 +15,134 @@ class UserDocumentDetails extends Component {
       page: 1,
       numPages: null,
       maxPages: null,
+      status: null,
+      showPaymentMessage: false,
+      isPaid: false, // Trạng thái kiểm tra đã thanh toán
+      canDownload: false, // Trạng thái xác nhận có thể tải xuống
+      mataikhoan: null,
+      reset: false,
     };
   }
 
   componentDidMount() {
     const { id } = this.props.router.params;
     this.props.getDocument(id);
-  }
-
-  onLoadSuccess = (pdfDocument) => {
-    console.log("PDF loaded successfully", pdfDocument);
-    const { document } = this.props;
     const storedUserSession = sessionStorage.getItem("userSession");
     const userSession = storedUserSession
       ? JSON.parse(storedUserSession)
       : null;
     const mataikhoan = userSession ? userSession.data.mataikhoan : 0;
-    PayService.checkDocumentView(mataikhoan, document.matailieu).then(
-      (result) => {
-        console.log("Kết quả kiểm tra " + result);
-        const numPages = pdfDocument.numPages;
-        const maxPages =
-          result === "Chưa thanh toán" ? Math.ceil(numPages * 0.2) : numPages;
-        this.setState({ numPages, maxPages });
+    PayService.checkDocumentView(mataikhoan, id).then((result) => {
+      console.log("Kết quả kiểm tra " + result);
+      const status = result;
+      this.setState({ status, mataikhoan });
+      if (status === "Đã thanh toán" || status === "Chủ sở hữu") {
+        this.setState({ isPaid: true, canDownload: true });
+      }
+    });
+  }
+
+  onLoadSuccess = (pdfDocument) => {
+    console.log("PDF loaded successfully", pdfDocument);
+    const numPages = pdfDocument.numPages;
+    const maxPages =
+      this.state.status === "Chưa thanh toán"
+        ? Math.ceil(numPages * 0.2)
+        : numPages;
+    this.setState({ numPages, maxPages });
+  };
+  onPageLoadSuccess = () => {
+    if (
+      this.state.page === this.state.maxPages &&
+      this.state.page !== this.state.numPages
+    ) {
+      this.setState({ showPaymentMessage: true });
+    }
+  };
+  handleNextPage = () => {
+    this.setState(
+      (prevState) => ({ page: prevState.page + 1 }),
+      () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     );
   };
+  handlePrevPage = () => {
+    this.setState((prevState) => ({
+      page: prevState.page - 1,
+    }));
+  };
+  // Xử lý sự kiện khi nhấn vào nút Tải
+  handleDownload = () => {
+    const { isPaid } = this.state;
+    console.log("isPaid: " + isPaid);
+    // Nếu đã thanh toán, cho phép tải xuống
+    if (isPaid) {
+      // Thực hiện tải xuống
+      const { document } = this.props;
+      const pdfUrl = DocumentService.getDocumentPDFUrl(document.diachiluutru);
+      const link = window.document.createElement("a");
+      link.href = pdfUrl;
+      link.setAttribute("download", document.tentailieu || "document.pdf");
+      window.document.body.appendChild(link);
+      link.click();
+      window.document.body.removeChild(link);
+    } else {
+      // Nếu chưa thanh toán, hiển thị thông báo yêu cầu thanh toán trước khi tải
+      this.setState({ showPaymentMessage: true });
+    }
+  };
+  onPayConfirm = () => {
+    const { document } = this.props;
+    const message = "Bạn có chắt chắn muốn thanh toán " + document.tentailieu;
 
+    Modal.confirm({
+      title: "Thông báo",
+      icon: <ExclamationCircleOutlined />,
+      content: message,
+      onOk: this.payDocument,
+      okText: "Xác nhận",
+      cancelText: "Hủy",
+    });
+  };
+  payDocument = () => {
+    console.log("Xác nhận thanh toán");
+    console.log(this.state.mataikhoan);
+    console.log(this.props.router.params.id);
+    this.props
+      .payDocument(this.state.mataikhoan, this.props.router.params.id)
+      .then((success) => {
+        if (success) {
+          // Payment successful, set reset message state
+          console.log("success " + success);
+          if (success) {
+            this.setState({ reset: true });
+          }
+        }
+      });
+  };
+  handleResetWebsite = () => {
+    // Reload the entire page
+    window.location.reload();
+  };
   render() {
     const { document } = this.props;
     const pdfUrl = DocumentService.getDocumentPDFUrl(document.diachiluutru);
-    const { page, maxPages } = this.state;
+    const { page, maxPages, showPaymentMessage, canDownload, reset } =
+      this.state;
+    // Format giá tiền thành tiền Việt Nam
+    const formattedPrice = new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(document.giaban);
     return (
       <div className="container">
-        <div className="left-panel">
-          <div className="document-description">
-            <div className="document-title">{document.tentailieu}</div>
-            <div className="document-metadata">
-              <div className="metadata-item">
-                <span className="metadata-label">Mô tả:</span>
-              </div>
-            </div>
-            <div className="document-text">{document.mota}</div>
-          </div>
-        </div>
         <div className="pdf-viewer-container">
           <Pdf
             file={pdfUrl}
             page={page}
             onDocumentLoadSuccess={this.onLoadSuccess}
+            onPageLoadSuccess={this.onPageLoadSuccess}
           >
             {({ pdfDocument, pdfPage, canvas }) => (
               <>
@@ -73,38 +153,71 @@ class UserDocumentDetails extends Component {
                     <button
                       className="prev-button"
                       disabled={page === 1}
-                      onClick={() =>
-                        this.setState((prevState) => ({
-                          page: prevState.page - 1,
-                        }))
-                      }
+                      onClick={this.handlePrevPage}
                     >
                       Trước
                     </button>
                     <button
                       className="next-button"
                       disabled={page === maxPages}
-                      onClick={() =>
-                        this.setState((prevState) => ({
-                          page: prevState.page + 1,
-                        }))
-                      }
+                      onClick={this.handleNextPage}
                     >
                       Sau
                     </button>
                     <p>
                       Trang {page} / {pdfDocument.numPages}
                     </p>
+                    {showPaymentMessage && (
+                      <div className="payment-message">
+                        <p>
+                          Để xem toàn bộ nội dung và tải về, vui lòng thanh
+                          toán.
+                        </p>
+                        <button
+                          onClick={() =>
+                            this.setState({ showPaymentMessage: false })
+                          }
+                        >
+                          Đóng
+                        </button>
+                      </div>
+                    )}
+                    {reset && (
+                      <div className="payment-message">
+                        <p>Hãy nhấn reset website để có thể xem hoặc tải về</p>
+                        <button
+                          onClick={() => {
+                            this.setState({ reset: false });
+                            this.handleResetWebsite();
+                          }}
+                        >
+                          Đóng
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
             )}
           </Pdf>
         </div>
-        <div className="right-panel">
+        <div className="divInformation">
+          <h1 className="document-title">{document.tentailieu}</h1>
+          <p className="document-description">
+            <b>Mô tả:</b> {document.mota}
+          </p>
+          <p className="document-price">
+            <b>Giá:</b> {formattedPrice}
+          </p>
           <div className="action-buttons">
-            <button className="action-button">Tải về</button>
-            <button className="action-button">Thanh toán</button>
+            <button className="button-download" onClick={this.handleDownload}>
+              Tải về
+            </button>
+            {!canDownload && (
+              <button className="button-pay" onClick={this.onPayConfirm}>
+                Thanh toán
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -119,6 +232,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   getDocument,
+  payDocument,
 };
 
 export default withRouter(

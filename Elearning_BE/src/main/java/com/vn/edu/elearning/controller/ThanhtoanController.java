@@ -1,6 +1,7 @@
 package com.vn.edu.elearning.controller;
 
 import com.vn.edu.elearning.domain.Taikhoan;
+import com.vn.edu.elearning.domain.Taikhoanthanhtoantailieu;
 import com.vn.edu.elearning.dto.TaikhoanDto;
 import com.vn.edu.elearning.service.MapValidationErrorService;
 import com.vn.edu.elearning.service.TaiikhoanService;
@@ -25,8 +26,11 @@ public class ThanhtoanController {
 
     @Autowired
     private TaikhoanthanhtoantailieuService taikhoanthanhtoantailieuService;
+
+    @Autowired
+    MapValidationErrorService mapValidationErrorService;
     @GetMapping("/check/{tk}/{tl}")
-    public ResponseEntity<?> CheckDocumentViewingPermissions(@PathVariable("tk") Long tk,@PathVariable("tl") Long tl) {
+    public ResponseEntity<?> checkDocumentViewingPermissions(@PathVariable("tk") Long tk,@PathVariable("tl") Long tl) {
         String check = "Chưa thanh toán";
         boolean checkSalesAccount = taikhoandangbantailieuService.checkSalesAccount(tk,tl);
         boolean checkBuyAccount = taikhoanthanhtoantailieuService.checkBuyAccount(tk,tl);
@@ -39,6 +43,19 @@ public class ThanhtoanController {
             check = "Đã thanh toán";
         }
         return new ResponseEntity<>(check, HttpStatus.OK);
+    }
+    @PostMapping("/pay/{tk}/{tl}")
+    public ResponseEntity<?> payDocument(@PathVariable("tk") Long tk,@PathVariable("tl") Long tl) {
+        Taikhoanthanhtoantailieu taikhoanthanhtoantailieu = taikhoanthanhtoantailieuService.save(tk,tl);
+        if (taikhoanthanhtoantailieu!=null)
+        {
+            Long matk = taikhoanthanhtoantailieuService.findFirstMataikhoanByMatailieu(taikhoanthanhtoantailieu.getTailieu().getMatailieu());
+            Long giaTL = taikhoanthanhtoantailieu.getTailieu().getGiaban();
+            System.out.println("Mã tài khoản " + matk);
+            System.out.println("Giá tài liệu " + giaTL);
+            taikhoanthanhtoantailieuService.incrementSodu(matk,giaTL);
+        }
+        return new ResponseEntity<>(taikhoanthanhtoantailieu, HttpStatus.OK);
     }
 
 }

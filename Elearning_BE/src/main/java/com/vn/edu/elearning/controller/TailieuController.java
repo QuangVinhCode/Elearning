@@ -93,7 +93,7 @@ public class TailieuController {
             contentType= "application/octet-stream";
         }
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION,"inline;filename=\""
+                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment;filename=\""
                 + resource.getFilename() + "\"")
                 .body(resource);
     }
@@ -120,6 +120,11 @@ public class TailieuController {
     @GetMapping()
     public ResponseEntity<?> getDocuments(){
         return new ResponseEntity<>(tailieuService.findAll(),HttpStatus.OK);
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<?> getDocumentsByCategory(@PathVariable("id") Long id){
+        return new ResponseEntity<>(tailieuService.findAllByCategory(id),HttpStatus.OK);
     }
 
     @GetMapping("/censorship/{censorship}")

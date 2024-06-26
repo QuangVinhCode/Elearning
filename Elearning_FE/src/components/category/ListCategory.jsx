@@ -80,7 +80,7 @@ class ListCategory extends Component {
       <>
         <ContentHeader
           navigate={navigate}
-          title="Danh sách tài liệu"
+          title="Danh sách danh mục"
           className="site-page-header"
         ></ContentHeader>
         <Table dataSource={objects} size="small" rowKey="madanhmuc">

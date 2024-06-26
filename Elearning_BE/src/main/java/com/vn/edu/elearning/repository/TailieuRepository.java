@@ -8,4 +8,7 @@ import java.util.List;
 public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
 
     List<Tailieu> findByKiemduyetContains(String kiemduyet);
+
+    List<Tailieu> findByDanhmuc_Madanhmuc(Long madanhmuc);
+
 }

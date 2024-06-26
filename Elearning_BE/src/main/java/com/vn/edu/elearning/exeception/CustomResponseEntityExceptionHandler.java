@@ -25,7 +25,14 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler(TaikhoanException.class)
-    public final ResponseEntity<Object> handleTaikhoanuException(TaikhoanException ex, WebRequest request){
+    public final ResponseEntity<Object> handleTaikhoanException(TaikhoanException ex, WebRequest request){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
+
+        return  new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TaikhoanthanhtoantailieuException.class)
+    public final ResponseEntity<Object> handleTaikhoanthanhtoantailieuException(TaikhoanthanhtoantailieuException ex, WebRequest request){
         ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
 
         return  new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);

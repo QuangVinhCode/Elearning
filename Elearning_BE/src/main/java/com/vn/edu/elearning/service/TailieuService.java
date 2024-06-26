@@ -67,6 +67,10 @@ public class TailieuService {
         return tailieuRepository.findAll();
     }
 
+    public List<?> findAllByCategory(Long madm) {
+        return tailieuRepository.findByDanhmuc_Madanhmuc(madm);
+    }
+
     public List<?> findAllByCensorship(String censorship) {
         return tailieuRepository.findByKiemduyetContains(censorship);
     }

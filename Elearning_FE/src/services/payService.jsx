@@ -11,5 +11,7 @@ export default class PayService {
       throw error; // Propagate the error back to the caller if needed
     }
   };
- 
+  payDocument = async (matk,matl) => {
+    return await axios.post(API_PAY + "/pay/"+ matk + "/" + matl);
+  };
 }

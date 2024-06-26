@@ -9,6 +9,7 @@ import {
   DOCUMENT_UPDATE,
 } from "./actionTypes";
 import DocumentService from "../../services/documentService";
+import PayService from "../../services/payService";
 export const insertDocument = (object) => async (dispatch) => {
   const service = new DocumentService();
   try {
@@ -348,4 +349,63 @@ export const updateDocument = (object) => async (dispatch) => {
     type: COMMON_LOADING_SET,
     payload: false,
   });
+};
+
+export const payDocument = (matk, matl) => async (dispatch) => {
+  const service = new PayService();
+  try {
+    console.log("Thanh toán tài liệu");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+
+    console.log("object matk " + matk);
+    console.log("object matl " + matl);
+
+    const response = await service.payDocument(matk, matl);
+    console.log("response");
+    console.log(response);
+    if (response.status === 200) {
+      console.log(response.data);
+      console.log("so du: " + response.data.taikhoan.sodu);
+      // Lấy userSession từ sessionStorage
+      let userSession = JSON.parse(sessionStorage.getItem("userSession"));
+      console.log("session " + userSession.data.sodu);
+      // Kiểm tra userSession có tồn tại và có trường data không
+      if (userSession && userSession.data) {
+        // Cập nhật trường trong data
+        userSession.data.sodu =
+          userSession.data.sodu - response.data.tailieu.giaban; // Thay 'fieldToUpdate' bằng tên trường bạn muốn cập nhật
+      }
+      console.log("session cập nhật " + userSession.data.sodu);
+      // Lưu lại userSession đã cập nhật vào sessionStorage
+      sessionStorage.setItem("userSession", JSON.stringify(userSession));
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "Thanh toán thành công",
+      });
+      return true; // Return true indicating successful payment
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+      return false; // Return false indicating payment failure
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+    return false; // Return false indicating payment failure
+  } finally {
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: false,
+    });
+  }
 };

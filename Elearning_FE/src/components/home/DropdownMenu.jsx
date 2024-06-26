@@ -21,24 +21,29 @@ const DropdownMenu = () => {
   };
 
   return (
-    <Dropdown
-      overlay={
-        <Menu onClick={handleMenuClick}>
-          {categories && categories.map((categorie) => (
-            <Menu.Item key={categorie.madanhmuc}>
-              {categorie.tendanhmuc}
-            </Menu.Item>
-          ))}
-        </Menu>
-      }
-    >
-      <a onClick={(e) => e.preventDefault()}>
-        <Space>
-          Danh mục
-          <DownOutlined />
-        </Space>
-      </a>
-    </Dropdown>
+    <>
+      {categories && (
+        <Dropdown
+          overlay={
+            <Menu onClick={handleMenuClick}>
+              {categories &&
+                categories.map((categorie) => (
+                  <Menu.Item key={categorie.madanhmuc}>
+                    {categorie.tendanhmuc}
+                  </Menu.Item>
+                ))}
+            </Menu>
+          }
+        >
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              Danh mục
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+      )}
+    </>
   );
 };
 
