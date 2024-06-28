@@ -58,7 +58,7 @@ export const insertAccount = (object, navigate) => async (dispatch) => {
   const service = new AccountService();
 
   try {
-    console.log("Thêm bài học");
+    console.log("Thêm tài khoản Action");
 
     dispatch({
       type: COMMON_LOADING_SET,

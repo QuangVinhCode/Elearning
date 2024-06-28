@@ -69,7 +69,7 @@ public class TaikhoanthanhtoantailieuService {
         taikhoan.setMataikhoan(matk);
         tailieu.setMatailieu(matl);
         LocalDateTime currentDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
         String formattedDateTime = currentDateTime.format(formatter);
         entity.setMataikhoanthanhtoantailieu(mataikhoanthanhtoantailieu);
         entity.setTaikhoan(taikhoan);

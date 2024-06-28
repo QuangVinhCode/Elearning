@@ -29,7 +29,7 @@ public class TaikhoandangbantailieuService {
         Taikhoandangbantailieu entity = new Taikhoandangbantailieu();
         BeanUtils.copyProperties(dto,entity);
         LocalDateTime currentDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
         String formattedDateTime = currentDateTime.format(formatter);
         entity.setThoigiandangban(formattedDateTime);
         return taikhoandangbantailieuRepository.save(entity);

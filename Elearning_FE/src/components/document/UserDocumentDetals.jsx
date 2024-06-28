@@ -3,11 +3,17 @@ import { connect } from "react-redux";
 import Pdf from "@mikecousins/react-pdf";
 import withRouter from "../../helpers/withRouter";
 import { getDocument, payDocument } from "../../redux/actions/documentAction";
+import {
+  getCommentsByDocument,
+  insertComment,
+} from "../../redux/actions/commentAction";
 import DocumentService from "../../services/documentService";
 import PayService from "../../services/payService";
 import "./UserDocumentDetals.css";
-import { Modal } from "antd";
+import { Comment, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import CommentDocument from "./CommentDocument";
+import ListComment from "./ListComment";
 class UserDocumentDetails extends Component {
   constructor(props) {
     super(props);
@@ -20,22 +26,28 @@ class UserDocumentDetails extends Component {
       isPaid: false, // Trạng thái kiểm tra đã thanh toán
       canDownload: false, // Trạng thái xác nhận có thể tải xuống
       mataikhoan: null,
+      tendangnhap: "",
+      login: false,
       reset: false,
+      value: "",
+      submitting: false,
     };
   }
 
   componentDidMount() {
     const { id } = this.props.router.params;
     this.props.getDocument(id);
+    this.props.getCommentsByDocument(id);
     const storedUserSession = sessionStorage.getItem("userSession");
     const userSession = storedUserSession
       ? JSON.parse(storedUserSession)
       : null;
     const mataikhoan = userSession ? userSession.data.mataikhoan : 0;
+    const tendangnhap = userSession ? userSession.data.tendangnhap : "";
     PayService.checkDocumentView(mataikhoan, id).then((result) => {
       console.log("Kết quả kiểm tra " + result);
       const status = result;
-      this.setState({ status, mataikhoan });
+      this.setState({ status, mataikhoan, tendangnhap });
       if (status === "Đã thanh toán" || status === "Chủ sở hữu") {
         this.setState({ isPaid: true, canDownload: true });
       }
@@ -125,11 +137,53 @@ class UserDocumentDetails extends Component {
     // Reload the entire page
     window.location.reload();
   };
+
+  handleChange = (e) => {
+    console.log("Comment: " + e.target.value);
+    this.setState({ value: e.target.value });
+  };
+  handleSubmit = () => {
+    if (this.state.mataikhoan === 0) {
+      this.setState({ login: true });
+    } else {
+      const currentDateTime = new Date();
+      const day = String(currentDateTime.getDate()).padStart(2, "0");
+      const month = String(currentDateTime.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+      const year = currentDateTime.getFullYear();
+      const hours = String(currentDateTime.getHours()).padStart(2, "0");
+      const minutes = String(currentDateTime.getMinutes()).padStart(2, "0");
+      const formattedDateTime = `${hours}:${minutes} ${day}/${month}/${year}`;
+
+      console.log("Comment state: " + this.state.value);
+      console.log("Current Date and Time: " + formattedDateTime);
+      const { document } = this.props;
+      const comment = {
+        matailieu: document.matailieu,
+        mataikhoan: this.state.mataikhoan,
+        tendangnhap: this.state.tendangnhap,
+        noidung: this.state.value,
+        thoigianbinhluan: formattedDateTime,
+      };
+      if (this.state.value) {
+        console.log(comment);
+        this.props.insertComment(comment);
+        this.setState({ value: "" });
+      }
+    }
+  };
   render() {
-    const { document } = this.props;
+    const { document, comments } = this.props;
     const pdfUrl = DocumentService.getDocumentPDFUrl(document.diachiluutru);
-    const { page, maxPages, showPaymentMessage, canDownload, reset } =
-      this.state;
+    const {
+      page,
+      maxPages,
+      showPaymentMessage,
+      canDownload,
+      reset,
+      login,
+      value,
+      submitting,
+    } = this.state;
     // Format giá tiền thành tiền Việt Nam
     const formattedPrice = new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -195,6 +249,18 @@ class UserDocumentDetails extends Component {
                         </button>
                       </div>
                     )}
+                    {login && (
+                      <div className="payment-message">
+                        <p>Hãy nhấn đăng nhập để có thể bình luận</p>
+                        <button
+                          onClick={() => {
+                            this.setState({ login: false });
+                          }}
+                        >
+                          Đóng
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
@@ -219,6 +285,23 @@ class UserDocumentDetails extends Component {
               </button>
             )}
           </div>
+          <div>
+            <div className="comment-section">
+              <ListComment comments={comments} />
+            </div>
+            <div>
+              <Comment
+                content={
+                  <CommentDocument
+                    onChange={this.handleChange}
+                    onSubmit={this.handleSubmit}
+                    submitting={submitting}
+                    value={value}
+                  />
+                }
+              />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -227,12 +310,15 @@ class UserDocumentDetails extends Component {
 
 const mapStateToProps = (state) => ({
   document: state.documentReducer.document,
+  comments: state.commentReducer.comments,
   permission: state.documentReducer.permission,
 });
 
 const mapDispatchToProps = {
   getDocument,
   payDocument,
+  insertComment,
+  getCommentsByDocument,
 };
 
 export default withRouter(

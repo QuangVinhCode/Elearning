@@ -194,3 +194,8 @@ button {
 .button-pay:hover {
  opacity: 0.8;
 }
+
+.comment-section {
+  max-height: 300px; /* Giới hạn chiều cao của danh sách bình luận */
+  overflow-y: auto; /* Thêm thanh cuộn dọc nếu vượt quá chiều cao */
+}

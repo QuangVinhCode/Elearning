@@ -4,6 +4,8 @@ import com.vn.edu.elearning.domain.Danhmuc;
 import com.vn.edu.elearning.dto.DanhmucDto;
 import com.vn.edu.elearning.exeception.DanhmucException;
 import com.vn.edu.elearning.repository.DanhmucRepository;
+import com.vn.edu.elearning.repository.TaikhoanRepository;
+import com.vn.edu.elearning.repository.TailieuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ import java.util.Optional;
 public class DanhmucService {
     @Autowired
     private DanhmucRepository danhmucRepository;
+    @Autowired
+    private TailieuRepository tailieuRepository;
+
     public Danhmuc save(DanhmucDto entity) {
         Danhmuc danhmuc = new Danhmuc();
         danhmuc.setTendanhmuc(entity.getTendanhmuc());
@@ -52,6 +57,11 @@ public class DanhmucService {
     }
 
     public void  deleteById(Long id){
+        List<?> exitList = tailieuRepository.findByDanhmuc_Madanhmuc(id);
+        if (!exitList.isEmpty())
+        {
+            throw new DanhmucException("Danh mục có tồn tại tài liệu");
+        }
         Danhmuc existed = findById(id);
         danhmucRepository.delete(existed);
     }

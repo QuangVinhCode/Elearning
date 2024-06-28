@@ -21,13 +21,11 @@ public class Binhluan {
     @Column(name = "mabinhluan", nullable = false)
     private Long mabinhluan;
 
-    @Column(name = "tieude", nullable = false, length = 50)
-    private String tieude;
-
-    @Column(name = "noidung", nullable = false, length = 250)
+    @Column(name = "noidung", nullable = false, length = 500)
     private String noidung;
 
     @OneToMany(mappedBy = "binhluan", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Taikhoandabinhluan> dstaikhoandabinhluan;
 
 }

@@ -8,10 +8,10 @@ import { useNavigate } from "react-router-dom";
 const DropdownMenu = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const categories = useSelector((state) => state.categoryReducer.objects);
+  //const categories = useSelector((state) => state.categoryReducer.objects);
   useEffect(() => {
-    dispatch(getCategories());
-    console.log("object in useEffect");
+    //dispatch(getCategories());
+    //console.log("object in useEffect");
   }, [dispatch]);
   // Function to handle menu item click
   const handleMenuClick = (e) => {
@@ -22,7 +22,7 @@ const DropdownMenu = () => {
 
   return (
     <>
-      {categories && (
+      {/* {categories && (
         <Dropdown
           overlay={
             <Menu onClick={handleMenuClick}>
@@ -42,7 +42,7 @@ const DropdownMenu = () => {
             </Space>
           </a>
         </Dropdown>
-      )}
+      )} */}
     </>
   );
 };
