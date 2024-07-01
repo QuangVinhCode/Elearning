@@ -8,6 +8,16 @@
   border-radius: 10px;
   padding: 30px 40px;
 }
+.register-form-container .title {
+  color: #fff;
+}
+.input-box .icon {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  transform: translateY(-50%);
+  font-size: 16px;
+}
 .register-form-container .input-box {
   position: relative;
   width: 100%;
@@ -43,7 +53,7 @@
 }
 
 .register-page {
-  height: 200vh;
+  height: 170vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,6 +61,7 @@
   background: url("/public/images/img-1.jpg") no-repeat;
   background-size: cover;
   background-position: center;
+  margin: -3px;
 }
 .register-form-container .login-link {
   font-size: 14.5px;
@@ -71,4 +82,22 @@
 
 .input-box input {
   color: black !important;
+}
+.ant-form-item {
+  margin-bottom: -2px;
+}
+.ant-form-item-explain {
+  line-height: 2px;
+}
+.ant-input-status-error:not(.ant-input-disabled):not(
+    .ant-input-borderless
+  ).ant-input,
+.ant-input-status-error:not(.ant-input-disabled):not(
+    .ant-input-borderless
+  ).ant-input:hover {
+  background: none;
+  border-color: #ff4d4f;
+}
+.ant-row {
+  margin-top: 0px;
 }

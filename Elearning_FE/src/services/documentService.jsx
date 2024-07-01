@@ -2,9 +2,7 @@ import axios from "axios";
 import { API_DOCUMENT } from "./constant";
 
 export default class DocumentService {
-  
   insertDocument = async (object) => {
-    
     let formData = new FormData();
     formData.append("tentailieu", object.tentailieu);
     formData.append("madanhmuc", object.madanhmuc);
@@ -25,6 +23,9 @@ export default class DocumentService {
   getDocuments = async () => {
     return await axios.get(API_DOCUMENT);
   };
+  getDocumentsByCategory = async (id) => {
+    return await axios.get(API_DOCUMENT + "/category/" + id);
+  };
   getDocumentByCensorship = async (id) => {
     return await axios.get(API_DOCUMENT + "/censorship/" + id);
   };
@@ -34,7 +35,7 @@ export default class DocumentService {
   confirmDocument = async (id) => {
     return await axios.patch(API_DOCUMENT + "/confirm/" + id);
   };
-  errorDocument = async (id,note) => {
+  errorDocument = async (id, note) => {
     return await axios.patch(API_DOCUMENT + "/error/" + id + "/" + note);
   };
   getDocument = async (id) => {

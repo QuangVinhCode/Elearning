@@ -8,11 +8,15 @@ import Home from "./Home";
 import Documents from "./Documents";
 import DocumentForm from "../components/document/DocumentForm";
 import UserDocumentDetals from "../components/document/UserDocumentDetals";
-import { insertDocument, updateDocument } from "../redux/actions/documentAction";
+import {
+  insertDocumentUser,
+  updateDocument,
+} from "../redux/actions/documentAction";
 import { setError, setMessage } from "../redux/actions/commonAction";
 import { message } from "antd";
+import DocumentHome from "../components/document/DocumentHome";
 
-function Users({ insertDocument, updateDocument }) {
+function Users({ insertDocumentUser, updateDocument }) {
   const [showDocumentForm, setShowDocumentForm] = useState(false);
   const [document, setDocument] = useState({
     matailieu: "",
@@ -50,7 +54,7 @@ function Users({ insertDocument, updateDocument }) {
     if (values.matailieu) {
       updateDocument(values);
     } else {
-      insertDocument(values);
+      insertDocumentUser(values);
     }
     setDocument({
       matailieu: "",
@@ -71,6 +75,7 @@ function Users({ insertDocument, updateDocument }) {
         <Route path="/document" element={<Documents />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/documents/:id" element={<DocumentHome />} />
         <Route path="/detail/:id" element={<UserDocumentDetals />} />
       </Routes>
 
@@ -87,7 +92,7 @@ function Users({ insertDocument, updateDocument }) {
 }
 
 const mapDispatchToProps = {
-  insertDocument,
+  insertDocumentUser,
   updateDocument,
 };
 

@@ -1,48 +1,68 @@
-import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, message, Space, Menu } from "antd";
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getCategories } from "../../redux/actions/categoryAction";
+import { Menu, Dropdown, Space } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { API_CATEGORY } from "../../services/constant";
+import axios from "axios";
+import "./DropdownMenu.css"; // Tạo file CSS để điều chỉnh phong cách
 
-const DropdownMenu = () => {
-  const dispatch = useDispatch();
+const DropdownMenu = (matailieu) => {
   const navigate = useNavigate();
-  //const categories = useSelector((state) => state.categoryReducer.objects);
+  const [categories, setCategories] = useState([]);
+  const [hoveredItem, setHoveredItem] = useState(null); // State để lưu trữ mục đang được hover
+
   useEffect(() => {
-    //dispatch(getCategories());
-    //console.log("object in useEffect");
-  }, [dispatch]);
-  // Function to handle menu item click
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(API_CATEGORY);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const handleMenuClick = (e) => {
-    console.log(e);
     const { key } = e;
-    navigate("/users/documentbycategory/" + key);
+    console.log("key" + key);
+    matailieu = key;
+    navigate("/users/documents/" + key);
+  };
+
+  const handleMenuItemHover = (key) => {
+    setHoveredItem(key);
   };
 
   return (
     <>
-      {/* {categories && (
+      {categories.length > 0 && (
         <Dropdown
           overlay={
             <Menu onClick={handleMenuClick}>
-              {categories &&
-                categories.map((categorie) => (
-                  <Menu.Item key={categorie.madanhmuc}>
-                    {categorie.tendanhmuc}
-                  </Menu.Item>
-                ))}
+              {categories.map((category) => (
+                <Menu.Item
+                  key={category.madanhmuc}
+                  onMouseEnter={() => handleMenuItemHover(category.madanhmuc)}
+                  className={
+                    hoveredItem === category.madanhmuc ? "hovered" : ""
+                  }
+                >
+                  {category.tendanhmuc}
+                </Menu.Item>
+              ))}
             </Menu>
           }
         >
-          <a onClick={(e) => e.preventDefault()}>
+          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
             <Space>
               Danh mục
               <DownOutlined />
             </Space>
           </a>
         </Dropdown>
-      )} */}
+      )}
     </>
   );
 };

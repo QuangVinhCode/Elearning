@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { insertAccount } from "../redux/actions/accountAction";
 import { setError } from "../redux/actions/commonAction";
+import { FaUser, FaLock, FaPhoneAlt } from "react-icons/fa";
+import { IoIosMail } from "react-icons/io";
 import "./Register.css";
 
 export default function Register() {
@@ -61,6 +63,7 @@ export default function Register() {
           >
             <div className="input-box">
               <Input type="text" placeholder="Tên đăng nhập" required />
+              <FaUser className="icon" />
             </div>
           </Form.Item>
 
@@ -80,6 +83,7 @@ export default function Register() {
           >
             <div className="input-box">
               <Input type="password" placeholder="Mật Khẩu" required />
+              <FaLock className="icon" />
             </div>
           </Form.Item>
 
@@ -109,6 +113,7 @@ export default function Register() {
           >
             <div className="input-box">
               <Input type="password" placeholder="Nhập lại mật khẩu" required />
+              <FaLock className="icon" />
             </div>
           </Form.Item>
 
@@ -133,6 +138,7 @@ export default function Register() {
           >
             <div className="input-box">
               <Input type="email" placeholder="Email" required />
+              <IoIosMail className="icon" />
             </div>
           </Form.Item>
 
@@ -151,6 +157,7 @@ export default function Register() {
           >
             <div className="input-box">
               <Input type="tel" placeholder="Số điện thoại" />
+              <FaPhoneAlt className="icon" />
             </div>
           </Form.Item>
 

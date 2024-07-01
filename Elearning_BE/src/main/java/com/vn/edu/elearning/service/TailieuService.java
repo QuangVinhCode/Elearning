@@ -75,8 +75,8 @@ public class TailieuService {
         return tailieuRepository.findByKiemduyetContains(censorship);
     }
 
-    public Page<Tailieu> findAll(Pageable pageable){
-        return tailieuRepository.findAll(pageable);
+    public Page<Tailieu> findAllByCategory(Long id,Pageable pageable){
+        return tailieuRepository.findByDanhmuc_MadanhmucOrderByGiabanAsc(id,pageable);
     }
 
     public Tailieu findById(Long id) {

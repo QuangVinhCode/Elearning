@@ -16,6 +16,7 @@ import com.vn.edu.elearning.service.TailieuService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -121,6 +122,13 @@ public class TailieuController {
     public ResponseEntity<?> getDocuments(){
         return new ResponseEntity<>(tailieuService.findAll(),HttpStatus.OK);
     }
+
+    @GetMapping("/page/{id}")
+    public ResponseEntity<?> getDocumentsPage(@PathVariable("id") Long id,
+                                                          @PageableDefault(sort = "giaban", direction = Sort.Direction.ASC) Pageable pageable){
+        return new ResponseEntity<>(tailieuService.findAllByCategory(id,pageable),HttpStatus.OK);
+    }
+
 
     @GetMapping("/category/{id}")
     public ResponseEntity<?> getDocumentsByCategory(@PathVariable("id") Long id){

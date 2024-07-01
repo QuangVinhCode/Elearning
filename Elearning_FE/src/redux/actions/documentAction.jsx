@@ -10,7 +10,7 @@ import {
 } from "./actionTypes";
 import DocumentService from "../../services/documentService";
 import PayService from "../../services/payService";
-export const insertDocument = (object) => async (dispatch) => {
+export const insertDocumentAdmin = (object) => async (dispatch) => {
   const service = new DocumentService();
   try {
     console.log("Thêm tài liệu");
@@ -61,6 +61,56 @@ export const insertDocument = (object) => async (dispatch) => {
     payload: false,
   });
 };
+export const insertDocumentUser = (object) => async (dispatch) => {
+  const service = new DocumentService();
+  try {
+    console.log("Thêm tài liệu");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    console.log("thêm object in action");
+    console.log(object);
+
+    const response = await service.insertDocument(object);
+    console.log("response");
+    console.log(response);
+    if (response.status === 201) {
+      dispatch({
+        type: DOCUMENT_SET,
+        payload: response.data,
+      });
+
+      dispatch({
+        type: DOCUMENT_APPEND,
+        payload: response.data,
+      });
+
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "tài liệu đã được thêm",
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+    console.log(response);
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
 export const getDocuments = () => async (dispatch) => {
   const service = new DocumentService();
 
@@ -71,6 +121,41 @@ export const getDocuments = () => async (dispatch) => {
       payload: true,
     });
     const response = await service.getDocuments();
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: DOCUMENTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+export const getDocumentsByCategory = (id) => async (dispatch) => {
+  const service = new DocumentService();
+
+  try {
+    console.log("Danh sách tài liệu");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getDocumentsByCategory(id);
     console.log(response);
     if (response.status === 200) {
       dispatch({

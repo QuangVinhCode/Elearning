@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
+import "./bootstrap.min.css";
 import { Button } from "./Button";
 import DropdownMenu from "./DropdownMenu";
 import { useDispatch } from "react-redux";
 import { LOG_OUT } from "../../redux/actions/actionTypes";
+import { FaSearch } from "react-icons/fa";
+
 function Navbar({ onUploadClick }) {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
   const [button, setButton] = useState(true);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -27,6 +32,7 @@ function Navbar({ onUploadClick }) {
       window.removeEventListener("resize", showButton);
     };
   }, []);
+
   const handleLogout = () => {
     let sesion = sessionStorage.removeItem("userSession");
 
@@ -35,77 +41,85 @@ function Navbar({ onUploadClick }) {
       dispatch({ type: LOG_OUT });
     }
   };
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   const storedUserSession = sessionStorage.getItem("userSession");
   const userSession = storedUserSession ? JSON.parse(storedUserSession) : null;
 
   return (
     <>
-      <nav className="navbar">
-        <div className="navbar-container">
-          <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-            E Learning <i className="fab fa-typo3"></i>
-          </Link>
-          <div className="menu-icon" onClick={handleClick}>
-            <i className={click ? "fas fa-times" : "fas fa-bars"} />
-          </div>
-          <ul className={click ? "nav-menu active" : "nav-menu"}>
-            <li className="nav-item">
-              <Link to="/" className="nav-links" onClick={closeMobileMenu}>
-                Trang chủ
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                to="/document"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                <DropdownMenu />
-              </Link>
-            </li>
-            {userSession && (
-              <li className="nav-item">
-                <Link
-                  to="#"
-                  className="nav-links"
-                  onClick={() => {
-                    closeMobileMenu();
-                    onUploadClick();
-                  }}
-                >
-                  Tải lên
+      <div className="container-fluid fixed-top">
+        <div className="container px-0">
+          <nav className="navbar navbar-light bg-white navbar-expand-xl">
+            <Link to="/" className="navbar-brand">
+              <h1 className="text-primary display-6"> E Learning</h1>
+            </Link>
+            <button
+              className="navbar-toggler py-2 px-3"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarCollapse"
+            >
+              <span className="fa fa-bars text-primary"></span>
+            </button>
+            <div
+              className="collapse navbar-collapse bg-white"
+              id="navbarCollapse"
+            >
+              <div className="navbar-nav mx-auto">
+                <Link to="/" className="nav-item nav-link active">
+                  Trang chủ
                 </Link>
-              </li>
-            )}
-            {userSession ? (
-              <li className="nav-item">
-                <span className="nav-links">
-                  Chào, {userSession.data.tendangnhap}
-                </span>
-              </li>
-            ) : (
-              <li className="nav-item">
-                <Link
-                  to="/users/login"
-                  className="nav-links-mobile"
-                  onClick={closeMobileMenu}
-                >
-                  Đăng nhập
-                </Link>
-              </li>
-            )}
-          </ul>
+                <div className="nav-item nav-link">
+                  <DropdownMenu />
+                </div>
 
-          {button && userSession && (
-            <Button onClick={handleLogout}>Đăng xuất</Button>
-          )}
-          {button && !userSession && (
-            <Button buttonStyle="btn--outline">Đăng nhập</Button>
-          )}
+                {userSession && (
+                  <Link
+                    to="#"
+                    className="nav-item nav-link"
+                    onClick={() => {
+                      closeMobileMenu();
+                      onUploadClick();
+                    }}
+                  >
+                    Tải lên
+                  </Link>
+                )}
+              </div>
+              <button
+                className="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
+                data-bs-toggle="modal"
+                data-bs-target="#searchModal"
+              >
+                <FaSearch className="fas fa-search text-primary" />
+              </button>
+              <div className="d-flex m-3 me-0">
+                {userSession ? (
+                  <Link to="/contact" className="nav-item nav-link">
+                    <span className="nav-link">
+                      Chào, {userSession.data.tendangnhap}
+                    </span>
+                  </Link>
+                ) : (
+                  <Link
+                    to="/users/login"
+                    className="nav-links-mobile"
+                    onClick={closeMobileMenu}
+                  >
+                    Đăng nhập
+                  </Link>
+                )}
+                {button && userSession && (
+                  <Button onClick={handleLogout}>Đăng xuất</Button>
+                )}
+                {button && !userSession && (
+                  <Button buttonStyle="btn--outline">Đăng nhập</Button>
+                )}
+              </div>
+            </div>
+          </nav>
         </div>
-      </nav>
+      </div>
     </>
   );
 }

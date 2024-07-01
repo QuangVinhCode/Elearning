@@ -8,7 +8,7 @@ import DocumentForm from "./DocumentForm";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import {
-  insertDocument,
+  insertDocumentAdmin,
   getDocuments,
   deleteDocument,
   updateDocument,
@@ -42,7 +42,7 @@ class ListDocument extends Component {
     if (values.matailieu) {
       this.props.updateDocument(values);
     } else {
-      this.props.insertDocument(values);
+      this.props.insertDocumentAdmin(values);
     }
 
     this.setState({
@@ -137,7 +137,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  insertDocument,
+  insertDocumentAdmin,
   getDocuments,
   deleteDocument,
   updateDocument,
