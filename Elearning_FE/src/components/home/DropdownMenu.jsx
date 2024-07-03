@@ -6,7 +6,7 @@ import { API_CATEGORY } from "../../services/constant";
 import axios from "axios";
 import "./DropdownMenu.css"; // Tạo file CSS để điều chỉnh phong cách
 
-const DropdownMenu = (matailieu) => {
+const DropdownMenu = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [hoveredItem, setHoveredItem] = useState(null); // State để lưu trữ mục đang được hover
@@ -27,7 +27,6 @@ const DropdownMenu = (matailieu) => {
   const handleMenuClick = (e) => {
     const { key } = e;
     console.log("key" + key);
-    matailieu = key;
     navigate("/users/documents/" + key);
   };
 
@@ -52,6 +51,25 @@ const DropdownMenu = (matailieu) => {
                   {category.tendanhmuc}
                 </Menu.Item>
               ))}
+            </Menu>
+          }
+        >
+          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+            <Space>
+              Danh mục
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+      )}
+      {categories.length === 0 && (
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item>DM</Menu.Item>
+              <Menu.Item>DM</Menu.Item>
+              <Menu.Item>DM</Menu.Item>
+              <Menu.Item>DM</Menu.Item>
             </Menu>
           }
         >
