@@ -28,6 +28,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 
 @RestController
 @CrossOrigin
@@ -169,4 +171,16 @@ public class TailieuController {
 
         return  new ResponseEntity<>("Đã chuyển sang tài liệu lỗi",HttpStatus.OK);
     }
+    @GetMapping("/preview/{filename:.+}")
+    public ResponseEntity<byte[]> getPDFPreview(@PathVariable String filename) {
+        try {
+            byte[] previewImage = fileStorageService.getPDFPreviewImage(filename);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<>(previewImage, headers, HttpStatus.OK);
+        } catch (IOException ex) {
+            throw new FileNotFoundException("Cannot load preview image for PDF file", ex);
+        }
+    }
+
 }

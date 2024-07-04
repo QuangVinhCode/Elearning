@@ -61,4 +61,8 @@ export default class DocumentService {
   static getDocumentPDFUrl = (filename) => {
     return API_DOCUMENT + "/content/" + filename;
   };
+
+  static getPDFPreview = (filename) => {
+    return API_DOCUMENT + "/preview/" + filename;
+  };
 }

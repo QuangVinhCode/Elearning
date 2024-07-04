@@ -3,12 +3,19 @@ package com.vn.edu.elearning.service;
 import com.vn.edu.elearning.config.FileStorageProperties;
 import com.vn.edu.elearning.exeception.FileNotFoundException;
 import com.vn.edu.elearning.exeception.FileStorageException;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +25,8 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
     private final Path filePDFStorageLocation;
-
+    @Value("${file.upload-filepdf-dir}")
+    private String uploadFilepdfDir;
     public  String storePDFFile(MultipartFile file)
     {
         return storeFile(filePDFStorageLocation,file);
@@ -92,6 +100,22 @@ public class FileStorageService {
         }catch (Exception ex)
         {
             throw new FileNotFoundException("Không tim thấy tệp tin " + filename,ex);
+        }
+    }
+    public byte[] getPDFPreviewImage(String filename) throws IOException {
+        Path filePath = Paths.get(uploadFilepdfDir).resolve(filename).normalize();
+
+        try (PDDocument document = PDDocument.load(filePath.toFile())) {
+            PDFRenderer renderer = new PDFRenderer(document);
+            BufferedImage image = renderer.renderImage(0); // Render first page
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", baos);
+            baos.flush();
+
+            return baos.toByteArray();
+        } catch (IOException ex) {
+            throw new FileNotFoundException("Error converting PDF to image", ex);
         }
     }
 }

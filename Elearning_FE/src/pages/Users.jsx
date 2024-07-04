@@ -32,12 +32,20 @@ function Users({ insertDocumentUser, updateDocument }) {
   useEffect(() => {
     if (msg) {
       dispatch(setMessage(""));
-      message.success(msg);
+      message.success({
+        content: msg,
+        style: { marginTop: '20vh' }, // Example of inline style
+        className: 'custom-success-message', // Example of using a CSS class
+      });
     }
 
     if (err) {
       dispatch(setError(""));
-      message.success(err);
+      message.error({
+        content: err,
+        style: { marginTop: '20vh' },
+        className: 'custom-error-message', // Example of using a CSS class
+      });
     }
   }, [msg, err]);
   const handleUploadClick = () => {
