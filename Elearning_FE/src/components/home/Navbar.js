@@ -46,9 +46,8 @@ const Navbar = ({ onUploadClick }) => {
     setShowSearchInput(!showSearchInput);
   };
   const handleChangeValue = (e) => {
-    setSearchQuery(e.target.value)
+    setSearchQuery(e.target.value);
     console.log(searchQuery);
-
   };
   return (
     <div className="container-fluid fixed-top">
@@ -64,11 +63,16 @@ const Navbar = ({ onUploadClick }) => {
             <div className="nav-item nav-link">
               <DropdownMenu />
             </div>
-           {showSearchInput && <div className="nav-item nav-link">
-              <input type="text" value={searchQuery}
-                onChange={handleChangeValue}
-                placeholder="Tìm kiếm..."/>
-            </div>}
+            {showSearchInput && (
+              <div className="nav-item nav-link">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleChangeValue}
+                  placeholder="Tìm kiếm..."
+                />
+              </div>
+            )}
             <button
               className="btn-search btn border border-secondary btn-md-square rounded-circle bg-white"
               data-bs-toggle="modal"
@@ -77,7 +81,6 @@ const Navbar = ({ onUploadClick }) => {
             >
               <FaSearch className="fas fa-search text-primary" />
             </button>
-           
           </div>
           <button
             className="navbar-toggler py-2 px-3"
@@ -107,7 +110,10 @@ const Navbar = ({ onUploadClick }) => {
             </div>
             <div className="d-flex m-3 me-0">
               {userSession ? (
-                <Link to="/contact" className="nav-item nav-link">
+                <Link
+                  to="/users/profile/accountsettings"
+                  className="nav-item nav-link"
+                >
                   <span className="nav-link">
                     Chào, {userSession.data.tendangnhap}
                   </span>

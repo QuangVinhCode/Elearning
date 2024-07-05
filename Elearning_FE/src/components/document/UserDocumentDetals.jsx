@@ -222,7 +222,7 @@ class UserDocumentDetails extends Component {
                       Trang {page} / {pdfDocument.numPages}
                     </p>
                     {showPaymentMessage && (
-                      <div className="payment-message">
+                      <div className="message-notification">
                         <p>
                           Để xem toàn bộ nội dung và tải về, vui lòng thanh
                           toán.
@@ -237,7 +237,7 @@ class UserDocumentDetails extends Component {
                       </div>
                     )}
                     {reset && (
-                      <div className="payment-message">
+                      <div className="message-notification">
                         <p>Hãy nhấn reset website để có thể xem hoặc tải về</p>
                         <button
                           onClick={() => {
@@ -250,7 +250,7 @@ class UserDocumentDetails extends Component {
                       </div>
                     )}
                     {login && (
-                      <div className="payment-message">
+                      <div className="message-notification">
                         <p>Hãy nhấn đăng nhập để có thể bình luận</p>
                         <button
                           onClick={() => {

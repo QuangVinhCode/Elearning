@@ -16,5 +16,4 @@ public class TaikhoanDto implements Serializable {
     String sodienthoai;
     String gmail;
     String quyenhan;
-    Long diemtichluy;
 }

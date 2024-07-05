@@ -99,17 +99,29 @@ public class TaiikhoanService {
     }
 
     public Taikhoan update(Long id ,TaikhoanDto dto) {
-        Optional<Taikhoan> foundList = taikhoanRepository.findById(id);
+        Taikhoan foundAccount = findById(id);
         Taikhoan entity = new Taikhoan();
-
-
-        if (!foundList.isPresent()) {
-            throw new TaikhoanException("Tên tài khoản đã tồn tại trong hệ thống");
-        }
-        BeanUtils.copyProperties(foundList,entity);
+        System.out.println("found Account: " + foundAccount.getSodu());
+        BeanUtils.copyProperties(foundAccount,entity);
+        System.out.println("Entity after copying from foundList: " + entity.getSodu());
         BeanUtils.copyProperties(dto,entity);
         String password = encryptPassword(dto.getMatkhau());
         entity.setMatkhau(password);
+        System.out.println("Entity after copying from dto: " + entity.getSodu());
         return taikhoanRepository.save(entity);
+    }
+
+    public Taikhoan changedPassword(Long id ,String oldPassword,String newPassword) {
+        Taikhoan foundAccount = findById(id);
+        System.out.println("found Account Password : " + foundAccount.getMatkhau());
+        boolean matches = matchesPassword(oldPassword,foundAccount.getMatkhau());
+        System.out.println("found Account Password : " + matches);
+        if (matches == false)
+        {
+            throw new TaikhoanException("Mật khẩu không chính xác");
+        }
+        String password = encryptPassword(newPassword);
+        foundAccount.setMatkhau(password);
+        return taikhoanRepository.save(foundAccount);
     }
 }

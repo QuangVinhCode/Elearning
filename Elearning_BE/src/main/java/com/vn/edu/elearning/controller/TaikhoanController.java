@@ -69,4 +69,10 @@ public class TaikhoanController {
         Taikhoan updatedAccount = taiikhoanService.update(id, dto);
         return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
     }
+
+    @PatchMapping("/change/{id}/{oldpassword}/{newpassword}")
+    public ResponseEntity<?> changePassword(@PathVariable("id") Long id,@PathVariable("oldpassword") String oldpassword,@PathVariable("newpassword") String newpassword) {
+        taiikhoanService.changedPassword(id,oldpassword,newpassword);
+        return new ResponseEntity<>("Đổi mật khẩu thành công", HttpStatus.OK);
+    }
 }

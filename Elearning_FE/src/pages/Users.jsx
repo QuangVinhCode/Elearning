@@ -5,6 +5,7 @@ import Register from "../pages/Register";
 import Login from "../pages/Login";
 import Navbar from "../components/home/Navbar";
 import Home from "./Home";
+import UserProfile from "./UserProfile";
 import Documents from "./Documents";
 import DocumentForm from "../components/document/DocumentForm";
 import UserDocumentDetals from "../components/document/UserDocumentDetals";
@@ -15,6 +16,7 @@ import {
 import { setError, setMessage } from "../redux/actions/commonAction";
 import { message } from "antd";
 import DocumentHome from "../components/document/DocumentHome";
+import Footer from "../components/home/Footer";
 
 function Users({ insertDocumentUser, updateDocument }) {
   const [showDocumentForm, setShowDocumentForm] = useState(false);
@@ -34,8 +36,8 @@ function Users({ insertDocumentUser, updateDocument }) {
       dispatch(setMessage(""));
       message.success({
         content: msg,
-        style: { marginTop: '20vh' }, // Example of inline style
-        className: 'custom-success-message', // Example of using a CSS class
+        style: { marginTop: "20vh" }, // Example of inline style
+        className: "custom-success-message", // Example of using a CSS class
       });
     }
 
@@ -43,8 +45,8 @@ function Users({ insertDocumentUser, updateDocument }) {
       dispatch(setError(""));
       message.error({
         content: err,
-        style: { marginTop: '20vh' },
-        className: 'custom-error-message', // Example of using a CSS class
+        style: { marginTop: "20vh" },
+        className: "custom-error-message", // Example of using a CSS class
       });
     }
   }, [msg, err]);
@@ -85,7 +87,9 @@ function Users({ insertDocumentUser, updateDocument }) {
         <Route path="/login" element={<Login />} />
         <Route path="/documents/:id" element={<DocumentHome />} />
         <Route path="/detail/:id" element={<UserDocumentDetals />} />
+        <Route path="/profile/:activepage" element={<UserProfile />} />
       </Routes>
+      <Footer />
 
       {showDocumentForm && (
         <DocumentForm
