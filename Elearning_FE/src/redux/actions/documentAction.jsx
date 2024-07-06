@@ -10,6 +10,7 @@ import {
 } from "./actionTypes";
 import DocumentService from "../../services/documentService";
 import PayService from "../../services/payService";
+
 export const insertDocumentAdmin = (object) => async (dispatch) => {
   const service = new DocumentService();
   try {
@@ -61,6 +62,7 @@ export const insertDocumentAdmin = (object) => async (dispatch) => {
     payload: false,
   });
 };
+
 export const insertDocumentUser = (object) => async (dispatch) => {
   const service = new DocumentService();
   try {
@@ -111,6 +113,7 @@ export const insertDocumentUser = (object) => async (dispatch) => {
     payload: false,
   });
 };
+
 export const getDocuments = () => async (dispatch) => {
   const service = new DocumentService();
 
@@ -182,6 +185,43 @@ export const getOutstandingDocuments = () => async (dispatch) => {
     payload: false,
   });
 };
+
+export const getDocumentsByName = (name) => async (dispatch) => {
+  const service = new DocumentService();
+
+  try {
+    console.log("Danh sách tài liệu");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getDocumentsByName(name);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: DOCUMENTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
 export const getDocumentsByCategory = (id) => async (dispatch) => {
   const service = new DocumentService();
 

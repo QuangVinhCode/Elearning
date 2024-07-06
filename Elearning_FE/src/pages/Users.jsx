@@ -9,6 +9,7 @@ import UserProfile from "./UserProfile";
 import Documents from "./Documents";
 import DocumentForm from "../components/document/DocumentForm";
 import UserDocumentDetals from "../components/document/UserDocumentDetals";
+import SearchDocument from "../components/document/SearchDocument";
 import {
   insertDocumentUser,
   updateDocument,
@@ -84,7 +85,8 @@ function Users({ insertDocumentUser, updateDocument }) {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/documents/:id" element={<DocumentHome />} />
-        <Route path="/detail/:id" element={<UserDocumentDetals />} />
+        <Route path="/detail/:id" element={<UserDocumentDetals />} /> 
+        <Route path="/search/:name" element={<SearchDocument />} />
         <Route path="/profile/:activepage" element={<UserProfile />} />
       </Routes>
       <Footer />

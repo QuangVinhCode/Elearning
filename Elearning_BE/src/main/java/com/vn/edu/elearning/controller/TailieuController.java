@@ -128,6 +128,11 @@ public class TailieuController {
     public ResponseEntity<?> getTop5Documents(){
         return new ResponseEntity<>(tailieuService.getTop5TaiLieuThanhToanNhieuNhat(),HttpStatus.OK);
     }
+
+    @GetMapping("/name/{tentailieu}")
+    public ResponseEntity<?> getListDocumentByName(@PathVariable("tentailieu") String tentailieu){
+        return new ResponseEntity<>(tailieuService.getListDocumentByName(tentailieu),HttpStatus.OK);
+    }
     @GetMapping("/page/{id}")
     public ResponseEntity<?> getDocumentsPage(@PathVariable("id") Long id,
                                                           @PageableDefault(sort = "giaban", direction = Sort.Direction.ASC) Pageable pageable){

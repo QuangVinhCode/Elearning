@@ -19,4 +19,9 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
     @Query(value = "SELECT tl.* FROM tailieu tl JOIN taikhoanthanhtoantailieu tkt ON tl.matailieu = tkt.matailieu GROUP BY tl.matailieu ORDER BY COUNT(tkt.matailieu) DESC LIMIT 5", nativeQuery = true)
     List<Tailieu> findTop5TailieuByThanhtoanNhieuNhat();
 
+    List<Tailieu> findByTentailieuLike(String tentailieu);
+
+    List<Tailieu> findByTentailieuContains(String tentailieu);
+
+
 }

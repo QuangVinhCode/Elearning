@@ -41,6 +41,7 @@ html {
   box-shadow: 0.5rem 0.75rem 1.5rem #bbbbbb;
 }
 .list_document {
+
   margin-top: 10rem;
   display: grid;
   grid-template-columns: 200px 200px 200px 200px 200px 200px;

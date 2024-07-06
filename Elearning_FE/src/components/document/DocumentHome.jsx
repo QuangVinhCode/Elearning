@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import withRouter from "../../helpers/withRouter";
 import { getDocumentsByCategory } from "../../redux/actions/documentAction";
-import { FaRegHeart } from "react-icons/fa";
 import DocumentService from "../../services/documentService";
-import Pdf from "@mikecousins/react-pdf";
 import "./DocumentHome.css";
 import { Tooltip } from "antd";
 class DocumentHome extends Component {

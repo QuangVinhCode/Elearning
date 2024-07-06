@@ -26,6 +26,9 @@ export default class DocumentService {
   getOutstandingDocuments = async () => {
     return await axios.get(API_DOCUMENT + "/top");
   };
+  getDocumentsByName = async (name) => {
+    return await axios.get(API_DOCUMENT + "/name/" + name);
+  };
   getDocumentsByCategory = async (id) => {
     return await axios.get(API_DOCUMENT + "/category/" + id);
   };

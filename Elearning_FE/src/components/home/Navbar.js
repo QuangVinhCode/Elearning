@@ -30,8 +30,8 @@ const useWindowSize = () => {
 
 const Navbar = ({ onUploadClick }) => {
   const [click, setClick] = useState(false);
-  const [showSearchInput, setShowSearchInput] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showSearchWarning, setShowSearchWarning] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userSession = useUserSession();
@@ -42,13 +42,21 @@ const Navbar = ({ onUploadClick }) => {
     navigate("/login");
     dispatch({ type: LOG_OUT });
   };
-  const handleSearchClick = () => {
-    setShowSearchInput(!showSearchInput);
-  };
-  const handleChangeValue = (e) => {
+
+  const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-    console.log(searchQuery);
+    setShowSearchWarning(false); // Hide the warning when the user starts typing
   };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) {
+      setShowSearchWarning(true);
+      return;
+    }
+    navigate("/users/search/" + searchQuery); // Thay thế bằng logic gửi yêu cầu tìm kiếm
+  };
+
   return (
     <div className="container-fluid fixed-top">
       <div className="container px-0">
@@ -63,24 +71,22 @@ const Navbar = ({ onUploadClick }) => {
             <div className="nav-item nav-link">
               <DropdownMenu />
             </div>
-            {showSearchInput && (
-              <div className="nav-item nav-link">
+            <div className="nav-item nav-link">
+              <form onSubmit={handleSearchSubmit}>
                 <input
                   type="text"
-                  value={searchQuery}
-                  onChange={handleChangeValue}
                   placeholder="Tìm kiếm..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                 />
-              </div>
-            )}
-            <button
-              className="btn-search btn border border-secondary btn-md-square rounded-circle bg-white"
-              data-bs-toggle="modal"
-              data-bs-target="#searchModal"
-              onClick={handleSearchClick}
-            >
-              <FaSearch className="fas fa-search text-primary" />
-            </button>
+                <button
+                  className="btn-search btn border border-secondary btn-md-square rounded-circle bg-white"
+                  type="submit"
+                >
+                  <FaSearch className="fas fa-search text-primary" />
+                </button>
+              </form>
+            </div>
           </div>
           <button
             className="navbar-toggler py-2 px-3"
@@ -134,6 +140,38 @@ const Navbar = ({ onUploadClick }) => {
           </div>
         </nav>
       </div>
+      {showSearchWarning && (
+        <div
+          className="modal fade show"
+          style={{ display: "block" }}
+          tabIndex="-1"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Thông báo</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowSearchWarning(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>Vui lòng nhập nội dung tìm kiếm</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowSearchWarning(false)}
+                >
+                  Đóng
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

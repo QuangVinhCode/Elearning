@@ -81,6 +81,10 @@ public class TailieuService {
     public List<Tailieu> getTop5TaiLieuThanhToanNhieuNhat(){
         return tailieuRepository.findTop5TailieuByThanhtoanNhieuNhat();
     }
+
+    public List<Tailieu> getListDocumentByName(String name){
+        return tailieuRepository.findByTentailieuContains(name);
+    }
     public Tailieu findById(Long id) {
         Optional<Tailieu> found = tailieuRepository.findById(id);
 
