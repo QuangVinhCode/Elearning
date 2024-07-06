@@ -273,7 +273,7 @@ class UserDocumentDetails extends Component {
             <b>Mô tả:</b> {document.mota}
           </p>
           <p className="document-price">
-            <b>Giá:</b> {formattedPrice}
+            <b>Giá:</b> {document.giaban===0 ? "Miễn phí" : formattedPrice}
           </p>
           <div className="action-buttons">
             <button className="button-download" onClick={this.handleDownload}>

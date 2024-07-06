@@ -36,8 +36,7 @@ function Users({ insertDocumentUser, updateDocument }) {
       dispatch(setMessage(""));
       message.success({
         content: msg,
-        style: { marginTop: "20vh" }, // Example of inline style
-        className: "custom-success-message", // Example of using a CSS class
+        style: { marginTop: "20vh" },
       });
     }
 
@@ -46,7 +45,6 @@ function Users({ insertDocumentUser, updateDocument }) {
       message.error({
         content: err,
         style: { marginTop: "20vh" },
-        className: "custom-error-message", // Example of using a CSS class
       });
     }
   }, [msg, err]);

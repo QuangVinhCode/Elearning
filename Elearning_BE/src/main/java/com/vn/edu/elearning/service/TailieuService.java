@@ -78,7 +78,9 @@ public class TailieuService {
     public Page<Tailieu> findAllByCategory(Long id,Pageable pageable){
         return tailieuRepository.findByDanhmuc_MadanhmucOrderByGiabanAsc(id,pageable);
     }
-
+    public List<Tailieu> getTop5TaiLieuThanhToanNhieuNhat(){
+        return tailieuRepository.findTop5TailieuByThanhtoanNhieuNhat();
+    }
     public Tailieu findById(Long id) {
         Optional<Tailieu> found = tailieuRepository.findById(id);
 

@@ -6,7 +6,7 @@ import { FaRegHeart } from "react-icons/fa";
 import DocumentService from "../../services/documentService";
 import Pdf from "@mikecousins/react-pdf";
 import "./DocumentHome.css";
-
+import { Tooltip } from "antd";
 class DocumentHome extends Component {
   componentDidMount() {
     const { id } = this.props.router.params;
@@ -41,14 +41,20 @@ class DocumentHome extends Component {
             </div>
             <div className="productCard__content">
               <h3 className="productName">{document.tentailieu}</h3>
-              <h4 className="productTitle">{document.mota}</h4>
+              <h4 className="productTitle">
+                <Tooltip placement="topLeft" title={document.mota}>
+                  {document.mota}
+                </Tooltip>
+              </h4>
             </div>
             <div className="displayStack__1">
               <div className="productPrice">
-                {new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(document.giaban)}
+                {document.giaban===0
+                  ? "Miễn phí"
+                  : new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(document.giaban)}
               </div>
             </div>
           </div>

@@ -68,3 +68,12 @@
     margin-bottom: 5px;
   }
 }
+
+.recharge {
+  background-color: yellow;
+}
+
+.recharge:hover {
+  background-color: yellow;
+  opacity: 0.8;
+}

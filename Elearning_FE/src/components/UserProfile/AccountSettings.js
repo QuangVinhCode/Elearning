@@ -2,6 +2,7 @@ import React from "react";
 import "./AccountSettings.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { FaMoneyCheck } from "react-icons/fa";
 const useUserSession = () => {
   const storedUserSession = sessionStorage.getItem("userSession");
   return storedUserSession ? JSON.parse(storedUserSession) : null;
@@ -48,12 +49,18 @@ const AccountSettings = () => {
         </div>
         <div className="form-group">
           <label htmlFor="sodu">
-            Số dư: <span>{userSession.data.sodu}</span>
+            Số dư:{" "}
+            <span>
+              {new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(userSession.data.sodu)}
+            </span> <button className="recharge"><FaMoneyCheck /> Nạp</button>
           </label>
         </div>
       </div>
 
-      <button className="mainbutton1">Save Changes</button>
+     
     </div>
   );
 };
