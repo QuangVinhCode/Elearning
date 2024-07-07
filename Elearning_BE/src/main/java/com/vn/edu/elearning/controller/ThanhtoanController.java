@@ -51,9 +51,19 @@ public class ThanhtoanController {
         {
             Long matk = taikhoanthanhtoantailieuService.findFirstMataikhoanByMatailieu(taikhoanthanhtoantailieu.getTailieu().getMatailieu());
             Long giaTL = taikhoanthanhtoantailieu.getTailieu().getGiaban();
+            // Tính toán giá trị 10% cho admin và 90% cho người dùng
+            Long adminShare = giaTL / 10;
+            Long userShare = giaTL - adminShare;
+
             System.out.println("Mã tài khoản " + matk);
             System.out.println("Giá tài liệu " + giaTL);
-            taikhoanthanhtoantailieuService.incrementSodu(matk,giaTL);
+            System.out.println("Admin share: " + adminShare);
+            System.out.println("User share: " + userShare);
+
+            // Cập nhật số dư cho người dùng
+            taikhoanthanhtoantailieuService.incrementSodu(matk, userShare);
+
+            taikhoanthanhtoantailieuService.incrementSoduForAdmin(adminShare);
         }
         return new ResponseEntity<>(taikhoanthanhtoantailieu, HttpStatus.OK);
     }

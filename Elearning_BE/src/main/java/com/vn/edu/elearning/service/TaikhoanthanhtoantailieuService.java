@@ -83,7 +83,13 @@ public class TaikhoanthanhtoantailieuService {
     }
 
     public void incrementSodu(Long mataikhoan, Long sodu) {
+
         taikhoanRepository.incrementSodu(mataikhoan,sodu);
+    }
+
+    public void incrementSoduForAdmin(Long sodu) {
+
+        taikhoanRepository.incrementSoduForAdmin(sodu);
     }
 
     public Long findFirstMataikhoanByMatailieu(Long matl) {
