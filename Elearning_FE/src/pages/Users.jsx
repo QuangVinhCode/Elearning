@@ -6,6 +6,7 @@ import Login from "../pages/Login";
 import Navbar from "../components/home/Navbar";
 import Home from "./Home";
 import UserProfile from "./UserProfile";
+import VNPayForm from "./VNPayForm";
 import Documents from "./Documents";
 import DocumentForm from "../components/document/DocumentForm";
 import UserDocumentDetals from "../components/document/UserDocumentDetals";
@@ -88,6 +89,7 @@ function Users({ insertDocumentUser, updateDocument }) {
         <Route path="/detail/:id" element={<UserDocumentDetals />} /> 
         <Route path="/search/:name" element={<SearchDocument />} />
         <Route path="/profile/:activepage" element={<UserProfile />} />
+        <Route path="/vnpayform" element={<VNPayForm />} />
       </Routes>
       <Footer />
 

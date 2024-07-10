@@ -1,36 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./AccountSettings.css";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
 import { FaMoneyCheck } from "react-icons/fa";
+import { getAccount } from "../../redux/actions/accountAction";
+
 const useUserSession = () => {
   const storedUserSession = sessionStorage.getItem("userSession");
   return storedUserSession ? JSON.parse(storedUserSession) : null;
 };
-const AccountSettings = () => {
+
+const AccountSettings = ({ account, getAccount }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const userSession = useUserSession();
+  const location = useLocation();
+
+  const [isSuccess, setIsSuccess] = useState(
+    new URLSearchParams(location.search).get("message") === "success"
+  );
+
+  const handleOpenVNpay = () => {
+    navigate("/users/vnpayform");
+  };
+
+  const handleCloseNotification = () => {
+    setIsSuccess(false);
+  };
+
+  useEffect(() => {
+    if (userSession) {
+      const { mataikhoan } = userSession.data;
+      getAccount(mataikhoan);
+    }
+  }, [getAccount, userSession]);
+
   return (
     <div className="accountsettings">
       <h1 className="mainhead1">Thông tin cá nhân</h1>
-
+      {isSuccess && (
+        <div className="message-notification">
+          <p>Thanh toán thành công!</p>
+          <button onClick={handleCloseNotification}>Đóng</button>
+        </div>
+      )}
       <div className="form">
         <div className="form-group">
           <label htmlFor="name">
-            Tên đăng nhập: <span>{userSession.data.tendangnhap}</span>
+            Tên đăng nhập: <span>{account.tendangnhap}</span>
           </label>
         </div>
 
         <div className="form-group">
           <label htmlFor="phone">
-            Số điện thoại: <span>{userSession.data.sodienthoai}</span>
+            Số điện thoại: <span>{account.sodienthoai}</span>
           </label>
         </div>
 
         <div className="form-group">
           <label htmlFor="email">
-            Gmail: <span>{userSession.data.gmail}</span>
+            Gmail: <span>{account.gmail}</span>
           </label>
         </div>
         <div className="form-group">
@@ -41,7 +69,7 @@ const AccountSettings = () => {
                 type="password"
                 name="password"
                 id="password"
-                value={userSession.data.matkhau}
+                value={account.matkhau}
                 style={{ border: 0 }}
               ></input>
             </span>
@@ -54,15 +82,24 @@ const AccountSettings = () => {
               {new Intl.NumberFormat("vi-VN", {
                 style: "currency",
                 currency: "VND",
-              }).format(userSession.data.sodu)}
-            </span> <button className="recharge"><FaMoneyCheck /> Nạp</button>
+              }).format(account.sodu)}
+            </span>{" "}
+            <button className="recharge" onClick={handleOpenVNpay}>
+              <FaMoneyCheck /> Nạp
+            </button>
           </label>
         </div>
       </div>
-
-     
     </div>
   );
 };
 
-export default AccountSettings;
+const mapStateToProps = (state) => ({
+  account: state.accountReducer.account,
+});
+
+const mapDispatchToProps = {
+  getAccount,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountSettings);

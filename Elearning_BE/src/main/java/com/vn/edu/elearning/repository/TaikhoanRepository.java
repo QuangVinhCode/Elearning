@@ -29,4 +29,6 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     @Transactional
     @Query("UPDATE Taikhoan t SET t.sodu = t.sodu + :amount WHERE t.quyenhan = 'Quản trị viên'")
     void incrementSoduForAdmin(@Param("amount") Long amount);
+
+
 }

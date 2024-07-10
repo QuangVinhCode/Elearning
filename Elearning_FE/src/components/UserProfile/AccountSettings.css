@@ -77,3 +77,36 @@
   background-color: yellow;
   opacity: 0.8;
 }
+
+.message-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border: 2px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1040; /* Ensures the layer is displayed above all other elements */
+  max-width: 400px; /* Max width of the message box */
+  text-align: center; /* Center align content */
+}
+
+.message-notification p {
+  margin-bottom: 10px;
+}
+
+.message-notification button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.message-notification button:hover {
+  background-color: #0056b3;
+}
