@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Pdf from "@mikecousins/react-pdf";
 import withRouter from "../../helpers/withRouter";
-import { getDocument, payDocument } from "../../redux/actions/documentAction";
+import {
+  getDocument,
+  payDocument,
+  clearDocumentState,
+} from "../../redux/actions/documentAction";
 import {
   getCommentsByDocument,
   insertComment,
@@ -31,15 +35,15 @@ class UserDocumentDetails extends Component {
       reset: false,
       value: "",
       submitting: false,
-      pdfUrl: "",
+      pdfUrl: null,
     };
     this.intervalId = null;
-    
   }
 
   componentDidMount() {
     const { id } = this.props.router.params;
-    this.props.getDocument(id);
+    const tl = this.props.getDocument(id);
+    console.log("Tài liệu: " + tl);
     this.props.getCommentsByDocument(id);
     const storedUserSession = sessionStorage.getItem("userSession");
     const userSession = storedUserSession
@@ -59,7 +63,8 @@ class UserDocumentDetails extends Component {
   componentDidUpdate(prevProps) {
     const { id } = this.props.router.params;
     if (prevProps.router.params.id !== id) {
-      this.props.getDocument(id);
+      const tl = this.props.getDocument(id);
+      console.log("Tài liệu: " + tl);
       this.props.getCommentsByDocument(id);
       const storedUserSession = sessionStorage.getItem("userSession");
       const userSession = storedUserSession
@@ -83,6 +88,7 @@ class UserDocumentDetails extends Component {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+    this.props.clearDocumentState();
   }
   onLoadSuccess = (pdfDocument) => {
     console.log("PDF loaded successfully", pdfDocument);
@@ -223,7 +229,7 @@ class UserDocumentDetails extends Component {
       <div className="container">
         <div className="pdf-viewer-container">
           <Pdf
-            file={pdfUrl}
+            file={DocumentService.getDocumentPDFUrl(document.diachiluutru)}
             page={page}
             onDocumentLoadSuccess={this.onLoadSuccess}
             onPageLoadSuccess={this.onPageLoadSuccess}
@@ -349,6 +355,7 @@ const mapDispatchToProps = {
   payDocument,
   insertComment,
   getCommentsByDocument,
+  clearDocumentState,
 };
 
 export default withRouter(

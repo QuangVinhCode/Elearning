@@ -7,6 +7,7 @@ import {
   DOCUMENT_DELETE,
   DOCUMENT_SET,
   DOCUMENT_UPDATE,
+  DOCUMENT_STATE_CLEAR,
 } from "./actionTypes";
 import DocumentService from "../../services/documentService";
 import PayService from "../../services/payService";
@@ -296,7 +297,6 @@ export const getDocumentByCensorship = (id) => async (dispatch) => {
 
 export const getDocument = (id) => async (dispatch) => {
   const service = new DocumentService();
-
   try {
     console.log("Lấy tài liệu");
     dispatch({
@@ -310,7 +310,7 @@ export const getDocument = (id) => async (dispatch) => {
         type: DOCUMENT_SET,
         payload: response.data,
       });
-      return response.data;
+      return response;
     } else {
       dispatch({
         type: COMMON_ERROR_SET,
@@ -569,4 +569,8 @@ export const payDocument = (matk, matl) => async (dispatch) => {
       payload: false,
     });
   }
+};
+
+export const clearDocumentState = () => (dispatch) => {
+  dispatch({ type: DOCUMENT_STATE_CLEAR });
 };

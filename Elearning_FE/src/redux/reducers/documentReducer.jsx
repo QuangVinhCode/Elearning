@@ -4,6 +4,7 @@ import {
   DOCUMENT_DELETE,
   DOCUMENT_SET,
   DOCUMENT_UPDATE,
+  DOCUMENT_STATE_CLEAR,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -32,6 +33,11 @@ const documentReducer = (state = initialState, { type, payload }) => {
         ...state,
         documents: [payload, ...newDocuments],
       };
+      case DOCUMENT_STATE_CLEAR:
+        return {
+          document: {},
+          documents: [],
+        };
     default:
       return state;
   }
