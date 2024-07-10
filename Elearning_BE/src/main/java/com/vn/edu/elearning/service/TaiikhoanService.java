@@ -49,6 +49,7 @@ public class TaiikhoanService {
         System.out.println("MK : " + password);
         entity.setMatkhau(password);
         entity.setQuyenhan("Người dùng");
+        entity.setTrangthai("Bình thường");
         entity.setSodu(0L);
         return taikhoanRepository.save(entity);
     }

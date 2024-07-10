@@ -38,6 +38,9 @@ public class Taikhoan {
     @Column(name = "sodu", nullable = false, length = 50)
     private Long sodu;
 
+    @Column(name = "trangthai", nullable = false, length = 50)
+    private String trangthai;
+
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Taikhoandabinhluan> dstaikhoandabinhluan;

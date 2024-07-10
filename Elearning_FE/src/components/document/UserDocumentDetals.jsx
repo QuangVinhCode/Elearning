@@ -31,7 +31,10 @@ class UserDocumentDetails extends Component {
       reset: false,
       value: "",
       submitting: false,
+      pdfUrl: "",
     };
+    this.intervalId = null;
+    
   }
 
   componentDidMount() {
@@ -53,7 +56,34 @@ class UserDocumentDetails extends Component {
       }
     });
   }
-
+  componentDidUpdate(prevProps) {
+    const { id } = this.props.router.params;
+    if (prevProps.router.params.id !== id) {
+      this.props.getDocument(id);
+      this.props.getCommentsByDocument(id);
+      const storedUserSession = sessionStorage.getItem("userSession");
+      const userSession = storedUserSession
+        ? JSON.parse(storedUserSession)
+        : null;
+      const mataikhoan = userSession ? userSession.data.mataikhoan : 0;
+      const tendangnhap = userSession ? userSession.data.tendangnhap : "";
+      PayService.checkDocumentView(mataikhoan, id).then((result) => {
+        const status = result;
+        this.setState({
+          status,
+          mataikhoan,
+          tendangnhap,
+          isPaid: status === "Đã thanh toán" || status === "Chủ sở hữu",
+          canDownload: status === "Đã thanh toán" || status === "Chủ sở hữu",
+        });
+      });
+    }
+  }
+  componentWillUnmount() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
   onLoadSuccess = (pdfDocument) => {
     console.log("PDF loaded successfully", pdfDocument);
     const numPages = pdfDocument.numPages;
@@ -273,7 +303,7 @@ class UserDocumentDetails extends Component {
             <b>Mô tả:</b> {document.mota}
           </p>
           <p className="document-price">
-            <b>Giá:</b> {document.giaban===0 ? "Miễn phí" : formattedPrice}
+            <b>Giá:</b> {document.giaban === 0 ? "Miễn phí" : formattedPrice}
           </p>
           <div className="action-buttons">
             <button className="button-download" onClick={this.handleDownload}>
