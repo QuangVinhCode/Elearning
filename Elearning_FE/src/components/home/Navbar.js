@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import "./bootstrap.min.css";
-import { Button } from "./Button";
+import { Button, message, Modal } from "antd";
 import DropdownMenu from "./DropdownMenu";
 import { useDispatch } from "react-redux";
 import { LOG_OUT } from "../../redux/actions/actionTypes";
@@ -39,7 +39,7 @@ const Navbar = ({ onUploadClick }) => {
 
   const handleLogout = () => {
     sessionStorage.removeItem("userSession");
-    navigate("/login");
+    navigate("/users/login");
     dispatch({ type: LOG_OUT });
   };
 
@@ -55,6 +55,24 @@ const Navbar = ({ onUploadClick }) => {
       return;
     }
     navigate("/users/search/" + searchQuery); // Thay thế bằng logic gửi yêu cầu tìm kiếm
+  };
+
+  const handleUploadClick = () => {
+    if (!userSession) {
+      message.warning({
+        content: "Bạn cần đăng nhập để tải lên tài liệu",
+        style: { marginTop: "20vh" },
+      });
+      return;
+    }
+    if (userSession.data.trangthai !== "Bình thường") {
+      message.warning({
+        content: "Tài khoản của bạn đã bị chặn quyền đăng tài liệu!",
+        style: { marginTop: "20vh" },
+      });
+      return;
+    }
+    onUploadClick();
   };
 
   return (
@@ -101,18 +119,16 @@ const Navbar = ({ onUploadClick }) => {
             id="navbarCollapse"
           >
             <div className="navbar-nav ms-auto">
-              {userSession && (
-                <Link
-                  to="#"
-                  className="nav-item nav-link"
-                  onClick={() => {
-                    setClick(false);
-                    onUploadClick();
-                  }}
-                >
-                  Tải lên
-                </Link>
-              )}
+              <Link
+                to="#"
+                className="nav-item nav-link"
+                onClick={() => {
+                  setClick(false);
+                  handleUploadClick();
+                }}
+              >
+                Tải lên
+              </Link>
             </div>
             <div className="d-flex m-3 me-0">
               {userSession ? (

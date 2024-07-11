@@ -20,6 +20,7 @@ import AddOrEditCategory from "../components/category/AddOrEditCategory";
 import ListCategory from "../components/category/ListCategory";
 import ListDocument from "../components/document/ListDocument";
 import Censoring from "../components/document/Censoring";
+import UserManage from "../components/account/UserManage";
 import Censored from "../components/document/Censored";
 import ErrorCensorship from "../components/document/ErrorCensorship";
 import { useDispatch, useSelector } from "react-redux";
@@ -138,6 +139,11 @@ function DashboardPage() {
                   onClick: () => navigate("/dashboard/document/error_censorship"),
                 },
               ],
+            }, {
+              key: "5",
+              icon: <MdAddCircleOutline />,
+              label: "Tài khoản",
+              onClick: () => navigate("/dashboard/account/list"),
             },
             {
               key: "8",
@@ -214,6 +220,10 @@ function DashboardPage() {
               <Route
                 path="/document/error_censorship"
                 element={<ErrorCensorship />}
+              ></Route>
+               <Route
+                path="/account/list"
+                element={<UserManage />}
               ></Route>
             </Routes>
             <Outlet></Outlet>

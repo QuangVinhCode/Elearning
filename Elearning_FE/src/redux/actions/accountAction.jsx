@@ -1,6 +1,7 @@
 import AccountService from "../../services/accountService";
 import {
   ACCOUNT_SET,
+  ACCOUNTS_SET,
   COMMON_ERROR_SET,
   COMMON_LOADING_SET,
   COMMON_MESSAGE_SET,
@@ -116,6 +117,45 @@ export const getAccount = (id) => async (dispatch) => {
     if (response.status === 200) {
       dispatch({
         type: ACCOUNT_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const getAccounts = (id) => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Lấy thông tin tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+
+    const response = await service.getAccounts();
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: ACCOUNTS_SET,
         payload: response.data,
       });
     } else {
