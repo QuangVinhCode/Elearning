@@ -1,4 +1,4 @@
-.usermanage {
+.yourorders {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,7 +8,8 @@
   position: relative;
   /* overflow: hidden; */
 }
-.yourorderstable1 {
+
+.yourorderstable {
   border: 1px solid #ccc;
   border-collapse: collapse;
   margin: 0;
@@ -17,24 +18,24 @@
   table-layout: fixed;
 }
 
-.yourorderstable1 thead tr {
+.yourorderstable thead tr {
   background-color: var(--col1);
   color: #fff;
   border: 1px solid #ddd;
   padding: 0.35em;
 }
-.yourorderstable1 tr {
+.yourorderstable tr {
   background-color: #ffffff;
   border: 1px solid #ddd;
   padding: 0.35em;
 }
 
-.yourorderstable1 th,
-.yourorderstable1 td {
+.yourorderstable th,
+.yourorderstable td {
   text-align: center;
 }
 
-.yourorderstable1 tr th {
+.yourorderstable tr th {
   font-size: 0.85em;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -43,20 +44,20 @@
   color: black;
 }
 
-.yourorderstable1 tr td {
+.yourorderstable tr td {
   padding: 5px 20px;
   border: 1px solid rgb(207, 207, 207);
   border-radius: 5px;
   color: grey;
 }
 
-.yourorderstable1 tr td button {
+.yourorderstable tr td button {
   padding: 5px 20px;
   margin: 0px;
   font-size: 16px;
 }
 
-.yourorderstable1 tr td .greendot {
+.yourorderstable tr td .greendot {
   content: "";
   width: 10px;
   height: 10px;
@@ -64,21 +65,21 @@
   background-color: green;
 }
 
-.yourorderstable1 tr td div {
+.yourorderstable tr td div {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
 }
 
-.yourorderstable1 tr td .yellowdot {
+.yourorderstable tr td .yellowdot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background-color: orange;
 }
 
-.yourorderstable1 tr td .reddot {
+.yourorderstable tr td .reddot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -86,7 +87,7 @@
 }
 
 @media screen and (max-width: 1200px) {
-  .yourorderstable1 thead {
+  .yourorderstable thead {
     border: none;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -96,13 +97,13 @@
     position: absolute;
     width: 1px;
   }
-  .yourorderstable1 tr {
+  .yourorderstable tr {
     display: block;
     margin-bottom: 0.625em;
     border: none;
   }
 
-  .yourorderstable1 tr td {
+  .yourorderstable tr td {
     border: none;
     border-radius: 0px;
     display: block;
@@ -112,7 +113,15 @@
     justify-content: space-between;
   }
 
-  .yourorderstable1 td::before {
+  .yourorderstable td::before {
     content: attr(data-label);
   }
+}
+.mota {
+  word-wrap: break-word; /* for older browsers */
+  overflow-wrap: break-word; /* standard property */
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

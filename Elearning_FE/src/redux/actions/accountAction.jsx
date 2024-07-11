@@ -7,6 +7,7 @@ import {
   COMMON_MESSAGE_SET,
   LOG_IN,
   LOG_OUT,
+  UPDATE_STATUS,
 } from "./actionTypes";
 
 export const loginAccount = (object, navigate) => async (dispatch) => {
@@ -32,7 +33,7 @@ export const loginAccount = (object, navigate) => async (dispatch) => {
         data: response.data,
       };
       sessionStorage.setItem("userSession", JSON.stringify(userSession));
-      console.log(response.data)
+      console.log(response.data);
       if (response.data.quyenhan === "Quản trị viên") {
         navigate("/dashboard/*");
       } else {
@@ -140,7 +141,7 @@ export const getAccount = (id) => async (dispatch) => {
   });
 };
 
-export const getAccounts = (id) => async (dispatch) => {
+export const updateAccountStatus = (id,status) => async (dispatch) => {
   const service = new AccountService();
 
   try {
@@ -151,12 +152,12 @@ export const getAccounts = (id) => async (dispatch) => {
       payload: true,
     });
 
-    const response = await service.getAccounts();
+    const response = await service.updateAccountStatus(id,status);
     console.log(response);
     if (response.status === 200) {
       dispatch({
-        type: ACCOUNTS_SET,
-        payload: response.data,
+        type: UPDATE_STATUS,
+        payload: id,
       });
     } else {
       dispatch({
@@ -178,6 +179,7 @@ export const getAccounts = (id) => async (dispatch) => {
     payload: false,
   });
 };
+
 
 export const clearAccount = () => (dispatch) => {
   dispatch({
@@ -241,4 +243,120 @@ export const updateAccount = (id, object, navigate) => async (dispatch) => {
     navigate("/login");
     dispatch({ type: LOG_OUT });
   }
+};
+export const getAccounts = () => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Lấy thông tin tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+
+    const response = await service.getAccounts();
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: ACCOUNTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const getAccountsByStatus = () => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Lấy thông tin tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+
+    const response = await service.getAccountsByStatus();
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: ACCOUNTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const getAccountsByStateless = () => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Lấy thông tin tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+
+    const response = await service.getAccountsByStateless();
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: ACCOUNTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
 };

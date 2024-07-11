@@ -1,5 +1,10 @@
-import { ACCOUNTS_SET, ACCOUNT_SET, LOG_IN, LOG_OUT } from "../actions/actionTypes";
-
+import {
+  ACCOUNTS_SET,
+  ACCOUNT_SET,
+  LOG_IN,
+  LOG_OUT,
+  UPDATE_STATUS,
+} from "../actions/actionTypes";
 
 const initialState = {
   account: {},
@@ -15,6 +20,11 @@ const accountReducer = (state = initialState, { type, payload }) => {
       return { ...state, accounts: payload };
     case LOG_IN:
       return { ...state, account: payload, isLoggedIn: true };
+    case UPDATE_STATUS:
+      return {
+        ...state,
+        accounts: state.accounts.filter((item) => item.mataikhoan !== payload),
+      };
     case LOG_OUT:
       return { ...state, account: {}, isLoggedIn: false };
     default:

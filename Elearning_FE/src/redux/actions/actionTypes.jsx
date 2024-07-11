@@ -21,5 +21,6 @@ export const COMMON_LOADING_SET = "COMMON_LOADING_SET";
 
 export const ACCOUNT_SET = 'ACCOUNT_SET';
 export const ACCOUNTS_SET = 'ACCOUNTS_SET';
+export const UPDATE_STATUS = 'UPDATE_STATUS';
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';

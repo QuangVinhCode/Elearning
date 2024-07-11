@@ -1,11 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import UserSidebar from "../components/UserProfile/UserSidebar";
-import AccountSettings from "../components/UserProfile/AccountSettings";
-import ChangePassword from "../components/UserProfile/ChangePassword";
-import YourOrders from "../components/UserProfile/YourOrders";
-import UserAddress from "../components/UserProfile/UserAddress";
-import LegalNotice from "../components/UserProfile/LegalNotice";
+import UserSidebar from "../components/account/user/UserSidebar";
+import AccountSettings from "../components/account/user/AccountSettings";
+import ChangePassword from "../components/account/user/ChangePassword";
+import YourOrders from "../components/account/user/YourOrders";
+import UserAddress from "../components/account/user/UserAddress";
+import LegalNotice from "../components/account/user/LegalNotice";
 import "./UserProfile.css";
 const UserProfile = () => {
   const { activepage } = useParams();

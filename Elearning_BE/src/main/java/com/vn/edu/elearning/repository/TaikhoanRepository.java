@@ -30,5 +30,15 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     @Query("UPDATE Taikhoan t SET t.sodu = t.sodu + :amount WHERE t.quyenhan = 'Quản trị viên'")
     void incrementSoduForAdmin(@Param("amount") Long amount);
 
+    @Modifying
+    @Query("UPDATE Taikhoan t SET t.trangthai = :trangthai WHERE t.mataikhoan = :id")
+    @Transactional
+    void updateTrangThai(@Param("id") Long id, @Param("trangthai") String trangthai);
+
+    @Query("SELECT t FROM Taikhoan t WHERE t.trangthai = 'Bình thường' AND t.quyenhan <> 'Quản trị viên'")
+    List<Taikhoan> findBinhThuongWithoutAdmin();
+
+    @Query("SELECT t FROM Taikhoan t WHERE t.trangthai <> 'Bình thường' AND t.quyenhan <> 'Quản trị viên'")
+    List<Taikhoan> findNotBinhThuongWithoutAdmin();
 
 }

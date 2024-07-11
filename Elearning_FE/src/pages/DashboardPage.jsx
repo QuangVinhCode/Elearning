@@ -20,12 +20,13 @@ import AddOrEditCategory from "../components/category/AddOrEditCategory";
 import ListCategory from "../components/category/ListCategory";
 import ListDocument from "../components/document/ListDocument";
 import Censoring from "../components/document/Censoring";
-import UserManage from "../components/account/UserManage";
 import Censored from "../components/document/Censored";
 import ErrorCensorship from "../components/document/ErrorCensorship";
 import { useDispatch, useSelector } from "react-redux";
 import { LOG_OUT } from "../redux/actions/actionTypes";
 import { setError, setMessage } from "../redux/actions/commonAction";
+import UserManage from "../components/account/admin/UserManage";
+import AccountBlocked from "../components/account/admin/AccountBlocked";
 const { Header, Sider, Content } = Layout;
 
 function DashboardPage() {
@@ -136,14 +137,31 @@ function DashboardPage() {
                   key: "43",
                   icon: <MdAddCircleOutline />,
                   label: "Lỗi kiểm duyệt",
-                  onClick: () => navigate("/dashboard/document/error_censorship"),
+                  onClick: () =>
+                    navigate("/dashboard/document/error_censorship"),
                 },
               ],
-            }, {
+            },
+            {
               key: "5",
-              icon: <MdAddCircleOutline />,
-              label: "Tài khoản",
-              onClick: () => navigate("/dashboard/account/list"),
+              icon: <MdOutlinePlayLesson />,
+              label: "Quản lý tài khoản",
+              children: [
+                {
+                  key: "51",
+                  icon: <MdFormatListBulleted />,
+                  label: "DS Tài khoản",
+                  onClick: () => navigate("/dashboard/account/usermanage"),
+                },
+                {
+                  key: "52",
+                  icon: <MdAddCircleOutline />,
+                  label: "DS Đã chặn",
+                  onClick: () => navigate("/dashboard/account/userblocked"),
+                },
+               
+              ],
+              
             },
             {
               key: "8",
@@ -209,21 +227,19 @@ function DashboardPage() {
               ></Route>
               <Route path="/category/list" element={<ListCategory />}></Route>
               <Route path="/document/list" element={<ListDocument />}></Route>
-              <Route
-                path="/document/censoring"
-                element={<Censoring />}
-              ></Route>
-              <Route
-                path="/document/censored"
-                element={<Censored />}
-              ></Route>
+              <Route path="/document/censoring" element={<Censoring />}></Route>
+              <Route path="/document/censored" element={<Censored />}></Route>
               <Route
                 path="/document/error_censorship"
                 element={<ErrorCensorship />}
               ></Route>
-               <Route
-                path="/account/list"
+              <Route
+                path="/account/usermanage"
                 element={<UserManage />}
+              ></Route>
+              <Route
+                path="/account/userblocked"
+                element={<AccountBlocked />}
               ></Route>
             </Routes>
             <Outlet></Outlet>

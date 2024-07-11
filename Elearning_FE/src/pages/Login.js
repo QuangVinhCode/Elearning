@@ -1,27 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FaUser, FaLock } from "react-icons/fa";
-import { Button, Form, Input, message } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { Button, Form, Input } from "antd";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setError, setMessage } from "../redux/actions/commonAction";
 import { loginAccount } from "../redux/actions/accountAction";
 import "./Login.css";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const isLoggedIn = useSelector((state) => state.accountReducer.isLoggedIn);
-  const err = useSelector((state) => state.commonReducer.error);
-  const msg = useSelector((state) => state.commonReducer.message);
-  useEffect(() => {
-    if (msg) {
-      dispatch(setMessage(""));
-      message.success(msg);
-    }
-    if (err) {
-      dispatch(setError(""));
-      message.success(err);
-    }
-  }, [msg, err]);
   const onFinish = (values) => {
     console.log("Success:", values);
     dispatch(loginAccount(values, navigate));

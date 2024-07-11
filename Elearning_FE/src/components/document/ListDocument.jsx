@@ -25,7 +25,7 @@ class ListDocument extends Component {
         mota: "",
         giaban: "",
         diachiluutru: "",
-        mataikhoan : "",
+        mataikhoan: "",
         danhmuc: { madanhmuc: "" },
       },
       details: false,
@@ -100,7 +100,7 @@ class ListDocument extends Component {
                 this.setState({ ...this.state, open: true });
               }}
             >
-              Thêm bài học mới
+              Thêm tài liệu mới
             </Button>
           </Col>
         </Row>

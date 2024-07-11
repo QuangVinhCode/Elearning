@@ -46,11 +46,30 @@ public class TaikhoanController {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
+    @GetMapping("/status")
+    public ResponseEntity<?> getAccountsByStatus() {
+        List<Taikhoan> taikhoanList = taiikhoanService.findBinhThuongWithoutAdmin();
+        return new ResponseEntity<>(taikhoanList, HttpStatus.OK);
+    }
+
+    @GetMapping("/stateless")
+    public ResponseEntity<?> getAccountsByStateless() {
+        List<Taikhoan> taikhoanList = taiikhoanService.findNotBinhThuongWithoutAdmin();
+        return new ResponseEntity<>(taikhoanList, HttpStatus.OK);
+    }
+
     @PatchMapping("/login/{username}/{password}")
     public ResponseEntity<?> loginAccount(@PathVariable("username") String username,@PathVariable("password") String password) {
 
         Taikhoan loggedInAccount = taiikhoanService.login(username,password);
         return new ResponseEntity<>(loggedInAccount, HttpStatus.OK);
+    }
+
+    @PatchMapping("/status/{id}/{status}")
+    public ResponseEntity<?> statusAccount(@PathVariable("id") Long id,@PathVariable("status") String status) {
+        taiikhoanService.updateTrangThai(id,status);
+        Taikhoan taikhoan = taiikhoanService.findById(id);
+        return new ResponseEntity<>(taikhoan, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

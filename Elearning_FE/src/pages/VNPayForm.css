@@ -1,5 +1,5 @@
 .container-vnpay {
-    min-height: 550px;
+  min-height: 550px;
 }
 .vnpayform {
   margin-top: 150px;
@@ -24,7 +24,6 @@
 }
 
 .ant-btn-primary {
-  width: 100%;
   background-color: #1890ff;
   border-color: #1890ff;
 }

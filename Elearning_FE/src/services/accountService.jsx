@@ -8,11 +8,19 @@ export default class ClassService {
   getAccounts = async () => {
     return await axios.get(API_ACCOUNT);
   };
-  loginAccount = async (username,password) => {
+  getAccountsByStatus = async () => {
+    return await axios.get(API_ACCOUNT + "/status");
+  };
+  getAccountsByStateless = async () => {
+    return await axios.get(API_ACCOUNT + "/stateless");
+  };
+  loginAccount = async (username, password) => {
     console.log("object in service");
     console.log(username);
     console.log(password);
-    return await axios.patch(API_ACCOUNT + "/login/" + username + "/" + password);
+    return await axios.patch(
+      API_ACCOUNT + "/login/" + username + "/" + password
+    );
   };
   deleteAccount = async (id) => {
     return await axios.delete(API_ACCOUNT + "/" + id);
@@ -23,4 +31,8 @@ export default class ClassService {
   updateAccount = async (id, object) => {
     return await axios.patch(API_ACCOUNT + "/" + id, object);
   };
+  updateAccountStatus = async (id, status) => {
+    return await axios.patch(API_ACCOUNT + "/status/" + id + "/" + status);
+  };
+  
 }

@@ -99,6 +99,18 @@ public class TaiikhoanService {
         taikhoanRepository.delete(existed);
     }
 
+    public void  updateTrangThai(Long id,String stautus){
+        taikhoanRepository.updateTrangThai(id,stautus);
+    }
+
+    public List<Taikhoan>  findBinhThuongWithoutAdmin(){
+        return taikhoanRepository.findBinhThuongWithoutAdmin();
+    }
+
+    public List<Taikhoan>  findNotBinhThuongWithoutAdmin(){
+        return taikhoanRepository.findNotBinhThuongWithoutAdmin();
+    }
+
     public Taikhoan update(Long id ,TaikhoanDto dto) {
         Taikhoan foundAccount = findById(id);
         Taikhoan entity = new Taikhoan();

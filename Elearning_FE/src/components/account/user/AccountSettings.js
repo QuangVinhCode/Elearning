@@ -3,7 +3,7 @@ import "./AccountSettings.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { FaMoneyCheck } from "react-icons/fa";
-import { getAccount } from "../../redux/actions/accountAction";
+import { getAccount } from "../../../redux/actions/accountAction";
 
 const useUserSession = () => {
   const storedUserSession = sessionStorage.getItem("userSession");
