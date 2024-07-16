@@ -113,15 +113,9 @@ public class TaiikhoanService {
 
     public Taikhoan update(Long id ,TaikhoanDto dto) {
         Taikhoan foundAccount = findById(id);
-        Taikhoan entity = new Taikhoan();
-        System.out.println("found Account: " + foundAccount.getSodu());
-        BeanUtils.copyProperties(foundAccount,entity);
-        System.out.println("Entity after copying from foundList: " + entity.getSodu());
-        BeanUtils.copyProperties(dto,entity);
-        String password = encryptPassword(dto.getMatkhau());
-        entity.setMatkhau(password);
-        System.out.println("Entity after copying from dto: " + entity.getSodu());
-        return taikhoanRepository.save(entity);
+        foundAccount.setSodienthoai(dto.getSodienthoai());
+        foundAccount.setGmail(dto.getGmail());
+        return taikhoanRepository.save(foundAccount);
     }
 
     public Taikhoan changedPassword(Long id ,String oldPassword,String newPassword) {

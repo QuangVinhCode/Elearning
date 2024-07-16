@@ -217,8 +217,9 @@ export const updateAccount = (id, object, navigate) => async (dispatch) => {
       });
       dispatch({
         type: COMMON_MESSAGE_SET,
-        payload: "Thông tin tài khoản đã được thay đổi vui lòng đăng nhập lại",
+        payload: "Thông tin tài khoản đã được thay đổi!",
       });
+      navigate("/users/profile/accountsettings");
     } else {
       dispatch({
         type: COMMON_ERROR_SET,
@@ -238,11 +239,6 @@ export const updateAccount = (id, object, navigate) => async (dispatch) => {
     type: COMMON_LOADING_SET,
     payload: false,
   });
-  let sesion = sessionStorage.removeItem("userSession");
-  if (!sesion) {
-    navigate("/login");
-    dispatch({ type: LOG_OUT });
-  }
 };
 export const getAccounts = () => async (dispatch) => {
   const service = new AccountService();
@@ -287,7 +283,7 @@ export const getAccountsByStatus = () => async (dispatch) => {
   const service = new AccountService();
 
   try {
-    console.log("Lấy thông tin tài khoản Action");
+    console.log("Kiểm tra trạng thái tài khoản tài khoản Action");
 
     dispatch({
       type: COMMON_LOADING_SET,
@@ -359,4 +355,48 @@ export const getAccountsByStateless = () => async (dispatch) => {
     type: COMMON_LOADING_SET,
     payload: false,
   });
+};
+
+export const changePassword = (id,oldPassword,newPassword,navigate) => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Đổi mật khẩu tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+
+    const response = await service.changePassword(id,oldPassword,newPassword);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+  let sesion = sessionStorage.removeItem("userSession");
+  if (!sesion) {
+    navigate("/users/login");
+    dispatch({ type: LOG_OUT });
+  }
 };

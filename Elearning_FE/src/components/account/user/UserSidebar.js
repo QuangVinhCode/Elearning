@@ -68,7 +68,7 @@ const UserSidebar = ({ activepage }) => {
           <span>Thay đổi thông tin cá nhân </span>
         </div>
       ) : (
-        <Link to="/users/profile/address" className="stylenone">
+        <Link to="/users/profile/updateaccount" className="stylenone">
           <div className="s1">
             <svg
               xmlns="http://www.w3.org/2000/svg"

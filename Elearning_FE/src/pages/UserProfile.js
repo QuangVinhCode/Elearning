@@ -4,7 +4,7 @@ import UserSidebar from "../components/account/user/UserSidebar";
 import AccountSettings from "../components/account/user/AccountSettings";
 import ChangePassword from "../components/account/user/ChangePassword";
 import YourOrders from "../components/account/user/YourOrders";
-import UserAddress from "../components/account/user/UserAddress";
+import EditAccount from "../components/account/user/EditAccount";
 import LegalNotice from "../components/account/user/LegalNotice";
 import "./UserProfile.css";
 const UserProfile = () => {
@@ -21,7 +21,7 @@ const UserProfile = () => {
           {activepage === "accountsettings" && <AccountSettings />}
           {activepage === "changepassword" && <ChangePassword />}
           {activepage === "yourorders" && <YourOrders />}
-          {activepage === "address" && <UserAddress />}
+          {activepage === "updateaccount" && <EditAccount />}
           {activepage === "legalnotice" && <LegalNotice />}
         </div>
       </div>

@@ -41,4 +41,8 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     @Query("SELECT t FROM Taikhoan t WHERE t.trangthai <> 'Bình thường' AND t.quyenhan <> 'Quản trị viên'")
     List<Taikhoan> findNotBinhThuongWithoutAdmin();
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE Taikhoan t SET t.trangthai = 'Bình thường' WHERE t.trangthai = ?1")
+    void updateTrangthaiIfDateMatches(String currentDate);
 }

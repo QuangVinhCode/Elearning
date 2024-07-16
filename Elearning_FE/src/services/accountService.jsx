@@ -34,5 +34,8 @@ export default class ClassService {
   updateAccountStatus = async (id, status) => {
     return await axios.patch(API_ACCOUNT + "/status/" + id + "/" + status);
   };
+  changePassword = async (id, oldPassword,newPassword) => {
+    return await axios.patch(API_ACCOUNT + "/change/" + id + "/" + oldPassword + "/" + newPassword);
+  };
   
 }

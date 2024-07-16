@@ -32,7 +32,7 @@ const AccountSettings = ({ account, getAccount }) => {
       const { mataikhoan } = userSession.data;
       getAccount(mataikhoan);
     }
-  }, [getAccount, userSession]);
+  }, []);
 
   return (
     <div className="accountsettings">

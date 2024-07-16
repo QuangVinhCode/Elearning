@@ -27,7 +27,7 @@ const VNPayForm = ({ getVnPay }) => {
     console.log("Số tiền:", amount);
     console.log("Mã tài khoản:", userSession.data.mataikhoan);
     console.log("Tài khoản ngân hàng:", bankAccount);
-    const data = getVnPay(amount, bankAccount,userSession.data.mataikhoan, navigate);
+    const data = getVnPay(amount, bankAccount,userSession.data.mataikhoan);
     console.log(data);
   };
 

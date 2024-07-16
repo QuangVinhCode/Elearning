@@ -1,9 +1,7 @@
 import React, { useState, Component } from "react";
 import "./YourOrders.css";
 import withRouter from "../../../helpers/withRouter";
-import { getDocuments, payDocument } from "../../../redux/actions/documentAction";
-import DocumentService from "../../../services/documentService";
-import PayService from "../../../services/payService";
+import { getDocuments } from "../../../redux/actions/documentAction";
 import { connect } from "react-redux";
 import { Tooltip } from "antd";
 class YourOrders extends Component {
