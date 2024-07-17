@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Button, Form, Input, message } from "antd";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { insertAccount } from "../redux/actions/accountAction";
 import { setError } from "../redux/actions/commonAction";
@@ -10,7 +9,6 @@ import "./Register.css";
 
 export default function Register() {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const err = useSelector((state) => state.commonReducer.error);
 
@@ -29,7 +27,7 @@ export default function Register() {
       gmail: values.email,
       sodienthoai: values.sodienthoai,
     };
-    dispatch(insertAccount(data, navigate));
+    dispatch(insertAccount(data));
   };
 
   return (

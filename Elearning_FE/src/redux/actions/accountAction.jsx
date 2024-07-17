@@ -56,7 +56,7 @@ export const loginAccount = (object, navigate) => async (dispatch) => {
   }
 };
 
-export const insertAccount = (object, navigate) => async (dispatch) => {
+export const insertAccount = (object) => async (dispatch) => {
   const service = new AccountService();
 
   try {
@@ -69,6 +69,44 @@ export const insertAccount = (object, navigate) => async (dispatch) => {
     console.log("object in action");
     console.log(object);
     const response = await service.insertAccount(object);
+    console.log("response ");
+    console.log(response);
+    if (response.status === 200) {
+      const OtpUrl = response.data.url;
+      console.log(OtpUrl)
+      window.location.href = OtpUrl; // Redirect to paymentUrl
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+export const insertOtpForRegister = (otp, navigate) => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Kiểm tra gmail tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    console.log("otp in action ");
+    console.log(otp);
+    const response = await service.insertOtpForRegister(otp);
     console.log("response");
     console.log(response);
     if (response.status === 201) {
@@ -141,7 +179,7 @@ export const getAccount = (id) => async (dispatch) => {
   });
 };
 
-export const updateAccountStatus = (id,status) => async (dispatch) => {
+export const updateAccountStatus = (id, status) => async (dispatch) => {
   const service = new AccountService();
 
   try {
@@ -152,7 +190,7 @@ export const updateAccountStatus = (id,status) => async (dispatch) => {
       payload: true,
     });
 
-    const response = await service.updateAccountStatus(id,status);
+    const response = await service.updateAccountStatus(id, status);
     console.log(response);
     if (response.status === 200) {
       dispatch({
@@ -179,7 +217,6 @@ export const updateAccountStatus = (id,status) => async (dispatch) => {
     payload: false,
   });
 };
-
 
 export const clearAccount = () => (dispatch) => {
   dispatch({
@@ -357,46 +394,51 @@ export const getAccountsByStateless = () => async (dispatch) => {
   });
 };
 
-export const changePassword = (id,oldPassword,newPassword,navigate) => async (dispatch) => {
-  const service = new AccountService();
+export const changePassword =
+  (id, oldPassword, newPassword, navigate) => async (dispatch) => {
+    const service = new AccountService();
 
-  try {
-    console.log("Đổi mật khẩu tài khoản Action");
+    try {
+      console.log("Đổi mật khẩu tài khoản Action");
 
-    dispatch({
-      type: COMMON_LOADING_SET,
-      payload: true,
-    });
-
-    const response = await service.changePassword(id,oldPassword,newPassword);
-    console.log(response);
-    if (response.status === 200) {
       dispatch({
-        type: COMMON_MESSAGE_SET,
-        payload: response.data,
+        type: COMMON_LOADING_SET,
+        payload: true,
       });
-    } else {
+
+      const response = await service.changePassword(
+        id,
+        oldPassword,
+        newPassword
+      );
+      console.log(response);
+      if (response.status === 200) {
+        dispatch({
+          type: COMMON_MESSAGE_SET,
+          payload: response.data,
+        });
+      } else {
+        dispatch({
+          type: COMMON_ERROR_SET,
+          payload: response.message,
+        });
+      }
+    } catch (error) {
+      console.log(error);
       dispatch({
         type: COMMON_ERROR_SET,
-        payload: response.message,
+        payload: error.response.data
+          ? error.response.data.message
+          : error.message,
       });
     }
-  } catch (error) {
-    console.log(error);
     dispatch({
-      type: COMMON_ERROR_SET,
-      payload: error.response.data
-        ? error.response.data.message
-        : error.message,
+      type: COMMON_LOADING_SET,
+      payload: false,
     });
-  }
-  dispatch({
-    type: COMMON_LOADING_SET,
-    payload: false,
-  });
-  let sesion = sessionStorage.removeItem("userSession");
-  if (!sesion) {
-    navigate("/users/login");
-    dispatch({ type: LOG_OUT });
-  }
-};
+    let sesion = sessionStorage.removeItem("userSession");
+    if (!sesion) {
+      navigate("/users/login");
+      dispatch({ type: LOG_OUT });
+    }
+  };

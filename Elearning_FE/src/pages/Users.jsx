@@ -7,6 +7,7 @@ import Navbar from "../components/home/Navbar";
 import Home from "./Home";
 import UserProfile from "./UserProfile";
 import VNPayForm from "./VNPayForm";
+import OtpVerification from "./OtpVerification";
 import Documents from "./Documents";
 import DocumentForm from "../components/document/DocumentForm";
 import UserDocumentDetals from "../components/document/UserDocumentDetals";
@@ -90,6 +91,7 @@ function Users({ insertDocumentUser, updateDocument }) {
         <Route path="/search/:name" element={<SearchDocument />} />
         <Route path="/profile/:activepage" element={<UserProfile />} />
         <Route path="/vnpayform" element={<VNPayForm />} />
+        <Route path="/otp" element={<OtpVerification />} />
       </Routes>
       <Footer />
 

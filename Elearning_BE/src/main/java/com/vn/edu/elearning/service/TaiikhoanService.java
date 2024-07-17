@@ -1,9 +1,11 @@
 package com.vn.edu.elearning.service;
 
+import com.vn.edu.elearning.config.OTPGenerator;
 import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.dto.TaikhoanDto;
 import com.vn.edu.elearning.exeception.TaikhoanException;
 import com.vn.edu.elearning.repository.TaikhoanRepository;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,15 +13,17 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class TaiikhoanService {
     @Autowired
     TaikhoanRepository taikhoanRepository;
 
+    @Autowired
+    private EmailService emailService;
+
+    private Map<String, String> otpStorage = new HashMap<>();
     public Taikhoan register(TaikhoanDto dto) {
         Optional<?> found = taikhoanRepository.findByTendangnhapContains(dto.getTendangnhap());
 
@@ -52,6 +56,25 @@ public class TaiikhoanService {
         entity.setTrangthai("Bình thường");
         entity.setSodu(0L);
         return taikhoanRepository.save(entity);
+    }
+
+    public void registerUser(String email) throws MessagingException {
+        // Sinh mã xác nhận
+        String otp = OTPGenerator.generateOTP(6);
+
+        // Lưu mã xác nhận cùng với email người dùng
+        otpStorage.put(email, otp);
+
+        // Gửi email chứa mã xác nhận
+        String subject = "Xác nhận đăng ký tài khoản";
+        String content = "Mã xác nhận của bạn là: " + otp;
+
+        emailService.sendEmail(email, subject, content);
+    }
+
+    public boolean verifyOTP(String email, String otp) {
+        String storedOtp = otpStorage.get(email);
+        return storedOtp != null && storedOtp.equals(otp);
     }
 
     public List<?> findAll() {
