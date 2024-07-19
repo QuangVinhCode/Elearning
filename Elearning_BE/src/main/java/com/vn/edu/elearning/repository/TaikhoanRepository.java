@@ -11,10 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
-
-
-    Optional<Taikhoan> findByTendangnhapContains(String tendangnhap);
-
     @Modifying
     @Transactional
     @Query("UPDATE Taikhoan t SET t.sodu = :sodu WHERE t.mataikhoan = :id")
@@ -45,4 +41,11 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     @Transactional
     @Query("UPDATE Taikhoan t SET t.trangthai = 'Bình thường' WHERE t.trangthai = ?1")
     void updateTrangthaiIfDateMatches(String currentDate);
+
+
+    Optional<Taikhoan> findByTendangnhapAndGmail(String tendangnhap, String gmail);
+
+    Optional<Taikhoan> findByTendangnhap(String tendangnhap);
+
+
 }

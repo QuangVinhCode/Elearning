@@ -7,6 +7,7 @@ import com.vn.edu.elearning.domain.Tailieu;
 import com.vn.edu.elearning.dto.TailieuDto;
 import com.vn.edu.elearning.exeception.TailieuException;
 import com.vn.edu.elearning.repository.TaikhoanRepository;
+import com.vn.edu.elearning.repository.TaikhoanthanhtoantailieuRepository;
 import com.vn.edu.elearning.repository.TailieuRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class TailieuService {
 
     @Autowired
     private TaikhoanRepository taikhoanRepository;
+
+    @Autowired
+    private TaikhoanthanhtoantailieuRepository taikhoanthanhtoantailieuRepository;
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -95,6 +99,10 @@ public class TailieuService {
         return found.get();
     }
     public void  deleteById(Long id){
+        List<?> notDelete = taikhoanthanhtoantailieuRepository.findByTailieu_Matailieu(id);
+        if(!notDelete.isEmpty()){
+            throw new TailieuException("Tài liệu đã được người dùng khác thanh toán");
+        }
         Tailieu existed = findById(id);
 
         tailieuRepository.delete(existed);

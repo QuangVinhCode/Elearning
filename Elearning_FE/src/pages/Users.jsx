@@ -8,6 +8,9 @@ import Home from "./Home";
 import UserProfile from "./UserProfile";
 import VNPayForm from "./VNPayForm";
 import OtpVerification from "./OtpVerification";
+import ForgotPassword from "./ForgotPassword";
+import OtpForgotPassword from "./OtpForgotPassword";
+import ResetPassword from "./ResetPassword";
 import Documents from "./Documents";
 import DocumentForm from "../components/document/DocumentForm";
 import UserDocumentDetals from "../components/document/UserDocumentDetals";
@@ -87,11 +90,14 @@ function Users({ insertDocumentUser, updateDocument }) {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/documents/:id" element={<DocumentHome />} />
-        <Route path="/detail/:id" element={<UserDocumentDetals />} /> 
+        <Route path="/detail/:id" element={<UserDocumentDetals />} />
         <Route path="/search/:name" element={<SearchDocument />} />
         <Route path="/profile/:activepage" element={<UserProfile />} />
-        <Route path="/vnpayform" element={<VNPayForm />} />
+        <Route path="/vnpay-form" element={<VNPayForm />} />
         <Route path="/otp" element={<OtpVerification />} />
+        <Route path="/forget" element={<ForgotPassword />} />
+        <Route path="/otp-forget" element={<OtpForgotPassword />} />
+        <Route path="/reset" element={<ResetPassword />} />
       </Routes>
       <Footer />
 

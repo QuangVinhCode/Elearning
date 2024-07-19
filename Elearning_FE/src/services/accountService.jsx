@@ -8,6 +8,15 @@ export default class ClassService {
   insertOtpForRegister = async (otp) => {
     return await axios.patch(API_ACCOUNT + "/verify/" + otp);
   };
+  forgotPassword = async (username, gmail) => {
+    return await axios.patch(API_ACCOUNT + "/forget/" + username + "/" + gmail);
+  };
+  forgotPasswordOpt = async (otp) => {
+    return await axios.patch(API_ACCOUNT + "/confirm/" + otp);
+  };
+  resetPassword = async (password) => {
+    return await axios.patch(API_ACCOUNT + "/reset/" + password);
+  };
   getAccounts = async () => {
     return await axios.get(API_ACCOUNT);
   };

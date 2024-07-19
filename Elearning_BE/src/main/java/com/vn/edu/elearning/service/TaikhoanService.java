@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
-public class TaiikhoanService {
+public class TaikhoanService {
     @Autowired
     TaikhoanRepository taikhoanRepository;
 
@@ -25,7 +25,7 @@ public class TaiikhoanService {
 
     private Map<String, String> otpStorage = new HashMap<>();
     public Taikhoan register(TaikhoanDto dto) {
-        Optional<?> found = taikhoanRepository.findByTendangnhapContains(dto.getTendangnhap());
+        Optional<?> found = taikhoanRepository.findByTendangnhap(dto.getTendangnhap());
 
         if (!found.isEmpty()) {
             throw new TaikhoanException("Tên tài khoản đã tồn tại trong hệ thống");
@@ -72,6 +72,20 @@ public class TaiikhoanService {
         emailService.sendEmail(email, subject, content);
     }
 
+    public void forgotUser(String email) throws MessagingException {
+        // Sinh mã xác nhận
+        String otp = OTPGenerator.generateOTP(6);
+
+        // Lưu mã xác nhận cùng với email người dùng
+        otpStorage.put(email, otp);
+
+        // Gửi email chứa mã xác nhận
+        String subject = "Xác nhận lấy lại tài khoản";
+        String content = "Mã xác nhận của bạn là: " + otp;
+
+        emailService.sendEmail(email, subject, content);
+    }
+
     public boolean verifyOTP(String email, String otp) {
         String storedOtp = otpStorage.get(email);
         return storedOtp != null && storedOtp.equals(otp);
@@ -95,14 +109,24 @@ public class TaiikhoanService {
 
         if (!found.isPresent())
         {
-            throw new TaikhoanException("Tài khoản có id "+ id + "không tồn tại");
+            throw new TaikhoanException("Tài khoản có mã "+ id + "không tồn tại");
+        }
+        return found.get();
+    }
+
+    public Taikhoan findByTendangnhapAndGmail(String tendangnhap,String gmail) {
+        Optional<Taikhoan> found = taikhoanRepository.findByTendangnhapAndGmail(tendangnhap,gmail);
+
+        if (!found.isPresent())
+        {
+            throw new TaikhoanException("Tên đăng nhập hoặc gmail đăng ký không chính xác!");
         }
         return found.get();
     }
 
     public Taikhoan login(String username,String password) {
         System.out.println(username + password);
-        Optional<Taikhoan> found = taikhoanRepository.findByTendangnhapContains(username);
+        Optional<Taikhoan> found = taikhoanRepository.findByTendangnhap(username);
         if (!found.isPresent())
         {
             throw new TaikhoanException("Tài khoản không tồn tại");
@@ -153,5 +177,11 @@ public class TaiikhoanService {
         String password = encryptPassword(newPassword);
         foundAccount.setMatkhau(password);
         return taikhoanRepository.save(foundAccount);
+    }
+
+    public void forgotPassword(Taikhoan taikhoan, String newPassword) {
+        String password = encryptPassword(newPassword);
+        taikhoan.setMatkhau(password);
+        taikhoanRepository.save(taikhoan);
     }
 }

@@ -73,7 +73,7 @@ export const insertAccount = (object) => async (dispatch) => {
     console.log(response);
     if (response.status === 200) {
       const OtpUrl = response.data.url;
-      console.log(OtpUrl)
+      console.log(OtpUrl);
       window.location.href = OtpUrl; // Redirect to paymentUrl
     } else {
       dispatch({
@@ -94,6 +94,128 @@ export const insertAccount = (object) => async (dispatch) => {
     payload: false,
   });
 };
+
+export const forgotPassword = (username, gmail) => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Quên mật khẩu Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    console.log("object in action");
+    console.log(username);
+    console.log(gmail);
+    const response = await service.forgotPassword(username, gmail);
+    console.log("response ");
+    console.log(response);
+    if (response.status === 200) {
+      const OtpUrl = response.data.url;
+      console.log(OtpUrl);
+      window.location.href = OtpUrl; // Redirect to paymentUrl
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const forgotPasswordOpt = (otp) => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Kiểm tra gmail lấy lại tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    console.log("otp in action ");
+    console.log(otp);
+    const response = await service.forgotPasswordOpt(otp);
+    console.log("response");
+    console.log(response);
+    if (response.status === 200) {
+      const OtpUrl = response.data.url;
+      console.log(OtpUrl);
+      window.location.href = OtpUrl; // Redirect to paymentUrl
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+    console.log(response);
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const resetPassword = (newPassword, navigate) => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Kiểm tra gmail tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    console.log("newPassword in action ");
+    console.log(newPassword);
+    const response = await service.resetPassword(newPassword);
+    console.log("response");
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: response.data,
+      });
+      navigate("/users/login");
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
 export const insertOtpForRegister = (otp, navigate) => async (dispatch) => {
   const service = new AccountService();
 

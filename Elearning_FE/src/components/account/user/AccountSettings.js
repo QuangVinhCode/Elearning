@@ -20,7 +20,7 @@ const AccountSettings = ({ account, getAccount }) => {
   );
 
   const handleOpenVNpay = () => {
-    navigate("/users/vnpayform");
+    navigate("/users/vnpay-form");
   };
 
   const handleCloseNotification = () => {

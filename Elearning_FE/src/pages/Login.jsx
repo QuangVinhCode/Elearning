@@ -60,7 +60,7 @@ const Login = () => {
               <input type="checkbox" />
               Nhớ mật khẩu
             </label>
-            <a href="#">Quên mật khẩu</a>
+            <a href="/users/forget">Quên mật khẩu</a>
           </div>
           <Button type="primary" htmlType="submit">
             {" "}
