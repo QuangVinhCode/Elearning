@@ -18,6 +18,7 @@ import { Comment, message, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import CommentDocument from "./CommentDocument";
 import ListComment from "./ListComment";
+import { Navigate } from "react-router-dom";
 class UserDocumentDetails extends Component {
   constructor(props) {
     super(props);
@@ -37,54 +38,47 @@ class UserDocumentDetails extends Component {
       submitting: false,
       pdfUrl: null,
       goToPage: "",
+      documentNotFound: false,
     };
     this.intervalId = null;
   }
 
   componentDidMount() {
-    const { id } = this.props.router.params;
-    const tl = this.props.getDocument(id);
-    console.log("Tài liệu: " + tl);
-    this.props.getCommentsByDocument(id);
-    const storedUserSession = sessionStorage.getItem("userSession");
-    const userSession = storedUserSession
-      ? JSON.parse(storedUserSession)
-      : null;
-    const mataikhoan = userSession ? userSession.data.mataikhoan : 0;
-    const tendangnhap = userSession ? userSession.data.tendangnhap : "";
-    PayService.checkDocumentView(mataikhoan, id).then((result) => {
-      console.log("Kết quả kiểm tra " + result);
-      const status = result;
-      this.setState({ status, mataikhoan, tendangnhap });
-      if (status === "Đã thanh toán" || status === "Chủ sở hữu") {
-        this.setState({ isPaid: true, canDownload: true });
-      }
-    });
+    this.loadDocument();
   }
   componentDidUpdate(prevProps) {
     const { id } = this.props.router.params;
     if (prevProps.router.params.id !== id) {
-      const tl = this.props.getDocument(id);
-      console.log("Tài liệu: " + tl);
-      this.props.getCommentsByDocument(id);
-      const storedUserSession = sessionStorage.getItem("userSession");
-      const userSession = storedUserSession
-        ? JSON.parse(storedUserSession)
-        : null;
-      const mataikhoan = userSession ? userSession.data.mataikhoan : 0;
-      const tendangnhap = userSession ? userSession.data.tendangnhap : "";
-      PayService.checkDocumentView(mataikhoan, id).then((result) => {
-        const status = result;
-        this.setState({
-          status,
-          mataikhoan,
-          tendangnhap,
-          isPaid: status === "Đã thanh toán" || status === "Chủ sở hữu",
-          canDownload: status === "Đã thanh toán" || status === "Chủ sở hữu",
-        });
-      });
+      this.loadDocument();
     }
   }
+  loadDocument = () => {
+    const { id } = this.props.router.params;
+    this.props.getDocument(id).then((result) => {
+      if (result) {
+        this.props.getCommentsByDocument(id);
+        const storedUserSession = sessionStorage.getItem("userSession");
+        const userSession = storedUserSession
+          ? JSON.parse(storedUserSession)
+          : null;
+        const mataikhoan = userSession ? userSession.data.mataikhoan : 0;
+        const tendangnhap = userSession ? userSession.data.tendangnhap : "";
+        PayService.checkDocumentView(mataikhoan, id).then((status) => {
+          this.setState({
+            status,
+            mataikhoan,
+            tendangnhap,
+            isPaid: status === "Đã thanh toán" || status === "Chủ sở hữu",
+            canDownload: status === "Đã thanh toán" || status === "Chủ sở hữu",
+            documentNotFound: false,
+          });
+        });
+      } else {
+        this.setState({ documentNotFound: true });
+      }
+    });
+  };
+
   componentWillUnmount() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
@@ -241,7 +235,11 @@ class UserDocumentDetails extends Component {
       value,
       submitting,
       goToPage,
+      documentNotFound,
     } = this.state;
+    if (documentNotFound) {
+      return <Navigate to="/404" />;
+    }
     // Format giá tiền thành tiền Việt Nam
     const formattedPrice = new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -290,7 +288,7 @@ class UserDocumentDetails extends Component {
                         }
                         placeholder="Nhập số trang"
                       />
-                      <button onClick={this.handleGoToPage} className="go-page" >
+                      <button onClick={this.handleGoToPage} className="go-page">
                         Đi đến trang
                       </button>
                     </div>
@@ -384,7 +382,6 @@ class UserDocumentDetails extends Component {
 const mapStateToProps = (state) => ({
   document: state.documentReducer.document,
   comments: state.commentReducer.comments,
-  permission: state.documentReducer.permission,
 });
 
 const mapDispatchToProps = {

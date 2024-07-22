@@ -49,6 +49,12 @@ public class BinhluanController {
     public ResponseEntity<?> getComments(){
         return new ResponseEntity<>(binhluanService.findAll(),HttpStatus.OK);
     }
+
+    @GetMapping("/account/{id}")
+    public ResponseEntity<?> getCommentsByAccount(@PathVariable("id") Long id){
+        return new ResponseEntity<>(binhluanService.findAllByAccount(id),HttpStatus.OK);
+    }
+
     @GetMapping("/document/{id}")
     public ResponseEntity<?> getCommentsByDocument(@PathVariable("id") Long id){
         return new ResponseEntity<>(binhluanService.findAllByDocument(id),HttpStatus.OK);

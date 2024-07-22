@@ -5,6 +5,7 @@ import Users from "./pages/Users";
 
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
           <Route path="/" element={<Navigate to="/users" />} />
           <Route path="/dashboard/*" element={<DashboardPage />} />
           <Route path="/users/*" element={<Users />} />
+          <Route path="/404" element={<NotFound />} /> {/* Route cho trang lỗi 404 */}
+          <Route path="*" element={<NotFound />} /> {/* Route cho các đường dẫn không hợp lệ */}
         </Routes>
       </BrowserRouter>
     </Provider>

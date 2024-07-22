@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
-import { Button, Form, Input, message } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { Button, Form, Input } from "antd";
+import { useDispatch } from "react-redux";
 import { insertAccount } from "../redux/actions/accountAction";
-import { setError } from "../redux/actions/commonAction";
 import { FaUser, FaLock, FaPhoneAlt } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 import "./Register.css";
@@ -10,14 +9,6 @@ import "./Register.css";
 export default function Register() {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const err = useSelector((state) => state.commonReducer.error);
-
-  useEffect(() => {
-    if (err) {
-      dispatch(setError(""));
-      message.error(err);
-    }
-  }, [err, dispatch]);
 
   const onFinish = (values) => {
     console.log("Received values of form: ", values);

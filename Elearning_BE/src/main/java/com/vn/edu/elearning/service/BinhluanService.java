@@ -3,6 +3,7 @@ package com.vn.edu.elearning.service;
 import com.vn.edu.elearning.domain.Binhluan;
 import com.vn.edu.elearning.dto.BinhluanDto;
 import com.vn.edu.elearning.dto.TaikhoanBinhluanDto;
+import com.vn.edu.elearning.dto.ThongtinTaikhoanBinhluanDto;
 import com.vn.edu.elearning.exeception.DanhmucException;
 import com.vn.edu.elearning.repository.BinhluanRepository;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +26,10 @@ public class BinhluanService {
 
     public List<Binhluan> findAll() {
         return binhluanRepository.findAll();
+    }
+
+    public List<ThongtinTaikhoanBinhluanDto> findAllByAccount(Long mataikhoan) {
+        return binhluanRepository.findCommentsByTaikhoanId(mataikhoan);
     }
 
     public List<TaikhoanBinhluanDto> findAllByDocument(Long matl) {

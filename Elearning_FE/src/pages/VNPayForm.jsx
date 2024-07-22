@@ -14,7 +14,6 @@ const VNPayForm = ({ getVnPay }) => {
   const userSession = useUserSession();
   const [amount, setAmount] = useState(0);
   const [bankAccount, setBankAccount] = useState("");
-  const navigate = useNavigate();
   const handleAmountChange = (e) => {
     setAmount(e.target.value);
   };

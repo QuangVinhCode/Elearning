@@ -22,6 +22,7 @@ import { setError, setMessage } from "../redux/actions/commonAction";
 import { message } from "antd";
 import DocumentHome from "../components/document/DocumentHome";
 import Footer from "../components/home/Footer";
+import NotFound from "./NotFound";
 
 function Users({ insertDocumentUser, updateDocument }) {
   const [showDocumentForm, setShowDocumentForm] = useState(false);
@@ -96,6 +97,8 @@ function Users({ insertDocumentUser, updateDocument }) {
         <Route path="/forget" element={<ForgotPassword />} />
         <Route path="/otp-forget" element={<OtpForgotPassword />} />
         <Route path="/reset" element={<ResetPassword />} />
+        <Route path="*" element={<NotFound />} />{" "}
+        {/* Route cho các đường dẫn không hợp lệ */}
       </Routes>
       <Footer />
 
