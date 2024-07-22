@@ -31,6 +31,7 @@ const useWindowSize = () => {
 const Navbar = ({ onUploadClick }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchWarning, setShowSearchWarning] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userSession = useUserSession();
@@ -71,7 +72,16 @@ const Navbar = ({ onUploadClick }) => {
       });
       return;
     }
-    onUploadClick();
+    setIsModalVisible(true);
+  };
+
+  const handleModalOk = () => {
+    setIsModalVisible(false);
+    onUploadClick(); // Proceed to upload after confirming terms
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -150,6 +160,68 @@ const Navbar = ({ onUploadClick }) => {
           </div>
         </nav>
       </div>
+
+      <Modal
+        title="Điều khoản đăng tài liệu"
+        visible={isModalVisible}
+        onOk={handleModalOk}
+        onCancel={handleModalCancel}
+        okText="Chấp nhận"
+        cancelText="Hủy"
+      >
+        <p>
+          <strong>
+            Chúng tôi hoan nghênh bạn đóng góp tài liệu cho nền tảng của chúng
+            tôi. Tuy nhiên, để đảm bảo chất lượng và hợp pháp của các tài liệu,
+            vui lòng lưu ý các điều khoản sau đây:
+          </strong>
+        </p>
+        <p>
+          <strong>Chào mừng bạn đến với nền tảng của chúng tôi!</strong>
+          <br />
+          Để đảm bảo chất lượng và tính hợp pháp của các tài liệu, vui lòng tuân
+          thủ các quy định sau khi đăng tải tài liệu:
+        </p>
+        <ul>
+          <li>
+            <strong>Không Đăng Tải Tài Liệu Giả Mạo:</strong> Tài liệu đăng tải
+            phải là bản gốc, chính thức và chính xác. Không chấp nhận tài liệu
+            đã bị chỉnh sửa, thay đổi nội dung gốc, hoặc tài liệu giả mạo.
+          </li>
+          <li>
+            <strong>Tuân Thủ Pháp Luật:</strong> Tài liệu không được vi phạm bất
+            kỳ quy định pháp luật nào, bao gồm luật bản quyền và các quy định
+            liên quan. Không được đăng tải nội dung vi phạm quyền sở hữu trí
+            tuệ, các hành vi trái phép khác hoặc nội dung gây tổn hại đến người
+            khác.
+          </li>
+          <li>
+            <strong>Chia Sẻ Doanh Thu:</strong> Đối với mỗi tài liệu được bán,
+            10% doanh thu sẽ được phân phối lại cho nền tảng của chúng tôi. Số
+            tiền chia sẻ này nhằm hỗ trợ duy trì và phát triển nền tảng của
+            chúng tôi.
+          </li>
+          <li>
+            <strong>Quá Trình Xét Duyệt:</strong> Tất cả các tài liệu sẽ phải
+            trải qua quá trình xét duyệt của quản trị viên. Tài liệu chỉ được
+            công khai trên nền tảng sau khi được phê duyệt, đảm bảo rằng nó đáp
+            ứng tất cả các tiêu chuẩn và quy định của chúng tôi.
+          </li>
+          <li>
+            <strong>Trách Nhiệm Của Người Đăng Tải:</strong> Người đăng tải tài
+            liệu có trách nhiệm đảm bảo rằng tài liệu của mình không vi phạm các
+            quy định trên. Người đăng tải sẽ chịu trách nhiệm hoàn toàn đối với
+            bất kỳ khiếu nại nào liên quan đến nội dung tài liệu của mình.
+          </li>
+        </ul>
+        <p>
+          <strong>
+            Chúng tôi cảm ơn sự hợp tác và đóng góp của bạn để duy trì chất
+            lượng và tính hợp pháp của nền tảng. Nếu bạn có bất kỳ câu hỏi nào,
+            vui lòng liên hệ với chúng tôi để được hỗ trợ.
+          </strong>
+        </p>
+      </Modal>
       {showSearchWarning && (
         <div
           className="modal fade show"

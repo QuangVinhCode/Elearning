@@ -181,6 +181,7 @@ class DocumentForm extends Component {
             label="Mã tài liệu"
             name="matailieu"
             initialValue={document.matailieu}
+            hidden={true}
           >
             <Input readOnly></Input>
           </Form.Item>

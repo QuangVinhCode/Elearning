@@ -276,9 +276,9 @@ class UserDocumentDetails extends Component {
                     >
                       Sau
                     </button>
-                    <p>
+                    <h3>
                       Trang {page} / {pdfDocument.numPages}
-                    </p>
+                    </h3>
                     <div className="page-navigation">
                       <input
                         type="number"
@@ -290,7 +290,7 @@ class UserDocumentDetails extends Component {
                         }
                         placeholder="Nhập số trang"
                       />
-                      <button onClick={this.handleGoToPage}>
+                      <button onClick={this.handleGoToPage} className="go-page" >
                         Đi đến trang
                       </button>
                     </div>

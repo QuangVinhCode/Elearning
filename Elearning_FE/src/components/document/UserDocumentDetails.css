@@ -203,3 +203,31 @@ button {
   max-height: 300px; /* Giới hạn chiều cao của danh sách bình luận */
   overflow-y: auto; /* Thêm thanh cuộn dọc nếu vượt quá chiều cao */
 }
+
+.go-page {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff; /* Màu nền nổi bật */
+  border: none;
+  border-radius: 5px; /* Bo tròn góc nút */
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.go-page:hover {
+  background-color: #0056b3; /* Màu nền khi hover */
+  transform: scale(1.05); /* Hiệu ứng phóng to khi hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Bóng đổ khi hover */
+}
+
+.go-page:active {
+  background-color: #004494; /* Màu nền khi nhấn */
+  transform: scale(0.98); /* Hiệu ứng co lại khi nhấn */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Bóng đổ khi nhấn */
+}
