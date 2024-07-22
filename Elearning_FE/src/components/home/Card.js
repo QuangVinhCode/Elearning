@@ -8,6 +8,10 @@ class Card extends Component {
   componentDidMount() {
     this.props.getOutstandingDocuments();
   }
+  onDocument = (id) => {
+    const { navigate } = this.props.router;
+    navigate("/users/detail/" + id);
+  };
   render() {
     const { documents } = this.props;
     return (

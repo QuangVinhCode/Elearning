@@ -11,9 +11,8 @@ import OtpVerification from "./OtpVerification";
 import ForgotPassword from "./ForgotPassword";
 import OtpForgotPassword from "./OtpForgotPassword";
 import ResetPassword from "./ResetPassword";
-import Documents from "./Documents";
 import DocumentForm from "../components/document/DocumentForm";
-import UserDocumentDetals from "../components/document/UserDocumentDetals";
+import UserDocumentDetails from "../components/document/UserDocumentDetails";
 import SearchDocument from "../components/document/SearchDocument";
 import {
   insertDocumentUser,
@@ -86,11 +85,10 @@ function Users({ insertDocumentUser, updateDocument }) {
       <Navbar onUploadClick={handleUploadClick} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/document" element={<Documents />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/documents/:id" element={<DocumentHome />} />
-        <Route path="/detail/:id" element={<UserDocumentDetals />} />
+        <Route path="/detail/:id" element={<UserDocumentDetails />} />
         <Route path="/search/:name" element={<SearchDocument />} />
         <Route path="/profile/:activepage" element={<UserProfile />} />
         <Route path="/vnpay-form" element={<VNPayForm />} />

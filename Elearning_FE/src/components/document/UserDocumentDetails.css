@@ -1,0 +1,205 @@
+/* Reset some basic styles */
+button {
+  border: none;
+  outline: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Layout styles */
+.container {
+  display: flex;
+
+  width: 100%;
+  height: 100%; /* Full viewport height */
+  overflow: hidden; /* Prevent content overflow */
+  margin-top: -50px;
+}
+.pdf-viewer-container {
+  width: 70%; /* 50% for the PDF viewer */
+  display: flex;
+  margin-top: 100px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff; /* White background, adjust as needed */
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto; /* Allow vertical scrolling if content overflows */
+}
+
+.next-button {
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  color: white;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.next-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  opacity: 0;
+  z-index: 1;
+}
+
+.next-button:hover::after {
+  opacity: 1;
+}
+
+/* Prev button with ripple effect */
+.prev-button {
+  background: #ff5f6d;
+  color: white;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.prev-button::after {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.3);
+  display: block;
+  border-radius: 50%;
+  transform: scale(10);
+  opacity: 0;
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+}
+
+.prev-button:active::after {
+  width: 300%;
+  height: 300%;
+  opacity: 0;
+  transform: scale(0);
+  transition: 0s;
+}
+
+.prev-button:active::before {
+  opacity: 1;
+  transition: 0s;
+}
+
+/* Navigation buttons container */
+.nav-buttons {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  justify-content: center;
+}
+
+.next-button[disabled],
+.prev-button[disabled] {
+  opacity: 0.6; /* Reduces opacity to indicate disabled state */
+  pointer-events: none; /* Prevents clicking on disabled button */
+}
+
+/* Message notification */
+.message-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border: 2px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1040; /* Ensures the layer is displayed above all other elements */
+  max-width: 400px; /* Max width of the message box */
+  text-align: center; /* Center align content */
+}
+
+.message-notification p {
+  margin-bottom: 10px;
+}
+
+.message-notification button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.message-notification button:hover {
+  background-color: #0056b3;
+}
+
+
+.divInformation {
+  width: 30%;
+  padding: 20px;
+  margin-top: 100px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.document-title {
+  font-size: 2.5em; /* Larger font size for the document title */
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.document-description {
+  font-size: 1.2em;
+  color: #666;
+  line-height: 1.6; /* Ensures adequate spacing between lines */
+}
+
+.document-price {
+  font-size: 1.5em; /* Larger font size for the price */
+  color: #dc3545; /* Red color for emphasis */
+  font-weight: bold; /* Bold text for emphasis */
+  margin-top: 10px; /* Add margin above the price */
+}
+
+.action-buttons {
+  margin-top: 20px;
+  text-align: center; /* Can be removed if you want buttons aligned to left */
+}
+
+.button-download,
+.button-pay {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1.2em;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+  height: 40px; /* Set the height of both buttons */
+}
+
+.button-download {
+  background-color: #007bff;
+}
+
+.button-pay {
+  background-color: #28a745;
+}
+.button-pay:hover {
+  opacity: 0.8;
+}
+
+.comment-section {
+  max-height: 300px; /* Giới hạn chiều cao của danh sách bình luận */
+  overflow-y: auto; /* Thêm thanh cuộn dọc nếu vượt quá chiều cao */
+}

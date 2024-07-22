@@ -5,9 +5,11 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginAccount } from "../redux/actions/accountAction";
 import "./Login.css";
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const onFinish = (values) => {
     console.log("Success:", values);
     dispatch(loginAccount(values, navigate));
@@ -16,6 +18,7 @@ const Login = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   return (
     <div className="login-page">
       <div className="wrapper">
@@ -63,12 +66,11 @@ const Login = () => {
             <a href="/users/forget">Quên mật khẩu</a>
           </div>
           <Button type="primary" htmlType="submit">
-            {" "}
             Đăng nhập
           </Button>
           <div className="register-link">
             <p className="cctk">
-              Chưa có tài khoản ? <a href="/users/register"> Đăng ký</a>
+              Chưa có tài khoản? <a href="/users/register"> Đăng ký</a>
             </p>
           </div>
         </Form>
@@ -76,4 +78,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;

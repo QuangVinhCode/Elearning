@@ -14,6 +14,7 @@ import {
   updateDocument,
 } from "../../redux/actions/documentAction";
 import DocumentDetails from "./DocumentDetails";
+import { MdMargin } from "react-icons/md";
 class ListDocument extends Component {
   constructor(props) {
     super(props);

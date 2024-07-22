@@ -4,6 +4,8 @@ import {
   Form,
   Image,
   Input,
+  InputNumber,
+  message,
   Modal,
   Select,
   Upload,
@@ -30,7 +32,7 @@ class DocumentForm extends Component {
         mataikhoan: "",
         danhmuc: { madanhmuc: "" },
       },
-      previewImage: "",
+      isFileSizeValid: true,
       previewVisible: false,
       categories: [],
     };
@@ -88,7 +90,31 @@ class DocumentForm extends Component {
       },
     });
   };
+  beforeUpload = (file) => {
+    console.log("file " + file.size / 1024 / 1024);
+    const isLt4M = file.size / 1024 / 1024 < 10; // Kiểm tra nếu kích thước tệp nhỏ hơn 4MB
+    console.log("isLt4M" + isLt4M);
+    const isPdf = file.type === "application/pdf";
+    if (!isPdf) {
+      message.error("Chỉ chấp nhận các tệp PDF!");
+    }
+    if (!isLt4M) {
+      message.info({
+        content: "Kích thước file pdf < 10MB!",
+        style: { marginTop: "20vh" },
+      });
+    }
+    this.setState({ isFileSizeValid: isLt4M && isPdf });
+    return !isLt4M && !isPdf;
+  };
+  formatCurrency = (value) => {
+    if (!value) return "";
+    return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
+  parseCurrency = (value) => {
+    return value.replace(/\đ\s?|(\,*)/g, "");
+  };
   render() {
     const { open, onCreate, onCancel } = this.props;
     const { document } = this.props;
@@ -121,6 +147,13 @@ class DocumentForm extends Component {
           onCancel();
         }}
         onOk={() => {
+          if (!this.state.isFileSizeValid) {
+            message.error({
+              content: "Định danh file pdf và kích thước < 10MB",
+              style: { marginTop: "20vh" },
+            });
+            return;
+          }
           this.form.current
             .validateFields()
             .then((values) => {
@@ -163,7 +196,7 @@ class DocumentForm extends Component {
             label="Mô tả"
             name="mota"
             initialValue={document.mota}
-            rules={[{ required: true, message: "Yêu cầu nhập tên tài liệu" }]}
+            rules={[{ required: true, message: "Yêu cầu nhập mô tả" }]}
           >
             <Input></Input>
           </Form.Item>
@@ -173,7 +206,13 @@ class DocumentForm extends Component {
             initialValue={document.giaban}
             rules={[{ required: true, message: "Yêu cầu nhập giá tiền" }]}
           >
-            <Input></Input>
+            <InputNumber
+              style={{ width: "100%" }}
+              min={0}
+              step={1000}
+              formatter={this.formatCurrency}
+              parser={this.parseCurrency}
+            />
           </Form.Item>
           <Form.Item
             label="Danh mục"
@@ -194,8 +233,7 @@ class DocumentForm extends Component {
           <Form.Item
             label="Tài khoản đăng tài liệu"
             name="mataikhoan"
-            initialValue={userSession ? userSession.data.mataikhoan : ""}
-            style={{ paddingLeft: 20 }}
+            initialValue={userSession.data.mataikhoan}
             hidden={true}
           >
             <Input></Input>
@@ -214,19 +252,12 @@ class DocumentForm extends Component {
               onRemove={this.handleRemove}
               accept=".pdf"
               maxCount={1}
-              beforeUpload={() => false}
+              beforeUpload={this.beforeUpload}
             >
               <Button type="primary">Tải lên</Button>
             </Upload>
           </Form.Item>
           <Divider></Divider>
-          {this.state.previewVisible && (
-            <Image
-              src={this.state.previewImage}
-              style={{ with: 200 }}
-              preview={{ visible: false }}
-            ></Image>
-          )}
         </Form>
       </Modal>
     );

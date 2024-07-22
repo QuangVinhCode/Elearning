@@ -66,7 +66,7 @@ public class TaikhoanController {
             Taikhoan registeredAccount = taikhoanService.register(registeredDto);
             return new ResponseEntity<>(registeredAccount, HttpStatus.CREATED);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mã xác nhận không đúng. Vui lòng kiểm tra lại.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Mã xác nhận không chính xác!"));
         }
     }
 
@@ -95,7 +95,7 @@ public class TaikhoanController {
             return ResponseEntity.ok(Map.of("message", "Thành công lấy lại tài khoản!",
                     "url", "http://localhost:3000/users/reset"));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không có dữ liệu tài khoản để xác nhận.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Mã xác nhận không chính xác!"));
         }
     }
 

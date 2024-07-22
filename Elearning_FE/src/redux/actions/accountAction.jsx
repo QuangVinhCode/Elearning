@@ -150,6 +150,7 @@ export const forgotPasswordOpt = (otp) => async (dispatch) => {
     const response = await service.forgotPasswordOpt(otp);
     console.log("response");
     console.log(response);
+    console.log(response.message);
     if (response.status === 200) {
       const OtpUrl = response.data.url;
       console.log(OtpUrl);

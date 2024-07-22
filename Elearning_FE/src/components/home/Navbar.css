@@ -178,3 +178,14 @@ input:not([type="range"]) {
 .message-notification button:hover {
   background-color: #0056b3;
 }
+
+a {
+  color: #81c408 !important ; /* Giữ nguyên màu chữ từ phần tử cha */
+  text-decoration: none; /* Bỏ gạch chân */
+  cursor: pointer; /* Giữ con trỏ ở dạng tay khi hover */
+}
+
+a:hover, a:focus, a:active {
+  text-decoration: none; /* Đảm bảo không có gạch chân khi hover, focus, hoặc active */
+ opacity: 0.6;
+}

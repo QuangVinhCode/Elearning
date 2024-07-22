@@ -29,7 +29,6 @@ const useWindowSize = () => {
 };
 
 const Navbar = ({ onUploadClick }) => {
-  const [click, setClick] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchWarning, setShowSearchWarning] = useState(false);
   const navigate = useNavigate();
@@ -123,7 +122,6 @@ const Navbar = ({ onUploadClick }) => {
                 to="#"
                 className="nav-item nav-link"
                 onClick={() => {
-                  setClick(false);
                   handleUploadClick();
                 }}
               >
@@ -141,11 +139,7 @@ const Navbar = ({ onUploadClick }) => {
                   </span>
                 </Link>
               ) : (
-                <Link
-                  to="/users/login"
-                  className="nav-links-mobile"
-                  onClick={() => setClick(false)}
-                >
+                <Link to="/users/login" className="nav-links-mobile">
                   Đăng nhập
                 </Link>
               )}
