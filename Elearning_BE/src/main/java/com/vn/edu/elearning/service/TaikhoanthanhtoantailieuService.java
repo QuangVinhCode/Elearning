@@ -29,7 +29,7 @@ public class TaikhoanthanhtoantailieuService {
     private TaikhoandangbantailieuRepository taikhoandangbantailieuRepository;
     @Autowired
     private TaikhoanthanhtoantailieuRepository taikhoanthanhtoantailieuRepository;
-    public Taikhoanthanhtoantailieu save(Long matk,Long matl) {
+    public Taikhoanthanhtoantailieu save(Long matk,Long matl,Long tongtien,Long phiquantri, Long thunhaptacgia) {
         Taikhoanthanhtoantailieu entity = new Taikhoanthanhtoantailieu();
         Mataikhoanthanhtoantailieu mataikhoanthanhtoantailieu = new Mataikhoanthanhtoantailieu();
         Taikhoan taikhoan = new Taikhoan();
@@ -74,6 +74,9 @@ public class TaikhoanthanhtoantailieuService {
         entity.setMataikhoanthanhtoantailieu(mataikhoanthanhtoantailieu);
         entity.setTaikhoan(taikhoan);
         entity.setTailieu(tailieu);
+        entity.setSotienthanhtoan(tongtien);
+        entity.setPhiquantri(phiquantri);
+        entity.setThunhaptacgia(thunhaptacgia);
         entity.setThoigianthanhtoan(formattedDateTime);
         return taikhoanthanhtoantailieuRepository.save(entity);
     }

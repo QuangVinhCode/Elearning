@@ -1,6 +1,7 @@
 package com.vn.edu.elearning.controller;
 
 import com.vn.edu.elearning.domain.Taikhoanthanhtoantailieu;
+import com.vn.edu.elearning.domain.Tailieu;
 import com.vn.edu.elearning.dto.PaymentDTO;
 import com.vn.edu.elearning.exeception.ResponseObject;
 import com.vn.edu.elearning.service.*;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ThanhtoanController {
     private final PaymentService paymentService;
-
+    @Autowired
+    TailieuService tailieuService;
     @Autowired
     private TaikhoanthanhtoantailieuService taikhoanthanhtoantailieuService;
     private Long amount;
@@ -45,21 +47,20 @@ public class ThanhtoanController {
     }
     @PostMapping("/pay/{tk}/{tl}")
     public ResponseEntity<?> payDocument(@PathVariable("tk") Long tk,@PathVariable("tl") Long tl) {
-        Taikhoanthanhtoantailieu taikhoanthanhtoantailieu = taikhoanthanhtoantailieuService.save(tk,tl);
+        Tailieu tailieu = tailieuService.findById(tl);
+        Long adminShare = tailieu.getGiaban() / 10;
+        Long userShare = tailieu.getGiaban() - adminShare;
+
+        System.out.println("Mã tài khoản " + tk);
+        System.out.println("Giá tài liệu " + tailieu.getGiaban());
+        System.out.println("Admin share: " + adminShare);
+        System.out.println("User share: " + userShare);
+        Taikhoanthanhtoantailieu taikhoanthanhtoantailieu = taikhoanthanhtoantailieuService.save(tk,tl,tailieu.getGiaban(),adminShare,userShare);
         if (taikhoanthanhtoantailieu!=null)
         {
             Long matk = taikhoanthanhtoantailieuService.findFirstMataikhoanByMatailieu(taikhoanthanhtoantailieu.getTailieu().getMatailieu());
             Long giaTL = taikhoanthanhtoantailieu.getTailieu().getGiaban();
-            // Tính toán giá trị 10% cho admin và 90% cho người dùng
-            Long adminShare = giaTL / 10;
-            Long userShare = giaTL - adminShare;
 
-            System.out.println("Mã tài khoản " + matk);
-            System.out.println("Giá tài liệu " + giaTL);
-            System.out.println("Admin share: " + adminShare);
-            System.out.println("User share: " + userShare);
-
-            // Cập nhật số dư cho người dùng
             taikhoanthanhtoantailieuService.incrementSodu(matk, userShare);
 
             taikhoanthanhtoantailieuService.incrementSoduForAdmin(adminShare);

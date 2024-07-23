@@ -5,9 +5,10 @@ import "./OtpVerification.css";
 import { insertOtpForRegister } from "../redux/actions/accountAction";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-const { Title, Text } = Typography;
+import ContentHeader from "../components/common/ContentHeader";
+const {  Text } = Typography;
 
-const OtpVerification = ({insertOtpForRegister}) => {
+const OtpVerification = ({ insertOtpForRegister }) => {
   const [values, setValues] = useState(Array(6).fill(""));
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
@@ -34,16 +35,22 @@ const OtpVerification = ({insertOtpForRegister}) => {
   };
 
   const handleSubmit = () => {
-    insertOtpForRegister(otp,navigate)
+    insertOtpForRegister(otp, navigate);
     console.log("OTP Entered:", otp);
   };
 
   return (
-    <Row align="middle" justify="center" style={{ height: "100vh" }}>
+    <Row
+      align="middle"
+      justify="center" 
+      style={{height:"80vh"}}  
+    >
       <Col>
-        <Title level={2} style={{ textAlign: "center" }}>
-          Xác Nhận Mã OTP
-        </Title>
+        <ContentHeader
+          navigate={navigate}
+          title="Mã xác nhận OTP"
+          className="site-page-header"
+        ></ContentHeader>
         <Text
           style={{
             textAlign: "center",
@@ -86,8 +93,7 @@ const OtpVerification = ({insertOtpForRegister}) => {
 };
 
 const mapDispatchToProps = {
-    insertOtpForRegister,
-  };
-  
-  export default connect(null, mapDispatchToProps)(OtpVerification);
-  
+  insertOtpForRegister,
+};
+
+export default connect(null, mapDispatchToProps)(OtpVerification);

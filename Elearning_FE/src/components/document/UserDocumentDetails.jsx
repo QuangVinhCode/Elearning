@@ -212,7 +212,7 @@ class UserDocumentDetails extends Component {
         });
       } else {
         message.warning({
-          content: "Số trang nằm trong phạm phải thanh toán để có thể",
+          content: "Số trang nằm trong phạm vi phải thanh toán để có thể xem!",
           style: { marginTop: "10vh" },
         });
       }

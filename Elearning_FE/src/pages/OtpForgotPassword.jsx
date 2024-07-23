@@ -5,9 +5,10 @@ import "./OtpVerification.css";
 import { forgotPasswordOpt } from "../redux/actions/accountAction";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ContentHeader from "../components/common/ContentHeader";
 const { Title, Text } = Typography;
 
-const OtpForgotPassword = ({forgotPasswordOpt}) => {
+const OtpForgotPassword = ({ forgotPasswordOpt }) => {
   const [values, setValues] = useState(Array(6).fill(""));
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
@@ -34,16 +35,18 @@ const OtpForgotPassword = ({forgotPasswordOpt}) => {
   };
 
   const handleSubmit = () => {
-    forgotPasswordOpt(otp)
+    forgotPasswordOpt(otp);
     console.log("OTP Entered:", otp);
   };
 
   return (
     <Row align="middle" justify="center" style={{ height: "100vh" }}>
       <Col>
-        <Title level={2} style={{ textAlign: "center" }}>
-          Xác Nhận Mã OTP
-        </Title>
+        <ContentHeader
+          navigate={navigate}
+          title="Mã xác nhận OTP"
+          className="site-page-header"
+        ></ContentHeader>
         <Text
           style={{
             textAlign: "center",
@@ -87,7 +90,6 @@ const OtpForgotPassword = ({forgotPasswordOpt}) => {
 
 const mapDispatchToProps = {
   forgotPasswordOpt,
-  };
-  
-  export default connect(null, mapDispatchToProps)(OtpForgotPassword);
-  
+};
+
+export default connect(null, mapDispatchToProps)(OtpForgotPassword);

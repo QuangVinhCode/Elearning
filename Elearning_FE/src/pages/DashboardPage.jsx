@@ -14,6 +14,7 @@ import {
   MdOutlineHome,
   MdOutlinePlayLesson,
 } from "react-icons/md";
+import { FaHouseUser } from "react-icons/fa";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "../components/home/Home";
 import AddOrEditCategory from "../components/category/AddOrEditCategory";
@@ -93,17 +94,23 @@ function DashboardPage() {
             },
             {
               key: "2",
+              icon: <FaHouseUser />,
+              label: "Trang người dùng",
+              onClick: () => navigate("/users"),
+            },
+            {
+              key: "3",
               icon: <MdClass />,
               label: "Danh mục",
               children: [
                 {
-                  key: "21",
+                  key: "31",
                   icon: <MdFormatListBulleted />,
                   label: "Danh sách danh mục",
                   onClick: () => navigate("/dashboard/category/list"),
                 },
                 {
-                  key: "22",
+                  key: "32",
                   icon: <MdAddCircleOutline />,
                   label: "Thêm danh mục",
                   onClick: () => navigate("/dashboard/category/add"),
@@ -111,30 +118,30 @@ function DashboardPage() {
               ],
             },
             {
-              key: "3",
+              key: "4",
               icon: <MdOutlinePlayLesson />,
               label: "Tài liệu",
               onClick: () => navigate("/dashboard/document/list"),
             },
             {
-              key: "4",
+              key: "5",
               icon: <MdClass />,
               label: "Kiểm duyệt",
               children: [
                 {
-                  key: "41",
+                  key: "51",
                   icon: <MdFormatListBulleted />,
                   label: "Chưa kiểm duyệt",
                   onClick: () => navigate("/dashboard/document/censoring"),
                 },
                 {
-                  key: "42",
+                  key: "52",
                   icon: <MdAddCircleOutline />,
                   label: "Đã kiểm duyệt",
                   onClick: () => navigate("/dashboard/document/censored"),
                 },
                 {
-                  key: "43",
+                  key: "53",
                   icon: <MdAddCircleOutline />,
                   label: "Lỗi kiểm duyệt",
                   onClick: () =>
@@ -143,18 +150,18 @@ function DashboardPage() {
               ],
             },
             {
-              key: "5",
+              key: "6",
               icon: <MdOutlinePlayLesson />,
               label: "Quản lý tài khoản",
               children: [
                 {
-                  key: "51",
+                  key: "61",
                   icon: <MdFormatListBulleted />,
                   label: "DS Tài khoản",
                   onClick: () => navigate("/dashboard/account/usermanage"),
                 },
                 {
-                  key: "52",
+                  key: "62",
                   icon: <MdAddCircleOutline />,
                   label: "DS Đã chặn",
                   onClick: () => navigate("/dashboard/account/userblocked"),
@@ -164,7 +171,7 @@ function DashboardPage() {
               
             },
             {
-              key: "8",
+              key: "7",
               icon: <MdLogout />,
               label: "Đăng xuất",
               onClick: handleLogout,

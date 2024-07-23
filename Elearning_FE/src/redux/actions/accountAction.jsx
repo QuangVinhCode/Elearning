@@ -320,6 +320,10 @@ export const updateAccountStatus = (id, status) => async (dispatch) => {
         type: UPDATE_STATUS,
         payload: id,
       });
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "Chặn thành công!",
+      });
     } else {
       dispatch({
         type: COMMON_ERROR_SET,
