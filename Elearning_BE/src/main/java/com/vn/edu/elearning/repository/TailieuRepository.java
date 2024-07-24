@@ -23,5 +23,8 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
 
     List<Tailieu> findByTentailieuContains(String tentailieu);
 
+    List<Tailieu> findByDstaikhoanthanhtoantailieu_Taikhoan_Mataikhoan(Long mataikhoan);
+
+    List<Tailieu> findByDstaikhoandangbantailieus_Taikhoan_Mataikhoan(Long mataikhoan);
 
 }

@@ -71,6 +71,14 @@ public class TailieuService {
         return tailieuRepository.findAll();
     }
 
+    public List<?> findAllByAccountSale(Long matk) {
+        return tailieuRepository.findByDstaikhoandangbantailieus_Taikhoan_Mataikhoan(matk);
+    }
+
+    public List<?> findAllByAccountPay(Long matk) {
+        return tailieuRepository.findByDstaikhoanthanhtoantailieu_Taikhoan_Mataikhoan(matk);
+    }
+
     public List<?> findAllByCategory(Long madm) {
         return tailieuRepository.findByDanhmuc_Madanhmuc(madm);
     }

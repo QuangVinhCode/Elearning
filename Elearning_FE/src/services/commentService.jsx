@@ -21,4 +21,7 @@ export default class CommentService {
   getComment = async (id) => {
     return await axios.get(API_COMMENT + "/" + id + "/get");
   };
+  getCommentsByAccount = async (id) => {
+    return await axios.get(API_COMMENT + "/account/" + id);
+  };
 }

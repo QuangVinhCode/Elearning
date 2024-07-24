@@ -92,12 +92,7 @@ function DashboardPage() {
               label: "Trang chủ",
               onClick: () => navigate("/dashboard/*"),
             },
-            {
-              key: "2",
-              icon: <FaHouseUser />,
-              label: "Trang người dùng",
-              onClick: () => navigate("/users"),
-            },
+
             {
               key: "3",
               icon: <MdClass />,
@@ -166,9 +161,7 @@ function DashboardPage() {
                   label: "DS Đã chặn",
                   onClick: () => navigate("/dashboard/account/userblocked"),
                 },
-               
               ],
-              
             },
             {
               key: "7",

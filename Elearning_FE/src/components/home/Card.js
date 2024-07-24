@@ -16,7 +16,7 @@ class Card extends Component {
     const { documents } = this.props;
     return (
       <div className="cards">
-        <h1>TÀI LIỆU NỔI BẬC</h1>
+        <h1>TÀI LIỆU NỔI BẬT</h1>
         <div className="cards__container">
           <div className="cards__wrapper">
             <ul className="cards__items">

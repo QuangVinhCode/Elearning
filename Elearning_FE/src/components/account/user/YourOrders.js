@@ -1,9 +1,12 @@
 import React, { useState, Component } from "react";
 import "./YourOrders.css";
 import withRouter from "../../../helpers/withRouter";
-import { getDocuments } from "../../../redux/actions/documentAction";
+import {
+  getDocuments,
+  updateDocument,
+} from "../../../redux/actions/documentAction";
 import { connect } from "react-redux";
-import { Tooltip } from "antd";
+import { Tooltip, Modal } from "antd";
 class YourOrders extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +15,37 @@ class YourOrders extends Component {
   componentDidMount() {
     this.props.getDocuments();
   }
+  showUpdateModal = (document) => {
+    this.setState({
+      isModalVisible: true,
+      selectedDocument: document,
+    });
+  };
+
+  handleUpdateCancel = () => {
+    this.setState({
+      isModalVisible: false,
+      selectedDocument: null,
+    });
+  };
+
+  handleUpdateChange = (e) => {
+    const { name, value } = e.target;
+    this.setState((prevState) => ({
+      selectedDocument: {
+        ...prevState.selectedDocument,
+        [name]: value,
+      },
+    }));
+  };
+
+  handleUpdateSubmit = () => {
+    this.props.updateDocument(this.state.selectedDocument);
+    this.setState({
+      isModalVisible: false,
+      selectedDocument: null,
+    });
+  };
   render() {
     const { documents } = this.props;
 
@@ -59,7 +93,25 @@ class YourOrders extends Component {
                   }).format(document.giaban)}
                 </td>
                 <td data-label="ghichu">
-                  {document.ghichu === null ? "Không lỗi" : document.ghichu}
+                  {document.kiemduyet == "Đã kiểm duyệt" && (
+                    <span>
+                      {document.ghichu === null
+                        ? "Tài liệu bình thường"
+                        : document.ghichu}
+                    </span>
+                  )}
+                  {document.kiemduyet == "Chưa kiểm duyệt" && (
+                    <span>
+                      {document.ghichu === null
+                        ? "Tài liệu chưa kiểm duyệt"
+                        : document.ghichu}
+                    </span>
+                  )}
+                  {document.kiemduyet == "Lỗi kiểm duyệt" && (
+                    <span>
+                      {document.ghichu === null ? "Không lỗi" : document.ghichu}
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}
@@ -76,6 +128,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   getDocuments,
+  updateDocument,
 };
 
 export default withRouter(

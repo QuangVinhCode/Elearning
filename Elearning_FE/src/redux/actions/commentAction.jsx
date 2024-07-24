@@ -127,6 +127,41 @@ export const getCommentsByDocument = (id) => async (dispatch) => {
     payload: false,
   });
 };
+export const getCommentsByAccount = (id) => async (dispatch) => {
+  const service = new CommentService();
+
+  try {
+    console.log("Danh sách bình luận Action theo tai khoan");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getCommentsByAccount(id);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: COMMENTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
 
 export const deleteComment = (matk, matl, mabl) => async (dispatch) => {
   const service = new CommentService();

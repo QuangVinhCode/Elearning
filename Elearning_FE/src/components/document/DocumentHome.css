@@ -41,7 +41,6 @@ html {
   box-shadow: 0.5rem 0.75rem 1.5rem #bbbbbb;
 }
 .list_document {
-
   margin-top: 10rem;
   display: grid;
   grid-template-columns: 200px 200px 200px 200px 200px 200px;
@@ -75,6 +74,27 @@ html {
   color: red;
   position: absolute;
   bottom: 16px; /* Khoảng cách từ dưới lên */
+  left: 0;
+  width: 100%;
+  text-align: left;
+}
+.productStatus {
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.productStatus .kd1 {
+  color: green;
+  position: absolute;
+  bottom: 3px; /* Khoảng cách từ dưới lên */
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+.productStatus .kd2 {
+  color: rgb(223, 223, 33);
+  position: absolute;
+  bottom: 3px; /* Khoảng cách từ dưới lên */
   left: 0;
   width: 100%;
   text-align: center;

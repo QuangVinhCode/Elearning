@@ -107,22 +107,27 @@ function Footer() {
               <h6 className="text-uppercase fw-bold mb-4">Danh Mục</h6>
               <p>
                 <a href="#!" className="text-reset">
-                  Triết học
+                  Công nghệ
                 </a>
               </p>
               <p>
                 <a href="#!" className="text-reset">
-                  Luận văn
+                  Sức khỏe
                 </a>
               </p>
               <p>
                 <a href="#!" className="text-reset">
-                  Toán học
+                  Giáo dục
                 </a>
               </p>
               <p>
                 <a href="#!" className="text-reset">
-                  Văn học
+                  Đời sống
+                </a>
+              </p>
+              <p>
+                <a href="#!" className="text-reset">
+                  Kinh tế
                 </a>
               </p>
             </MDBCol>

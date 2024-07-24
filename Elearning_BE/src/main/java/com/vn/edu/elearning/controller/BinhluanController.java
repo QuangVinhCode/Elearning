@@ -72,4 +72,5 @@ public class BinhluanController {
         binhluanService.deleteById(mabl);
         return  new ResponseEntity<>("Xóa thành công",HttpStatus.OK);
     }
+    
 }

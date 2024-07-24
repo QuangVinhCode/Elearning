@@ -127,11 +127,6 @@ const Navbar = ({ onUploadClick }) => {
             id="navbarCollapse"
           >
             <div className="navbar-nav ms-auto">
-              {userSession && userSession.data.quyenhan==="Quản trị viên" && (
-                <Link to="/dashboard" className="nav-item nav-link">
-                  Trang Quản Trị Viên
-                </Link>
-              )}
               <Link
                 to="#"
                 className="nav-item nav-link"

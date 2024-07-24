@@ -47,12 +47,20 @@ class DocumentHome extends Component {
             </div>
             <div className="displayStack__1">
               <div className="productPrice">
-                {document.giaban===0
+                {document.giaban === 0
                   ? "Miễn phí"
                   : new Intl.NumberFormat("vi-VN", {
                       style: "currency",
                       currency: "VND",
                     }).format(document.giaban)}
+              </div>
+              <div className="productStatus">
+                {document.kiemduyet == "Đã kiểm duyệt" && (
+                  <span className="kd1">{document.kiemduyet}</span>
+                )}
+                {document.kiemduyet == "Chưa kiểm duyệt" && (
+                  <span className="kd2">{document.kiemduyet}</span>
+                )}
               </div>
             </div>
           </div>

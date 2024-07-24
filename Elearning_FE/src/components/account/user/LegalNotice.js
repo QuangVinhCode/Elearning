@@ -1,72 +1,99 @@
-import React from "react";
 import "./LegalNotice.css";
+import React, { Component } from "react";
+import withRouter from "../../../helpers/withRouter";
+import {
+  getCommentsByAccount,
+  deleteComment,
+} from "../../../redux/actions/commentAction";
+import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import { connect } from "react-redux";
+import { Modal, Button } from "antd";
 
-const LegalNotice = () => {
-  return (
-    <div className="legalnotice">
-      <h1 className="mainhead1">Legal Notice</h1>
+class LegalNotice extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      object: {},
+    };
+  }
+  componentDidMount() {
+    const storedUserSession = sessionStorage.getItem("userSession");
+    const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
+    this.props.getCommentsByAccount(UserSesion.data.mataikhoan);
+  }
+  deleteComment = () => {
+    this.props.deleteComment(
+      this.state.object.mabinhluan,
+      this.state.object.mataikhoan,
+      this.state.object.matailieu
+    );
+    console.log("Delete lesson in ListLesson");
+  };
 
-      <div className="legalnoticein">
-        <h2>1. Terms of Use</h2>
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </p>
+  onDeleteConfirm = (object) => {
+    this.setState({ ...this.state, object: object });
+    console.log(object);
+    const message = "Bạn có chắt chắn muốn xóa bình luận: " + object.noidung;
+
+    Modal.confirm({
+      title: "Xác nhận",
+      icon: <ExclamationCircleOutlined />,
+      content: message,
+      onOk: this.deleteComment,
+      okText: "Xóa",
+      cancelText: "Hủy",
+    });
+  };
+  render() {
+    const { comments } = this.props;
+
+    return (
+      <div className="legalnotice">
+        <h1 className="mainhead1">Nội dung đã bình luận</h1>
+        <table className="yourorderstable">
+          <thead>
+            <tr>
+              <th scope="col">Tên tài liệu</th>
+              <th scope="col">Nội dung đã bình luận</th>
+              <th scope="col">Thời gian bình luận</th>
+              <th scope="col">Tác vụ</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {comments.map((comment) => (
+              <tr>
+                <td data-label="tentailieu">{comment.tentailieu}</td>
+                <td data-label="ndbinhluan">{comment.noidung}</td>
+                <td data-label="thoigianbl">{comment.thoigianbinhluan}</td>
+                <td data-label="tacvu">
+                  <Button
+                    type="primary"
+                    danger
+                    size="big"
+                    onClick={() => this.onDeleteConfirm(comment)}
+                  >
+                    <DeleteOutlined style={{ marginRight: 8 }} />
+                    Xóa
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+    );
+  }
+}
+const mapStateToProps = (state) => ({
+  comments: state.commentReducer.comments,
+});
 
-      <div className="legalnoticein">
-        <h2>2. Terms of Use</h2>
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </p>
-      </div>
-
-      <div className="legalnoticein">
-        <h2>3. Terms of Use</h2>
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </p>
-      </div>
-
-      <div className="legalnoticein">
-        <h2>4. Terms of Use</h2>
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </p>
-      </div>
-    </div>
-  );
+const mapDispatchToProps = {
+  getCommentsByAccount,
+  deleteComment,
 };
 
-export default LegalNotice;
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(LegalNotice)
+);
