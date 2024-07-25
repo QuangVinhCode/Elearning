@@ -142,6 +142,11 @@ public class TailieuController {
         return new ResponseEntity<>(tailieuService.findAllByCategory(id),HttpStatus.OK);
     }
 
+    @GetMapping("/revenue/{id}")
+    public ResponseEntity<?> getAllDocumentRevenueByAccount(@PathVariable("id") Long id){
+        return new ResponseEntity<>(tailieuService.findAllDocumentRevenueByAccount(id),HttpStatus.OK);
+    }
+
     @GetMapping("/sale/{id}")
     public ResponseEntity<?> getDocumentsByAccountSale(@PathVariable("id") Long id){
         return new ResponseEntity<>(tailieuService.findAllByAccountSale(id),HttpStatus.OK);

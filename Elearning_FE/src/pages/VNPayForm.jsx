@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Select, Input } from "antd";
+import { Form, Button, Select, Input, InputNumber } from "antd";
 import { connect } from "react-redux";
 import { getVnPay } from "../redux/actions/payAction";
 import "./VNPayForm.css";
@@ -12,24 +12,21 @@ const useUserSession = () => {
 };
 const VNPayForm = ({ getVnPay }) => {
   const userSession = useUserSession();
-  const [amount, setAmount] = useState(0);
-  const [bankAccount, setBankAccount] = useState("");
-  const handleAmountChange = (e) => {
-    setAmount(e.target.value);
-  };
 
-  const handleBankAccountChange = (value) => {
-    setBankAccount(value);
-  };
-
-  const handleSubmit = () => {
-    console.log("Số tiền:", amount);
+  const handleSubmit = (values) => {
+    console.log("Số tiền:", values.amount);
     console.log("Mã tài khoản:", userSession.data.mataikhoan);
-    console.log("Tài khoản ngân hàng:", bankAccount);
-    const data = getVnPay(amount, bankAccount,userSession.data.mataikhoan);
-    console.log(data);
+    console.log("Tài khoản ngân hàng:", values.bankAccount);
+    getVnPay(values.amount, values.bankAccount, userSession.data.mataikhoan);
+  };
+  const formatCurrency = (value) => {
+    if (!value) return "";
+    return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
+  const parseCurrency = (value) => {
+    return value.replace(/\đ\s?|(\,*)/g, "");
+  };
   return (
     <div className="container-vnpay">
       <div className="vnpayform">
@@ -40,12 +37,12 @@ const VNPayForm = ({ getVnPay }) => {
             name="amount"
             rules={[{ required: true, message: "Vui lòng nhập số tiền" }]}
           >
-            <Input
-              type="text"
-              min={1}
+            <InputNumber
               style={{ width: "100%" }}
-              value={amount}
-              onChange={handleAmountChange}
+              min={0}
+              step={10000}
+              formatter={formatCurrency}
+              parser={parseCurrency}
             />
           </Form.Item>
 
@@ -56,11 +53,7 @@ const VNPayForm = ({ getVnPay }) => {
               { required: true, message: "Vui lòng chọn tài khoản ngân hàng" },
             ]}
           >
-            <Select
-              placeholder="Chọn tài khoản ngân hàng"
-              value={bankAccount}
-              onChange={handleBankAccountChange}
-            >
+            <Select placeholder="Chọn tài khoản ngân hàng">
               <Option key="SCB">Ngân hàng SCB</Option>
               <Option key="NCB">Ngân hàng NCB</Option>
               <Option key="">Không chọn</Option>

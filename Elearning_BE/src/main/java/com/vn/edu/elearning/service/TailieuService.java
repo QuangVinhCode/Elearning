@@ -71,6 +71,9 @@ public class TailieuService {
         return tailieuRepository.findAll();
     }
 
+    public List<?> findAllDocumentRevenueByAccount(Long matk) {
+        return tailieuRepository.getTongHopTheoMaTaiKhoan(matk);
+    }
     public List<?> findAllByAccountSale(Long matk) {
         return tailieuRepository.findByDstaikhoandangbantailieus_Taikhoan_Mataikhoan(matk);
     }
@@ -84,7 +87,7 @@ public class TailieuService {
     }
 
     public List<?> findAllByCensorship(String censorship) {
-        return tailieuRepository.findByKiemduyetContains(censorship);
+        return tailieuRepository.findTailieuWithTaikhoanByKiemduyet(censorship);
     }
 
     public Page<Tailieu> findAllByCategory(Long id,Pageable pageable){
