@@ -36,7 +36,7 @@ const AccountSettings = ({ account, getAccount }) => {
 
   return (
     <div className="accountsettings">
-      <h1 className="mainhead1">Thông tin cá nhân</h1>
+      <h1 className="mainhead1">Thông Tin Cá Nhân</h1>
       {isSuccess && (
         <div className="message-notification">
           <p>Thanh toán thành công!</p>

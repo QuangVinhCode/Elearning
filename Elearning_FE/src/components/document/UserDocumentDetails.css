@@ -138,7 +138,6 @@ button {
   background-color: #0056b3;
 }
 
-
 .divInformation {
   width: 30%;
   padding: 20px;
@@ -185,11 +184,12 @@ button {
   border-radius: 5px;
   cursor: pointer;
   margin-right: 10px;
-  height: 40px; /* Set the height of both buttons */
+  height: 42px; /* Set the height of both buttons */
 }
 
 .button-download {
   background-color: #007bff;
+  text-align: center;
 }
 
 .button-pay {
@@ -215,7 +215,8 @@ button {
   border-radius: 5px; /* Bo tròn góc nút */
   text-align: center;
   text-decoration: none;
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
   cursor: pointer;
   margin-left: 10px;
 }
@@ -230,4 +231,23 @@ button {
   background-color: #004494; /* Màu nền khi nhấn */
   transform: scale(0.98); /* Hiệu ứng co lại khi nhấn */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Bóng đổ khi nhấn */
+}
+.pagenumber {
+  margin-top: 15px;
+  text-align: center;
+}
+.page-navigation input[type="number"] {
+  /* Các thuộc tính định dạng cho input */
+  width: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.page-navigation input[type="number"]:focus {
+  /* Các thuộc tính định dạng khi input được focus */
+  border-color: #66afe9;
+  outline: none;
+  box-shadow: 0 0 5px rgba(102, 175, 233, 0.6);
 }

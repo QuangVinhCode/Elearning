@@ -92,7 +92,7 @@ class DocumentForm extends Component {
   };
   beforeUpload = (file) => {
     console.log("file " + file.size / 1024 / 1024);
-    const isLt4M = file.size / 1024 / 1024 < 100; // Kiểm tra nếu kích thước tệp nhỏ hơn 4MB
+    const isLt4M = file.size / 1024 / 1024 < 10; // Kiểm tra nếu kích thước tệp nhỏ hơn 4MB
     console.log("isLt4M" + isLt4M);
     const isPdf = file.type === "application/pdf";
     if (!isPdf) {
@@ -100,7 +100,7 @@ class DocumentForm extends Component {
     }
     if (!isLt4M) {
       message.info({
-        content: "Kích thước file pdf < 100MB!",
+        content: "Kích thước file pdf < 10MB!",
         style: { marginTop: "20vh" },
       });
     }
@@ -149,7 +149,7 @@ class DocumentForm extends Component {
         onOk={() => {
           if (!this.state.isFileSizeValid) {
             message.error({
-              content: "Định danh file pdf và kích thước < 100MB",
+              content: "Định danh file pdf và kích thước < 10MB",
               style: { marginTop: "20vh" },
             });
             return;

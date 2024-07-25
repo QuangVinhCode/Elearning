@@ -2,64 +2,40 @@ import React, { useState, Component } from "react";
 import "./YourOrders.css";
 import withRouter from "../../../helpers/withRouter";
 import {
-  getDocuments,
+  getDocumentsByAccountPay,
   updateDocument,
 } from "../../../redux/actions/documentAction";
 import { connect } from "react-redux";
-import { Tooltip, Modal } from "antd";
+import { Tooltip, Button } from "antd";
+import { FaRegEye } from "react-icons/fa";
 class YourOrders extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
   componentDidMount() {
-    this.props.getDocuments();
+    const storedUserSession = sessionStorage.getItem("userSession");
+    const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
+    this.props.getDocumentsByAccountPay(UserSesion.data.mataikhoan);
+    const { id } = this.props.router.params;
+    this.props.getDocumentsByAccountPay(id);
   }
-  showUpdateModal = (document) => {
-    this.setState({
-      isModalVisible: true,
-      selectedDocument: document,
-    });
-  };
-
-  handleUpdateCancel = () => {
-    this.setState({
-      isModalVisible: false,
-      selectedDocument: null,
-    });
-  };
-
-  handleUpdateChange = (e) => {
-    const { name, value } = e.target;
-    this.setState((prevState) => ({
-      selectedDocument: {
-        ...prevState.selectedDocument,
-        [name]: value,
-      },
-    }));
-  };
-
-  handleUpdateSubmit = () => {
-    this.props.updateDocument(this.state.selectedDocument);
-    this.setState({
-      isModalVisible: false,
-      selectedDocument: null,
-    });
+  onDocument = (id) => {
+    const { navigate } = this.props.router;
+    navigate("/users/detail/" + id);
   };
   render() {
     const { documents } = this.props;
 
     return (
       <div className="yourorders">
-        <h1 className="mainhead1">Tài Liệu</h1>
+        <h1 className="mainhead1">Tài Liệu Đã Thanh Toán</h1>
         <table className="yourorderstable">
           <thead>
             <tr>
               <th scope="col">Tên tài liệu</th>
-              <th scope="col">Kiểm duyệt</th>
               <th scope="col">Mô tả</th>
-              <th scope="col">Giá</th>
-              <th scope="col">Thông báo lỗi</th>
+              <th scope="col">Tác vụ</th>
             </tr>
           </thead>
 
@@ -67,51 +43,21 @@ class YourOrders extends Component {
             {documents.map((document) => (
               <tr>
                 <td data-label="tentailieu">{document.tentailieu}</td>
-                <td data-label="kiemduyet">
-                  <div>
-                    {document.kiemduyet == "Đã kiểm duyệt" && (
-                      <span className="greendot"></span>
-                    )}
-                    {document.kiemduyet == "Chưa kiểm duyệt" && (
-                      <span className="yellowdot"></span>
-                    )}
-                    {document.kiemduyet == "Lỗi kiểm duyệt" && (
-                      <span className="reddot"></span>
-                    )}
-                    {document.kiemduyet}
-                  </div>
-                </td>
+
                 <td data-label="mota" className="mota">
                   <Tooltip placement="topLeft" title={document.mota}>
                     {document.mota}
                   </Tooltip>
                 </td>
-                <td data-label="giaban">
-                  {new Intl.NumberFormat("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(document.giaban)}
-                </td>
-                <td data-label="ghichu">
-                  {document.kiemduyet == "Đã kiểm duyệt" && (
-                    <span>
-                      {document.ghichu === null
-                        ? "Tài liệu bình thường"
-                        : document.ghichu}
-                    </span>
-                  )}
-                  {document.kiemduyet == "Chưa kiểm duyệt" && (
-                    <span>
-                      {document.ghichu === null
-                        ? "Tài liệu chưa kiểm duyệt"
-                        : document.ghichu}
-                    </span>
-                  )}
-                  {document.kiemduyet == "Lỗi kiểm duyệt" && (
-                    <span>
-                      {document.ghichu === null ? "Không lỗi" : document.ghichu}
-                    </span>
-                  )}
+                <td data-label="tacvu">
+                  <Button
+                    type="primary"
+                    size="big"
+                    onClick={() => this.onDocument(document.matailieu)}
+                  >
+                    <FaRegEye style={{ marginRight: 8 }} />
+                    Xem
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -127,7 +73,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  getDocuments,
+  getDocumentsByAccountPay,
   updateDocument,
 };
 

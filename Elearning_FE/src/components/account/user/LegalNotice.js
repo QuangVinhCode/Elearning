@@ -49,7 +49,7 @@ class LegalNotice extends Component {
 
     return (
       <div className="legalnotice">
-        <h1 className="mainhead1">Nội dung đã bình luận</h1>
+        <h1 className="mainhead1">Nội Dung Đã Bình Luận</h1>
         <table className="yourorderstable">
           <thead>
             <tr>

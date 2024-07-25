@@ -70,7 +70,7 @@ const EditAccount = ({ updateAccount, getAccount, account }) => {
   };
   return (
     <div className="accountsettings">
-      <h1 className="mainhead1">Sửa thông tin cá nhân</h1>
+      <h1 className="mainhead1">Sửa Thông Tin Cá Nhân</h1>
       <Form
         {...formItemLayout}
         form={form}

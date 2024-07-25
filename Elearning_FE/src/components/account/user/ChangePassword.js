@@ -2,13 +2,15 @@ import { message } from "antd";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { changePassword } from "../../../redux/actions/accountAction";
-
+import "./ChangePassword.css";
+import { useNavigate } from "react-router-dom";
 const useUserSession = () => {
   const storedUserSession = sessionStorage.getItem("userSession");
   return storedUserSession ? JSON.parse(storedUserSession) : null;
 };
 
 const ChangePassword = ({ changePassword }) => {
+  const navigate = useNavigate();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -23,7 +25,7 @@ const ChangePassword = ({ changePassword }) => {
     }
     if (userSession) {
       const { mataikhoan } = userSession.data;
-      changePassword(mataikhoan, oldPassword, newPassword);
+      changePassword(mataikhoan, oldPassword, newPassword,navigate);
     }
     // Xử lý việc cập nhật mật khẩu ở đây
     console.log("Mật khẩu cũ:", oldPassword);

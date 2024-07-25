@@ -35,6 +35,12 @@ export default class DocumentService {
   getDocumentByCensorship = async (id) => {
     return await axios.get(API_DOCUMENT + "/censorship/" + id);
   };
+  getDocumentsByAccountSale = async (id) => {
+    return await axios.get(API_DOCUMENT + "/sale/" + id);
+  };
+  getDocumentsByAccountPay = async (id) => {
+    return await axios.get(API_DOCUMENT + "/pay/" + id);
+  };
   deleteDocument = async (id) => {
     return await axios.delete(API_DOCUMENT + "/" + id);
   };

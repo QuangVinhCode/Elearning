@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { Form, Button, Select, Input, InputNumber } from "antd";
+import React from "react";
+import { Form, Button, Select, InputNumber } from "antd";
 import { connect } from "react-redux";
 import { getVnPay } from "../redux/actions/payAction";
 import "./VNPayForm.css";
-import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 const useUserSession = () => {
