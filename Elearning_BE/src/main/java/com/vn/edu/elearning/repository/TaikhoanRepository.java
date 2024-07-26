@@ -47,5 +47,6 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
 
     Optional<Taikhoan> findByTendangnhap(String tendangnhap);
 
+    Optional<Taikhoan> findByGmail(String gmail);
 
 }

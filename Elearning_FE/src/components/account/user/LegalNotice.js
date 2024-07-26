@@ -5,10 +5,11 @@ import {
   getCommentsByAccount,
   deleteComment,
 } from "../../../redux/actions/commentAction";
-import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { Modal, Button } from "antd";
-
+import { MdOutlineDelete } from "react-icons/md";
+import { Tooltip } from "antd";
 class LegalNotice extends Component {
   constructor(props) {
     super(props);
@@ -63,7 +64,11 @@ class LegalNotice extends Component {
           <tbody>
             {comments.map((comment) => (
               <tr>
-                <td data-label="tentailieu">{comment.tentailieu}</td>
+                <td data-label="tentailieu">
+                  <Tooltip placement="topLeft" title={comment.tentailieu}>
+                    {comment.tentailieu}
+                  </Tooltip>
+                </td>
                 <td data-label="ndbinhluan">{comment.noidung}</td>
                 <td data-label="thoigianbl">{comment.thoigianbinhluan}</td>
                 <td data-label="tacvu">
@@ -73,8 +78,7 @@ class LegalNotice extends Component {
                     size="big"
                     onClick={() => this.onDeleteConfirm(comment)}
                   >
-                    <DeleteOutlined style={{ marginRight: 8 }} />
-                    Xóa
+                    <MdOutlineDelete style={{ marginBottom: 8 }} />
                   </Button>
                 </td>
               </tr>

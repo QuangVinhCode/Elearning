@@ -117,10 +117,10 @@ class UserDocumentDetails extends Component {
   };
   // Xử lý sự kiện khi nhấn vào nút Tải
   handleDownload = () => {
-    const { isPaid } = this.state;
-    console.log("isPaid: " + isPaid);
+    const { canDownload } = this.state;
+    console.log("isPaid: " + canDownload);
     // Nếu đã thanh toán, cho phép tải xuống
-    if (isPaid) {
+    if (canDownload) {
       // Thực hiện tải xuống
       const { document } = this.props;
       const pdfUrl = DocumentService.getDocumentPDFUrl(document.diachiluutru);
@@ -229,7 +229,7 @@ class UserDocumentDetails extends Component {
       page,
       maxPages,
       showPaymentMessage,
-      canDownload,
+      isPaid,
       reset,
       login,
       value,
@@ -350,7 +350,7 @@ class UserDocumentDetails extends Component {
             <button className="button-download" onClick={this.handleDownload}>
               Tải về
             </button>
-            {!canDownload && (
+            {!isPaid && (
               <button className="button-pay" onClick={this.onPayConfirm}>
                 Thanh toán
               </button>

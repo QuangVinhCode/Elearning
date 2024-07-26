@@ -92,7 +92,7 @@ class DocumentForm extends Component {
   };
   beforeUpload = (file) => {
     console.log("file " + file.size / 1024 / 1024);
-    const isLt4M = file.size / 1024 / 1024 < 10; // Kiểm tra nếu kích thước tệp nhỏ hơn 4MB
+    const isLt4M = file.size / 1024 / 1024 < 100; // Kiểm tra nếu kích thước tệp nhỏ hơn 4MB
     console.log("isLt4M" + isLt4M);
     const isPdf = file.type === "application/pdf";
     if (!isPdf) {
@@ -100,7 +100,7 @@ class DocumentForm extends Component {
     }
     if (!isLt4M) {
       message.info({
-        content: "Kích thước file pdf < 10MB!",
+        content: "Kích thước file pdf < 100MB!",
         style: { marginTop: "20vh" },
       });
     }
@@ -197,7 +197,10 @@ class DocumentForm extends Component {
             label="Mô tả"
             name="mota"
             initialValue={document.mota}
-            rules={[{ required: true, message: "Yêu cầu nhập mô tả" }]}
+            rules={[
+              { required: true, message: "Yêu cầu nhập mô tả" },
+              { max: 255, message: "Mô tả không được vượt quá 255 ký tự" },
+            ]}
           >
             <Input></Input>
           </Form.Item>

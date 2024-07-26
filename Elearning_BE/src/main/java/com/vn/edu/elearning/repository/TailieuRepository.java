@@ -13,10 +13,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
-
-    List<Tailieu> findByKiemduyetContains(String kiemduyet);
-
     List<Tailieu> findByDanhmuc_Madanhmuc(Long madanhmuc);
+
+
 
     Page<Tailieu> findByDanhmuc_MadanhmucOrderByGiabanAsc(Long madanhmuc, Pageable pageable);
     @Query(value = "SELECT tl.* FROM tailieu tl JOIN taikhoanthanhtoantailieu tkt ON tl.matailieu = tkt.matailieu GROUP BY tl.matailieu ORDER BY COUNT(tkt.matailieu) DESC LIMIT 5", nativeQuery = true)
@@ -29,7 +28,7 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
 
     List<Tailieu> findByDstaikhoandangbantailieus_Taikhoan_Mataikhoan(Long mataikhoan);
 
-    @Query("SELECT new com.vn.edu.elearning.dto.TailieuKiemDuyetDto(t.matailieu, t.tentailieu, t.mota, t.giaban, tk.tendangnhap,t.danhmuc.tendanhmuc) " +
+    @Query("SELECT new com.vn.edu.elearning.dto.TailieuKiemDuyetDto(t.matailieu, t.tentailieu, t.mota, t.giaban, tk.tendangnhap,t.danhmuc.tendanhmuc,t.diachiluutru) " +
             "FROM Tailieu t " +
             "JOIN Taikhoandangbantailieu tb ON t.matailieu = tb.mataikhoandangbantailieu.matailieu " +
             "JOIN Taikhoan tk ON tb.mataikhoandangbantailieu.mataikhoan = tk.mataikhoan " +
@@ -51,4 +50,6 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             ") " +
             "GROUP BY t.matailieu, t.tentailieu")
     List<TailieuRevenueDto> getTongHopTheoMaTaiKhoan(@Param("mataikhoan") Long mataikhoan);
+
+    List<Tailieu> findByDanhmuc_MadanhmucAndKiemduyetNot(Long madanhmuc, String kiemduyet);
 }

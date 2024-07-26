@@ -38,7 +38,11 @@ class DocumentHome extends Component {
               />
             </div>
             <div className="productCard__content">
-              <h3 className="productName">{document.tentailieu}</h3>
+              <h3 className="productName">
+                <Tooltip placement="topLeft" title={document.tentailieu}>
+                  {document.tentailieu}
+                </Tooltip>
+              </h3>
               <h4 className="productTitle">
                 <Tooltip placement="topLeft" title={document.mota}>
                   {document.mota}

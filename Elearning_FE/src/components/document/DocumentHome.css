@@ -51,6 +51,12 @@ html {
 
 .productName {
   font-size: 1.5rem;
+  word-wrap: break-word; /* for older browsers */
+  overflow-wrap: break-word; /* standard property */
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .productTitle {
   font-size: 1rem;

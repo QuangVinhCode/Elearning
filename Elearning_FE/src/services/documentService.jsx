@@ -50,6 +50,9 @@ export default class DocumentService {
   errorDocument = async (id, note) => {
     return await axios.patch(API_DOCUMENT + "/error/" + id + "/" + note);
   };
+  getAllDocumentRevenueByAccount = async (id) => {
+    return await axios.get(API_DOCUMENT + "/revenue/" + id);
+  };
   getDocument = async (id) => {
     return await axios.get(API_DOCUMENT + "/" + id + "/get");
   };

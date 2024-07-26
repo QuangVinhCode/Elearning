@@ -83,7 +83,7 @@ public class TailieuService {
     }
 
     public List<?> findAllByCategory(Long madm) {
-        return tailieuRepository.findByDanhmuc_Madanhmuc(madm);
+        return tailieuRepository.findByDanhmuc_MadanhmucAndKiemduyetNot(madm,"Lỗi kiểm duyệt");
     }
 
     public List<?> findAllByCensorship(String censorship) {

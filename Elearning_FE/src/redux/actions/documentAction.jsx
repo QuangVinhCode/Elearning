@@ -258,6 +258,41 @@ export const getDocumentsByCategory = (id) => async (dispatch) => {
     payload: false,
   });
 };
+export const getAllDocumentRevenueByAccount = (id) => async (dispatch) => {
+  const service = new DocumentService();
+
+  try {
+    console.log("Thống kê chi tiêu");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getAllDocumentRevenueByAccount(id);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: DOCUMENTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
 export const getDocumentsByAccountSale = (id) => async (dispatch) => {
   const service = new DocumentService();
 

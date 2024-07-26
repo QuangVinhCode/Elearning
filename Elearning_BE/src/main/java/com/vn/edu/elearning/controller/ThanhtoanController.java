@@ -36,9 +36,9 @@ public class ThanhtoanController {
         boolean checkSalesAccount = taikhoandangbantailieuService.checkSalesAccount(tk,tl);
         boolean checkBuyAccount = taikhoanthanhtoantailieuService.checkBuyAccount(tk,tl);
         Tailieu tailieu = tailieuService.findById(tl);
-        if (tailieu != null)
+        if (tailieu != null && tailieu.getGiaban()== 0)
         {
-            check = "Miễn phí";
+                check = "Miễn phí";
         }
         if (checkSalesAccount)
         {

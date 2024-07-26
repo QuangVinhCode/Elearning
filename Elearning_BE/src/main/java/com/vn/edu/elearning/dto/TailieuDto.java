@@ -16,7 +16,7 @@ public class TailieuDto implements Serializable {
     String tentailieu;
     String mota;
     Long giaban;
-    Long diachiluutru;
+    String diachiluutru;
     Long madanhmuc;
     Long mataikhoan;
     @JsonIgnore

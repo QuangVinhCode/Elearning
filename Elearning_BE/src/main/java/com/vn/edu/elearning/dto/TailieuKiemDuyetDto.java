@@ -19,4 +19,5 @@ public class TailieuKiemDuyetDto implements Serializable {
     private Long giaban;
     private String tendangnhap;
     private String tendanhmuc;
+    private String diachiluutru;
 }

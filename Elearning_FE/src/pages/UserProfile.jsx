@@ -8,6 +8,7 @@ import EditAccount from "../components/account/user/EditAccount";
 import LegalNotice from "../components/account/user/LegalNotice";
 import "./UserProfile.css";
 import DocumentsSold from "../components/account/user/DocumentsSold";
+import Statistics from "../components/account/user/Statistics";
 const UserProfile = () => {
   const { activepage } = useParams();
 
@@ -25,6 +26,7 @@ const UserProfile = () => {
           {activepage === "updateaccount" && <EditAccount />}
           {activepage === "legalnotice" && <LegalNotice />}
           {activepage === "documentssold" && <DocumentsSold />}
+          {activepage === "statistics" && <Statistics />}
         </div>
       </div>
     </div>

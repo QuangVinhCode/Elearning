@@ -4,6 +4,7 @@ import "./Card.css";
 import { connect } from "react-redux";
 import withRouter from "../../helpers/withRouter";
 import DocumentService from "../../services/documentService";
+import { Tooltip } from "antd";
 class Card extends Component {
   componentDidMount() {
     this.props.getOutstandingDocuments();
@@ -32,8 +33,17 @@ class Card extends Component {
                     />
                   </div>
                   <div className="productCard__content">
-                    <h3 className="productName">{document.tentailieu}</h3>
-                    <h4 className="productTitle">{document.mota}</h4>
+                    <h3 className="productName">
+                      {" "}
+                      <Tooltip placement="topLeft" title={document.tentailieu}>
+                        {document.tentailieu}
+                      </Tooltip>
+                    </h3>
+                    <h4 className="productTitle">
+                      <Tooltip placement="topLeft" title={document.mota}>
+                        {document.mota}
+                      </Tooltip>
+                    </h4>
                   </div>
                   <div className="displayStack__1">
                     <div className="productPrice">

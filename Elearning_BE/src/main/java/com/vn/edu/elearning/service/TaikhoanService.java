@@ -26,11 +26,13 @@ public class TaikhoanService {
     private Map<String, String> otpStorage = new HashMap<>();
     public Taikhoan register(TaikhoanDto dto) {
         Optional<?> found = taikhoanRepository.findByTendangnhap(dto.getTendangnhap());
-
         if (!found.isEmpty()) {
             throw new TaikhoanException("Tên tài khoản đã tồn tại trong hệ thống");
         }
-
+        Optional<?> foundGmail = taikhoanRepository.findByGmail(dto.getGmail());
+        if (!foundGmail.isEmpty()) {
+            throw new TaikhoanException("Gmail đã từng được dùng để đăng ký tài khoản khác!");
+        }
         Taikhoan entity = new Taikhoan();
         BeanUtils.copyProperties(dto,entity);
         Random random = new Random();

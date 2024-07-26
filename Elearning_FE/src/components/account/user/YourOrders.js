@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { Component } from "react";
 import "./YourOrders.css";
 import withRouter from "../../../helpers/withRouter";
 import {
@@ -42,7 +42,11 @@ class YourOrders extends Component {
           <tbody>
             {documents.map((document) => (
               <tr>
-                <td data-label="tentailieu">{document.tentailieu}</td>
+                <td data-label="tentailieu" className="tentailieu">
+                  <Tooltip placement="topLeft" title={document.tentailieu}>
+                    {document.tentailieu}
+                  </Tooltip>
+                </td>
 
                 <td data-label="mota" className="mota">
                   <Tooltip placement="topLeft" title={document.mota}>
@@ -55,8 +59,7 @@ class YourOrders extends Component {
                     size="big"
                     onClick={() => this.onDocument(document.matailieu)}
                   >
-                    <FaRegEye style={{ marginRight: 8 }} />
-                    Xem
+                    <FaRegEye style={{ marginBottom: 8 }} />
                   </Button>
                 </td>
               </tr>
