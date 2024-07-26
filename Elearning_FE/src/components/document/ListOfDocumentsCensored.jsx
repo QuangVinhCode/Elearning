@@ -64,21 +64,39 @@ const ListOfDocumentsCensored = ({ dataSource, onConfirm, onDetails }) => {
           </Tooltip>
         )}
       />
-      <Table.Column
+       <Table.Column
         title="Danh mục"
-        key="danhmuc"
-        dataIndex="danhmuc"
+        key="tendanhmuc"
+        dataIndex="tendanhmuc"
         width={40}
         align="center"
         ellipsis={{
           showTitle: false,
         }}
-        render={(danhmuc) => (
+        render={(tendanhmuc) => (
           <Tooltip
             placement="topLeft"
-            title={danhmuc ? danhmuc.tendanhmuc : "N/A"}
+            title={tendanhmuc ? tendanhmuc : "N/A"}
           >
-            {danhmuc ? danhmuc.tendanhmuc : "N/A"}
+            {tendanhmuc ? tendanhmuc : "N/A"}
+          </Tooltip>
+        )}
+      />
+      <Table.Column
+        title="Tài khoản"
+        key="tendangnhap"
+        dataIndex="tendangnhap"
+        width={40}
+        align="center"
+        ellipsis={{
+          showTitle: false,
+        }}
+        render={(tendangnhap) => (
+          <Tooltip
+            placement="topLeft"
+            title={tendangnhap ? tendangnhap : "N/A"}
+          >
+            {tendangnhap ? tendangnhap : "N/A"}
           </Tooltip>
         )}
       />

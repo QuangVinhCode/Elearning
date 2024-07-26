@@ -35,6 +35,11 @@ public class ThanhtoanController {
         String check = "Chưa thanh toán";
         boolean checkSalesAccount = taikhoandangbantailieuService.checkSalesAccount(tk,tl);
         boolean checkBuyAccount = taikhoanthanhtoantailieuService.checkBuyAccount(tk,tl);
+        Tailieu tailieu = tailieuService.findById(tl);
+        if (tailieu != null)
+        {
+            check = "Miễn phí";
+        }
         if (checkSalesAccount)
         {
             check = "Chủ sở hữu";

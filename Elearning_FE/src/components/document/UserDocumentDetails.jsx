@@ -68,8 +68,8 @@ class UserDocumentDetails extends Component {
             status,
             mataikhoan,
             tendangnhap,
-            isPaid: status === "Đã thanh toán" || status === "Chủ sở hữu",
-            canDownload: status === "Đã thanh toán" || status === "Chủ sở hữu",
+            isPaid: status === "Đã thanh toán" || status === "Chủ sở hữu" || status === "Miễn phí",
+            canDownload: status === "Đã thanh toán" || status === "Chủ sở hữu" || status === "Miễn phí",
             documentNotFound: false,
           });
         });
@@ -95,10 +95,10 @@ class UserDocumentDetails extends Component {
     this.setState({ numPages, maxPages });
   };
   onPageLoadSuccess = () => {
-    if (
-      this.state.page === this.state.maxPages &&
-      this.state.page !== this.state.numPages
-    ) {
+    console.log("this.state.page " + this.state.page);
+    console.log("this.state.maxPages " + this.state.maxPages);
+    console.log("this.state.numPages " + this.state.numPages);
+    if (this.state.page === this.state.maxPages) {
       this.setState({ showPaymentMessage: true });
     }
   };

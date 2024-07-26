@@ -3,6 +3,13 @@ import { Button, Space, Table, Tooltip } from "antd";
 import { EditOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 
 const DocumentList = ({ dataSource, onEdit, onDetails, onDeleteConfirm }) => {
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(value);
+  };
+
   return (
     <Table dataSource={dataSource} size="small" rowKey="matailieu">
       <Table.Column
@@ -60,8 +67,8 @@ const DocumentList = ({ dataSource, onEdit, onDetails, onDeleteConfirm }) => {
           showTitle: false,
         }}
         render={(text) => (
-          <Tooltip placement="topLeft" title={text + " VND"}>
-            {text}
+          <Tooltip placement="topLeft" title={formatCurrency(text)}>
+            {formatCurrency(text)}
           </Tooltip>
         )}
       />
