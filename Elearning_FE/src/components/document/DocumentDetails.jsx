@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import DocumentService from "../../services/documentService";
 import { message, Modal } from "antd";
 import Pdf from "@mikecousins/react-pdf";
-
+import PayService from "../../services/payService";
+import {
+  getDocument,
+  payDocument,
+  clearDocumentState,
+} from "../../redux/actions/documentAction";
+import withRouter from "../../helpers/withRouter";
+import { connect } from "react-redux";
 class DocumentDetails extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +21,10 @@ class DocumentDetails extends Component {
       goToPage: "",
     };
     this.scrollableDivRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.props.getDocument(this.props.tailieu);
   }
 
   handleNextPage = () => {
@@ -83,8 +94,7 @@ class DocumentDetails extends Component {
         onCancel={onCancel}
         cancelText="Đóng"
         okButtonProps={{ style: { display: "none" } }}
-        width="50%"
-        bodyStyle={{ padding: 0, height: "80vh" }}
+        width="100%"
       >
         <div
           style={{ height: "100%", overflow: "auto" }}
@@ -145,4 +155,16 @@ class DocumentDetails extends Component {
   }
 }
 
-export default DocumentDetails;
+const mapStateToProps = (state) => ({
+  document: state.documentReducer.document,
+});
+
+const mapDispatchToProps = {
+  getDocument,
+  payDocument,
+  clearDocumentState,
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(DocumentDetails)
+);
