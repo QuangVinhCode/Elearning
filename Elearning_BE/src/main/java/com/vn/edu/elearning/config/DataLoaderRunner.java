@@ -33,15 +33,16 @@ public class DataLoaderRunner {
             adminAccount.setSodienthoai("0123456789");
             adminAccount.setGmail("admin@gmail.com");
             adminAccount.setQuyenhan("Quản trị viên");
-            adminAccount.setSodu(100000L);
-            adminAccount.setTrangthai("Bình thường");
+            adminAccount.setSodu(0L);
+            adminAccount.setTrangthaidangtai("Bình thường");
+            adminAccount.setTrangthaibinhluan("Bình thường");
 
             taikhoanRepository.save(adminAccount);
         }
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String currentDateString = currentDate.format(formatter);
-
-        taikhoanRepository.updateTrangthaiIfDateMatches(currentDateString);
+//        LocalDate currentDate = LocalDate.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//        String currentDateString = currentDate.format(formatter);
+//
+//        taikhoanRepository.updateTrangthaiIfDateMatches(currentDateString);
     }
 }

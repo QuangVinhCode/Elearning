@@ -55,7 +55,8 @@ public class TaikhoanService {
         System.out.println("MK : " + password);
         entity.setMatkhau(password);
         entity.setQuyenhan("Người dùng");
-        entity.setTrangthai("Bình thường");
+        entity.setTrangthaibinhluan("Bình thường");
+        entity.setTrangthaidangtai("Bình thường");
         entity.setSodu(0L);
         return taikhoanRepository.save(entity);
     }
@@ -116,6 +117,11 @@ public class TaikhoanService {
         return found.get();
     }
 
+    public Taikhoan findByPostedDocuments(Long id) {
+        Taikhoan found = taikhoanRepository.findByDsdangtai_Tailieu_Matailieu(id);
+        return found;
+    }
+
     public Taikhoan findByTendangnhapAndGmail(String tendangnhap,String gmail) {
         Optional<Taikhoan> found = taikhoanRepository.findByTendangnhapAndGmail(tendangnhap,gmail);
 
@@ -149,7 +155,7 @@ public class TaikhoanService {
     }
 
     public void  updateTrangThai(Long id,String stautus){
-        taikhoanRepository.updateTrangThai(id,stautus);
+        taikhoanRepository.updateTrangThaiDangTai(id,stautus);
     }
 
     public List<Taikhoan>  findBinhThuongWithoutAdmin(){
@@ -185,5 +191,10 @@ public class TaikhoanService {
         String password = encryptPassword(newPassword);
         taikhoan.setMatkhau(password);
         taikhoanRepository.save(taikhoan);
+    }
+
+    public void  incrementSodu(Long id,Long amount){
+
+        taikhoanRepository.incrementSodu(id,amount);
     }
 }

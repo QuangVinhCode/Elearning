@@ -27,19 +27,24 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     void incrementSoduForAdmin(@Param("amount") Long amount);
 
     @Modifying
-    @Query("UPDATE Taikhoan t SET t.trangthai = :trangthai WHERE t.mataikhoan = :id")
+    @Query("UPDATE Taikhoan t SET t.trangthaidangtai = :trangthai WHERE t.mataikhoan = :id")
     @Transactional
-    void updateTrangThai(@Param("id") Long id, @Param("trangthai") String trangthai);
+    void updateTrangThaiDangTai(@Param("id") Long id, @Param("trangthai") String trangthai);
 
-    @Query("SELECT t FROM Taikhoan t WHERE t.trangthai = 'Bình thường' AND t.quyenhan <> 'Quản trị viên'")
+    @Modifying
+    @Query("UPDATE Taikhoan t SET t.trangthaibinhluan = :trangthai WHERE t.mataikhoan = :id")
+    @Transactional
+    void updateTrangThaiBinhlLuan(@Param("id") Long id, @Param("trangthai") String trangthai);
+
+    @Query("SELECT t FROM Taikhoan t WHERE t.trangthaidangtai = 'Bình thường' AND t.quyenhan <> 'Quản trị viên'")
     List<Taikhoan> findBinhThuongWithoutAdmin();
 
-    @Query("SELECT t FROM Taikhoan t WHERE t.trangthai <> 'Bình thường' AND t.quyenhan <> 'Quản trị viên'")
+    @Query("SELECT t FROM Taikhoan t WHERE t.trangthaidangtai <> 'Bình thường' AND t.quyenhan <> 'Quản trị viên'")
     List<Taikhoan> findNotBinhThuongWithoutAdmin();
 
     @Modifying
     @Transactional
-    @Query("UPDATE Taikhoan t SET t.trangthai = 'Bình thường' WHERE t.trangthai = ?1")
+    @Query("UPDATE Taikhoan t SET t.trangthaidangtai = 'Bình thường' WHERE t.trangthaidangtai = ?1")
     void updateTrangthaiIfDateMatches(String currentDate);
 
 
@@ -48,5 +53,7 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     Optional<Taikhoan> findByTendangnhap(String tendangnhap);
 
     Optional<Taikhoan> findByGmail(String gmail);
+
+    Taikhoan findByDsdangtai_Tailieu_Matailieu(Long matailieu);
 
 }

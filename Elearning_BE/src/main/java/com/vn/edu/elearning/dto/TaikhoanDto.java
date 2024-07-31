@@ -12,8 +12,11 @@ import java.io.Serializable;
 public class TaikhoanDto implements Serializable {
     Long mataikhoan;
     String tendangnhap;
+    Long sodu;
+    String gmail;
     String matkhau;
     String sodienthoai;
-    String gmail;
+    String trangthaidangtai;
+    String trangthaibinhluan;
     String quyenhan;
 }

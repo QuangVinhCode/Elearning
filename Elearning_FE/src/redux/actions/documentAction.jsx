@@ -364,7 +364,7 @@ export const getDocumentsByAccountPay = (id) => async (dispatch) => {
   });
 };
 
-export const getDocumentByCensorship = (id) => async (dispatch) => {
+export const getDocumentByCensorship = () => async (dispatch) => {
   const service = new DocumentService();
 
   try {
@@ -373,7 +373,7 @@ export const getDocumentByCensorship = (id) => async (dispatch) => {
       type: COMMON_LOADING_SET,
       payload: true,
     });
-    const response = await service.getDocumentByCensorship(id);
+    const response = await service.getDocumentByCensorship();
     console.log(response);
     if (response.status === 200) {
       dispatch({
@@ -479,7 +479,7 @@ export const deleteDocument = (id) => async (dispatch) => {
   });
 };
 
-export const confirmDocument = (id) => async (dispatch) => {
+export const confirmDocument = (object) => async (dispatch) => {
   const service = new DocumentService();
 
   try {
@@ -490,16 +490,12 @@ export const confirmDocument = (id) => async (dispatch) => {
       payload: true,
     });
 
-    const response = await service.confirmDocument(id);
+    const response = await service.confirmDocument(object);
     console.log(response);
-    if (response.status === 200) {
-      dispatch({
-        type: DOCUMENT_DELETE,
-        payload: id,
-      });
+    if (response.status === 201) {
       dispatch({
         type: COMMON_MESSAGE_SET,
-        payload: response.data,
+        payload: "Thành công",
       });
     } else {
       dispatch({
@@ -520,6 +516,7 @@ export const confirmDocument = (id) => async (dispatch) => {
     type: COMMON_LOADING_SET,
     payload: false,
   });
+  dispatch(getDocumentByCensorship());
 };
 
 export const errorDocument = (id, note) => async (dispatch) => {

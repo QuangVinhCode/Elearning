@@ -1,8 +1,6 @@
 import {
   Button,
-  Divider,
   Form,
-  Image,
   Input,
   InputNumber,
   message,
@@ -10,15 +8,17 @@ import {
   Select,
   Upload,
 } from "antd";
-import React, { Component } from "react";
-import { createRef } from "react";
-import { getCategories } from "../../redux/actions/categoryAction";
+import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
 import withRouter from "../../helpers/withRouter";
 import DocumentService from "../../services/documentService";
+import { getCategories } from "../../redux/actions/categoryAction";
+
 const { Option } = Select;
+
 class DocumentForm extends Component {
   form = createRef();
+
   constructor(props) {
     super(props);
 
@@ -26,9 +26,12 @@ class DocumentForm extends Component {
       document: {
         matailieu: "",
         tentailieu: "",
+        tacgia:"",
         mota: "",
         giaban: "",
         diachiluutru: "",
+        tylephiquantri: "",
+        tylethunhaptacgia: "",
         mataikhoan: "",
         danhmuc: { madanhmuc: "" },
       },
@@ -38,24 +41,20 @@ class DocumentForm extends Component {
     };
   }
 
-  async componentDidMount() {
-    try {
-      // Assuming getSubjects is a Redux action
-      await this.props.getCategories();
-      const categories = this.props.categories;
-      this.setState({ categories });
-    } catch (error) {
-      console.error("Error fetching subjects:", error);
+  componentDidMount() {
+    this.props.getCategories();
+  }
+
+  componentWillUnmount() {
+    // Check if form.current exists before trying to reset
+    if (this.form.current) {
+      this.form.current.resetFields();
     }
   }
 
   handlePreview = (file) => {
-    console.log("object in before file pdf");
-    console.log(file);
-    console.log(file.thumbUrl);
     if (file.thumbUrl) {
       this.setState({
-        ...this.state,
         previewImage: file.thumbUrl,
         previewVisible: true,
       });
@@ -63,7 +62,6 @@ class DocumentForm extends Component {
   };
 
   handleRemove = (value) => {
-    console.log("object in upload pdf");
     return false;
   };
 
@@ -74,15 +72,10 @@ class DocumentForm extends Component {
     if (e.fileList.length > 1) {
       return [e.fileList[1]];
     }
-    const originalFileObj = e.fileList[0].originFileObj;
-    console.log("Original File Object:", originalFileObj);
     return e && e.fileList;
   };
 
   handleSubjectChange = (value) => {
-    console.log("first in handleSubjectChange");
-
-    // Cập nhật giá trị subject_id trong state
     this.setState({
       document: {
         ...this.state.document,
@@ -90,23 +83,23 @@ class DocumentForm extends Component {
       },
     });
   };
+
   beforeUpload = (file) => {
-    console.log("file " + file.size / 1024 / 1024);
-    const isLt4M = file.size / 1024 / 1024 < 100; // Kiểm tra nếu kích thước tệp nhỏ hơn 4MB
-    console.log("isLt4M" + isLt4M);
+    const isLt100M = file.size / 1024 / 1024 < 100; // Kiểm tra nếu kích thước tệp nhỏ hơn 100MB
     const isPdf = file.type === "application/pdf";
     if (!isPdf) {
       message.error("Chỉ chấp nhận các tệp PDF!");
     }
-    if (!isLt4M) {
+    if (!isLt100M) {
       message.info({
         content: "Kích thước file pdf < 100MB!",
         style: { marginTop: "20vh" },
       });
     }
-    this.setState({ isFileSizeValid: isLt4M && isPdf });
-    return !isLt4M && !isPdf;
+    this.setState({ isFileSizeValid: isLt100M && isPdf });
+    return !isLt100M || !isPdf;
   };
+
   formatCurrency = (value) => {
     if (!value) return "";
     return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -115,26 +108,38 @@ class DocumentForm extends Component {
   parseCurrency = (value) => {
     return value.replace(/\đ\s?|(\,*)/g, "");
   };
+
+  handlePercentageChange = (changedValue, allValues) => {
+    const { tylephiquantri, tylethunhaptacgia } = allValues;
+    if (changedValue.hasOwnProperty("tylephiquantri")) {
+      this.form.current.setFieldsValue({
+        tylethunhaptacgia: 10 - tylephiquantri,
+      });
+    } else if (changedValue.hasOwnProperty("tylethunhaptacgia")) {
+      this.form.current.setFieldsValue({
+        tylephiquantri: 10 - tylethunhaptacgia,
+      });
+    }
+  };
+
   render() {
     const { open, onCreate, onCancel } = this.props;
     const { document } = this.props;
     const { categories } = this.props;
     const storedUserSession = sessionStorage.getItem("userSession");
+
     const userSession = storedUserSession
       ? JSON.parse(storedUserSession)
       : null;
 
-    let title = "Thêm tài liệu";
-    let okText = "Thêm";
+    let title = "Đăng tài liệu";
+    let okText = "Đăng";
     if (document.matailieu) {
       title = "Cập nhật tài liệu";
-      okText = "Sửa";
+      okText = "Cập nhật";
     }
     const pdfUrl = DocumentService.getDocumentPDFUrl(document.diachiluutru);
-    const initialPDF = {
-      url: pdfUrl,
-      uid: document.diachiluutru,
-    };
+    const initialPDF = { url: pdfUrl, uid: document.diachiluutru };
 
     return (
       <Modal
@@ -143,39 +148,39 @@ class DocumentForm extends Component {
         okText={okText}
         cancelText="Hủy"
         onCancel={() => {
-          this.form.current.resetFields(); // Reset form fields
+          if (this.form.current) {
+            this.form.current.resetFields(); // Reset form fields if form.current exists
+          }
           onCancel();
         }}
         onOk={() => {
           if (!this.state.isFileSizeValid) {
             message.error({
-              content: "Định danh file pdf và kích thước < 10MB",
+              content: "Định danh file pdf và kích thước < 100MB",
               style: { marginTop: "20vh" },
             });
             return;
           }
-          this.form.current
-            .validateFields()
-            .then((values) => {
-              this.form.current.resetFields();
-
-              console.log("-------object in values form--------");
-              console.log(values);
-              onCreate(values);
-            })
-            .catch((info) => {
-              console.log("Validate Failed:", info);
-            });
+          if (this.form.current) {
+            this.form.current
+              .validateFields()
+              .then((values) => {
+                this.form.current.resetFields();
+                onCreate(values);
+              })
+              .catch((info) => {
+                console.log("Validate Failed:", info);
+              });
+          }
         }}
       >
         <Form
           ref={this.form}
           layout="vertical"
           name="form_in_modal"
-          initialValues={{
-            modifier: "public",
-          }}
+          initialValues={{ modifier: "public" }}
           key={"f" + document.matailieu}
+          onValuesChange={this.handlePercentageChange}
         >
           <Form.Item
             label="Mã tài liệu"
@@ -183,7 +188,7 @@ class DocumentForm extends Component {
             initialValue={document.matailieu}
             hidden={true}
           >
-            <Input readOnly></Input>
+            <Input readOnly />
           </Form.Item>
           <Form.Item
             label="Tên tài liệu"
@@ -191,7 +196,15 @@ class DocumentForm extends Component {
             initialValue={document.tentailieu}
             rules={[{ required: true, message: "Yêu cầu nhập tên tài liệu" }]}
           >
-            <Input></Input>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Tác giả"
+            name="tacgia"
+            initialValue={document.tacgia}
+            rules={[{ required: true, message: "Yêu cầu nhập tên tác giả" }]}
+          >
+            <Input />
           </Form.Item>
           <Form.Item
             label="Mô tả"
@@ -202,7 +215,7 @@ class DocumentForm extends Component {
               { max: 255, message: "Mô tả không được vượt quá 255 ký tự" },
             ]}
           >
-            <Input></Input>
+            <Input />
           </Form.Item>
           <Form.Item
             label="Giá bán"
@@ -235,12 +248,38 @@ class DocumentForm extends Component {
             </Select>
           </Form.Item>
           <Form.Item
+            label="Tỷ lệ thu nhập tác giả (%)"
+            name="tylethunhaptacgia"
+            initialValue={document.tylethunhaptacgia}
+            rules={[
+              {
+                required: true,
+                message: "Yêu cầu nhập tỷ lệ thu nhập tác giả",
+              },
+            ]}
+          >
+            <InputNumber min={0} max={10} />
+          </Form.Item>
+          <Form.Item
+            label="Tỷ lệ phí quản trị viên (%)"
+            name="tylephiquantri"
+            initialValue={document.tylephiquantri}
+            rules={[
+              {
+                required: true,
+                message: "Yêu cầu nhập tỷ lệ phí quản trị viên",
+              },
+            ]}
+          >
+            <InputNumber min={1} max={10} />
+          </Form.Item>
+          <Form.Item
             label="Tài khoản đăng tài liệu"
             name="mataikhoan"
             initialValue={userSession.data.mataikhoan}
             hidden={true}
           >
-            <Input></Input>
+            <Input />
           </Form.Item>
           <Form.Item
             label="Nội dung file PDF"
@@ -254,19 +293,17 @@ class DocumentForm extends Component {
               listType="text"
               onPreview={this.handlePreview}
               onRemove={this.handleRemove}
-              accept=".pdf"
-              maxCount={1}
               beforeUpload={this.beforeUpload}
             >
-              <Button type="primary">Tải lên</Button>
+              <Button type="primary">Tải file pdf lên</Button>
             </Upload>
           </Form.Item>
-          <Divider></Divider>
         </Form>
       </Modal>
     );
   }
 }
+
 const mapStateToProps = (state) => ({
   categories: state.categoryReducer.objects,
 });
@@ -275,6 +312,7 @@ const mapDispatchToProps = {
   getCategories,
 };
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(DocumentForm)
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(DocumentForm));

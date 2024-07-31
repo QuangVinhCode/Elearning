@@ -17,39 +17,54 @@ import java.util.List;
 @Table(name = "taikhoan")
 public class Taikhoan {
     @Id
-    @Column(name = "mataikhoan", nullable = false,length = 50)
+    @Column(name = "mataikhoan", nullable = false)
     private Long mataikhoan;
 
-    @Column(name = "tendangnhap", nullable = false, length = 100)
+    @Column(name = "tendangnhap",length = 50, nullable = false)
     private String tendangnhap;
 
-    @Column(name = "matkhau", nullable = false, length = 100)
+    @Column(name = "matkhau",length = 100, nullable = false)
     private String matkhau;
 
-    @Column(name = "sodienthoai", nullable = false, length = 50)
-    private String sodienthoai;
-
-    @Column(name = "gmail", nullable = false, length = 50)
-    private String gmail;
-
-    @Column(name = "quyenhan", nullable = false, length = 50)
-    private String quyenhan;
-
-    @Column(name = "sodu", nullable = false, length = 50)
+    @Column(name = "sodu",nullable = false)
     private Long sodu;
 
-    @Column(name = "trangthai", nullable = false, length = 50)
-    private String trangthai;
+    @Column(name = "gmail",length = 100, nullable = false)
+    private String gmail;
+
+    @Column(name = "sodienthoai",length = 15, nullable = false)
+    private String sodienthoai;
+
+    @Column(name = "quyenhan",length = 20, nullable = false)
+    private String quyenhan;
+
+    @Column(name = "trangthaidangtai",length = 20, nullable = false)
+    private String trangthaidangtai;
+
+    @Column(name = "trangthaibinhluan",length = 20, nullable = false)
+    private String trangthaibinhluan;
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Taikhoandabinhluan> dstaikhoandabinhluan;
+    private List<Dangtai> dsdangtai;
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Taikhoanthanhtoantailieu> dstaikhoanthanhtoantailieu;
+    private List<Thanhtoan> dsthanhtoan;
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Taikhoandangbantailieu> dstaikhoandangbantailieus;
+    private List<Baocaotailieu> dsbaocaotailieu;
+
+    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Baocaobinhluan> dsbaocaobinhluan;
+
+    @OneToMany(mappedBy = "taikhoan")
+    @JsonIgnore
+    private List<Giaodich> dsgiaodich;
+
+    @OneToMany(mappedBy = "taikhoan")
+    @JsonIgnore
+    private List<Binhluan> dsbinhluan;
 }

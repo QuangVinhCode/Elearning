@@ -64,7 +64,7 @@ const Navbar = ({ onUploadClick }) => {
       });
       return;
     }
-    if (userSession.data.trangthai !== "Bình thường") {
+    if (userSession.data.trangthaidangtai !== "Bình thường") {
       message.warning({
         content: "Tài khoản của bạn đã bị chặn quyền đăng tài liệu!",
         style: { marginTop: "20vh" },

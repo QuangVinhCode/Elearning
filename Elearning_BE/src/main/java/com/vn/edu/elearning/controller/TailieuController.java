@@ -1,16 +1,14 @@
 package com.vn.edu.elearning.controller;
 
 
-import com.vn.edu.elearning.domain.Mataikhoandangbantailieu;
+import com.vn.edu.elearning.domain.Dangtai;
+import com.vn.edu.elearning.domain.Madangtai;
 import com.vn.edu.elearning.domain.Taikhoan;
-import com.vn.edu.elearning.domain.Taikhoandangbantailieu;
 import com.vn.edu.elearning.domain.Tailieu;
+import com.vn.edu.elearning.dto.LichsukiemduyetDto;
 import com.vn.edu.elearning.dto.TailieuDto;
 import com.vn.edu.elearning.exeception.FileNotFoundException;
-import com.vn.edu.elearning.service.FileStorageService;
-import com.vn.edu.elearning.service.MapValidationErrorService;
-import com.vn.edu.elearning.service.TaikhoandangbantailieuService;
-import com.vn.edu.elearning.service.TailieuService;
+import com.vn.edu.elearning.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -26,6 +24,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @RestController
@@ -40,7 +40,13 @@ public class TailieuController {
     TailieuService tailieuService;
 
     @Autowired
-    TaikhoandangbantailieuService taikhoandangbantailieuService;
+    TaikhoanService taikhoanService;
+
+    @Autowired
+    DangtaiService dangtaiService;
+
+    @Autowired
+    KiemduyetService kiemduyetService;
 
     @Autowired
     MapValidationErrorService mapValidationErrorService;
@@ -56,20 +62,19 @@ public class TailieuController {
             return responseEntity;
         }
 
-        // Save the new Subject entity
         Tailieu tailieu = tailieuService.save(dto);
-        Mataikhoandangbantailieu mataikhoandangbantailieu = new Mataikhoandangbantailieu();
-        Taikhoan taikhoan = new Taikhoan();
-        Taikhoandangbantailieu taikhoandangbantailieu = new Taikhoandangbantailieu();
+        Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
 
-        taikhoan.setMataikhoan(dto.getMataikhoan());
-        mataikhoandangbantailieu.setMataikhoan(dto.getMataikhoan());
-        mataikhoandangbantailieu.setMatailieu(tailieu.getMatailieu());
-        taikhoandangbantailieu.setMataikhoandangbantailieu(mataikhoandangbantailieu);
-        taikhoandangbantailieu.setTailieu(tailieu);
-        taikhoandangbantailieu.setTaikhoan(taikhoan);
-
-        taikhoandangbantailieuService.save(taikhoandangbantailieu);
+        dangtaiService.save(taikhoan,tailieu);
+        LichsukiemduyetDto kiemduyet = new LichsukiemduyetDto();
+        kiemduyet.setMatailieu(tailieu.getMatailieu());
+        if (taikhoan.getQuyenhan().equals("Quản trị viên"))
+        {
+            kiemduyet.setKetqua("Đã duyệt");
+        }else {
+            kiemduyet.setKetqua("Chờ kiểm duyệt");
+        }
+        kiemduyetService.save(kiemduyet);
 
         return new ResponseEntity<>(tailieu, HttpStatus.CREATED);
     }
@@ -115,6 +120,7 @@ public class TailieuController {
         // Save the new Subject entity
         Tailieu tailieu = tailieuService.update(id,dto);
 
+
         return new ResponseEntity<>(tailieu, HttpStatus.CREATED);
     }
     @GetMapping()
@@ -130,37 +136,27 @@ public class TailieuController {
     public ResponseEntity<?> getListDocumentByName(@PathVariable("tentailieu") String tentailieu){
         return new ResponseEntity<>(tailieuService.getListDocumentByName(tentailieu),HttpStatus.OK);
     }
-    @GetMapping("/page/{id}")
-    public ResponseEntity<?> getDocumentsPage(@PathVariable("id") Long id,
-                                                          @PageableDefault(sort = "giaban", direction = Sort.Direction.ASC) Pageable pageable){
-        return new ResponseEntity<>(tailieuService.findAllByCategory(id,pageable),HttpStatus.OK);
-    }
-
 
     @GetMapping("/category/{id}")
     public ResponseEntity<?> getDocumentsByCategory(@PathVariable("id") Long id){
         return new ResponseEntity<>(tailieuService.findAllByCategory(id),HttpStatus.OK);
     }
 
-    @GetMapping("/revenue/{id}")
-    public ResponseEntity<?> getAllDocumentRevenueByAccount(@PathVariable("id") Long id){
-        return new ResponseEntity<>(tailieuService.findAllDocumentRevenueByAccount(id),HttpStatus.OK);
+    @GetMapping("/censorship")
+    public ResponseEntity<?> getAllDocumentCensorship(){
+        return new ResponseEntity<>(tailieuService.findAllDocumentCensorship(),HttpStatus.OK);
     }
 
-    @GetMapping("/sale/{id}")
-    public ResponseEntity<?> getDocumentsByAccountSale(@PathVariable("id") Long id){
-        return new ResponseEntity<>(tailieuService.findAllByAccountSale(id),HttpStatus.OK);
-    }
+//    @GetMapping("/revenue/{id}")
+//    public ResponseEntity<?> getAllDocumentRevenueByAccount(@PathVariable("id") Long id){
+//        return new ResponseEntity<>(tailieuService.findAllDocumentRevenueByAccount(id),HttpStatus.OK);
+//    }
 
-    @GetMapping("/pay/{id}")
-    public ResponseEntity<?> getDocumentsByAccountPay(@PathVariable("id") Long id){
-        return new ResponseEntity<>(tailieuService.findAllByAccountPay(id),HttpStatus.OK);
-    }
 
-    @GetMapping("/censorship/{censorship}")
-    public ResponseEntity<?> getDocumentsByCensorship(@PathVariable("censorship") String censorship){
-        return new ResponseEntity<>(tailieuService.findAllByCensorship(censorship),HttpStatus.OK);
-    }
+//    @GetMapping("/censorship/{censorship}")
+//    public ResponseEntity<?> getDocumentsByCensorship(@PathVariable("censorship") String censorship){
+//        return new ResponseEntity<>(tailieuService.findAllByCensorship(censorship),HttpStatus.OK);
+//    }
 
 
     @GetMapping("/{id}/get")
@@ -176,21 +172,6 @@ public class TailieuController {
         return  new ResponseEntity<>("Tài liệu có id " + id + " đã được xóa",HttpStatus.OK);
     }
 
-    @PatchMapping("/confirm/{id}")
-    public ResponseEntity<?> confirmDocument(@PathVariable("id") Long id)
-    {
-        tailieuService.confirm(id);
-
-        return  new ResponseEntity<>("Đã kiểm duyệt",HttpStatus.OK);
-    }
-
-    @PatchMapping("/error/{id}/{note}")
-    public ResponseEntity<?> errorDocument(@PathVariable("id") Long id,@PathVariable("note") String note)
-    {
-        tailieuService.error(id,note);
-
-        return  new ResponseEntity<>("Đã chuyển sang tài liệu lỗi",HttpStatus.OK);
-    }
     @GetMapping("/preview/{filename:.+}")
     public ResponseEntity<byte[]> getPDFPreview(@PathVariable String filename) {
         try {

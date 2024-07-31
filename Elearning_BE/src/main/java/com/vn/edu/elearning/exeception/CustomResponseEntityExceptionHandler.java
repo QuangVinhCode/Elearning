@@ -34,13 +34,6 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return  new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(TaikhoanthanhtoantailieuException.class)
-    public final ResponseEntity<Object> handleTaikhoanthanhtoantailieuException(TaikhoanthanhtoantailieuException ex, WebRequest request){
-        ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
-
-        return  new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(FileNotFoundException.class)
     public final ResponseEntity<Object> handleFileNotFoundException(FileNotFoundException ex, WebRequest request){
         ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());

@@ -1,7 +1,6 @@
 import React, { Component, createRef } from "react";
-import { errorDocument } from "../../redux/actions/documentAction";
-import { Button, Form, Modal, message } from "antd";
-import TextArea from "antd/lib/input/TextArea";
+import { confirmDocument } from "../../redux/actions/documentAction";
+import { Button, Form, Modal, Select, message } from "antd";
 import { connect } from "react-redux";
 import withRouter from "../../helpers/withRouter";
 
@@ -11,35 +10,66 @@ class DocumentNotes extends Component {
     super(props);
 
     this.state = {
-      content: "",
+      selectedError: null,
+      additionalContent: "",
     };
   }
 
-  handleContentChange = (e) => {
-    this.setState({ content: e.target.value });
+  handleErrorChange = (value) => {
+    this.setState({ selectedError: value });
   };
 
   handleConfirm = () => {
-    const { content } = this.state;
+    const { selectedError, additionalContent } = this.state;
     const { document } = this.props;
+
+    if (!selectedError) {
+      message.error("Vui lòng chọn lỗi tài liệu.");
+      return;
+    }
+
+    const content = `${selectedError}${
+      additionalContent ? ": " + additionalContent : ""
+    }`;
+    const censorship = {
+      ketqua: "Cần chỉnh sửa",
+      lydo: content,
+      matailieu: document.matailieu,
+    };
     console.log("Tên tài liệu lỗi " + document.tentailieu);
     console.log("Tên tài liệu lỗi " + content);
-    this.props.errorDocument(document.matailieu, content);
-    this.setState({ content: "" });
+    this.props.confirmDocument(censorship);
+    this.setState({ selectedError: null, additionalContent: "" });
     this.props.onCancel();
   };
 
   render() {
     const { onCancel, open } = this.props;
-    const { content } = this.state;
+    const { selectedError } = this.state;
+    const errorOptions = [
+      "Tài liệu không đầy đủ thông tin",
+      "Tỷ lệ phân chia phần trăm quản trị còn thấp",
+      "Tài liệu vi phạm bản quyền",
+      "Nội dung không phù hợp",
+      "Tài liệu không rõ ràng",
+      "Tài liệu bị lỗi định dạng",
+      "Tài liệu trùng lặp",
+      "Tài liệu không thể tải xuống",
+    ];
 
     return (
       <Modal
         title="Chi tiết tài liệu"
         visible={open}
         onCancel={onCancel}
-        cancelText="Đóng"
-        okButtonProps={{ style: { display: "none" } }}
+        footer={[
+          <Button key="back" onClick={onCancel}>
+            Đóng
+          </Button>,
+          <Button key="submit" type="primary" onClick={this.handleConfirm}>
+            Xác nhận
+          </Button>,
+        ]}
       >
         <Form
           labelCol={{
@@ -50,16 +80,18 @@ class DocumentNotes extends Component {
           }}
           layout="horizontal"
         >
-          <Form.Item label="Nội dung">
-            <TextArea
-              rows={4}
-              value={content}
-              onChange={this.handleContentChange}
-            />
-          </Form.Item>
-
-          <Form.Item label=">>>">
-            <Button onClick={this.handleConfirm}>Xác nhận</Button>
+          <Form.Item label="Lỗi tài liệu">
+            <Select
+              placeholder="Chọn lỗi tài liệu"
+              value={selectedError}
+              onChange={this.handleErrorChange}
+            >
+              {errorOptions.map((error, index) => (
+                <Select.Option key={index} value={error}>
+                  {error}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Form>
       </Modal>
@@ -67,12 +99,10 @@ class DocumentNotes extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  categories: state.categoryReducer.objects,
-});
+const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = {
-  errorDocument,
+  confirmDocument,
 };
 
 export default withRouter(

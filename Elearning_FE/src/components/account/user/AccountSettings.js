@@ -19,12 +19,17 @@ const AccountSettings = ({ account, getAccount }) => {
     new URLSearchParams(location.search).get("message") === "success"
   );
 
+  const [isError, setIsError] = useState(
+    new URLSearchParams(location.search).get("message") === "error"
+  );
+
   const handleOpenVNpay = () => {
     navigate("/users/vnpay-form");
   };
 
   const handleCloseNotification = () => {
     setIsSuccess(false);
+    setIsError(false);
   };
 
   useEffect(() => {
@@ -40,6 +45,12 @@ const AccountSettings = ({ account, getAccount }) => {
       {isSuccess && (
         <div className="message-notification">
           <p>Thanh toán thành công!</p>
+          <button onClick={handleCloseNotification}>Đóng</button>
+        </div>
+      )}
+      {isError && (
+        <div className="message-notification">
+          <p>Thanh toán thất bại!</p>
           <button onClick={handleCloseNotification}>Đóng</button>
         </div>
       )}
@@ -65,13 +76,7 @@ const AccountSettings = ({ account, getAccount }) => {
           <label htmlFor="password">
             Mật khẩu:{" "}
             <span>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                value={account.matkhau}
-                style={{ border: 0 }}
-              ></input>
+             **********
             </span>
           </label>
         </div>

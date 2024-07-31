@@ -1,8 +1,9 @@
 package com.vn.edu.elearning.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Value;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
@@ -11,18 +12,13 @@ import java.io.Serializable;
  * DTO for {@link com.vn.edu.elearning.domain.Tailieu}
  */
 @Data
-public class TailieuDto implements Serializable {
+@AllArgsConstructor
+@NoArgsConstructor
+public class KiemduyettailieuDto implements Serializable {
     Long matailieu;
     String tentailieu;
-    String tacgia;
-    String mota;
-    Long giaban;
-    String diachiluutru;
-    Long tylephiquantri;
-    Long tylethunhaptacgia;
-    String trangthai;
-    Long madanhmuc;
     Long mataikhoan;
-    @JsonIgnore
-    private MultipartFile pdfFile;
+    String tendangnhap;
+    String trangthai;;
+    String thoigiandangtai;
 }

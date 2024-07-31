@@ -13,8 +13,11 @@ import {
   deleteDocument,
   updateDocument,
 } from "../../redux/actions/documentAction";
+import {
+  getCategories,
+  clearCategoryState,
+} from "../../redux/actions/categoryAction";
 import DocumentDetails from "./DocumentDetails";
-import { MdMargin } from "react-icons/md";
 class ListDocument extends Component {
   constructor(props) {
     super(props);
@@ -23,10 +26,13 @@ class ListDocument extends Component {
       document: {
         matailieu: "",
         tentailieu: "",
+        tacgia:"",
         mota: "",
         giaban: "",
         diachiluutru: "",
         mataikhoan: "",
+        tylephiquantri: "",
+        tylethunhaptacgia: "",
         danhmuc: { madanhmuc: "" },
       },
       details: false,
@@ -35,6 +41,10 @@ class ListDocument extends Component {
   componentDidMount = () => {
     this.props.getDocuments();
     console.log("object in did mount");
+  };
+  componentWillUnmount = () => {
+    this.props.clearCategoryState();
+    console.log("Will Unmount");
   };
 
   onCreate = (values) => {
@@ -82,8 +92,9 @@ class ListDocument extends Component {
     const { navigate } = this.props.router;
     const { open } = this.state;
     const { details } = this.state;
-    const { documents } = this.props;
+    const { documents, objects } = this.props;
     const { document } = this.state;
+    console.log("Document")
     console.log(document);
     return (
       <>
@@ -107,13 +118,14 @@ class ListDocument extends Component {
         </Row>
         <DocumentList
           dataSource={documents}
+          categories={objects}
           onDeleteConfirm={this.onDeleteConfirm}
           onEdit={this.onEdit}
           onDetails={this.onDetails}
         />
         {this.state.details && (
           <DocumentDetails
-            document={this.state.document}
+            document={document}
             open={details}
             onCancel={() => {
               this.setState({ ...this.state, document: {}, details: false });
@@ -121,7 +133,7 @@ class ListDocument extends Component {
           />
         )}
         <DocumentForm
-          document={this.state.document}
+          document={document}
           open={open}
           onCreate={this.onCreate}
           onCancel={() => {
@@ -135,6 +147,7 @@ class ListDocument extends Component {
 
 const mapStateToProps = (state) => ({
   documents: state.documentReducer.documents,
+  objects: state.categoryReducer.objects,
 });
 
 const mapDispatchToProps = {
@@ -142,6 +155,8 @@ const mapDispatchToProps = {
   getDocuments,
   deleteDocument,
   updateDocument,
+  getCategories,
+  clearCategoryState,
 };
 
 export default connect(

@@ -21,23 +21,29 @@ public class Tailieu {
     @Column(name = "matailieu", nullable = false)
     private Long matailieu;
 
-    @Column(name = "tentailieu", nullable = false, length = 50)
+    @Column(name = "tentailieu",length = 100, nullable = false)
     private String tentailieu;
 
-    @Column(name = "mota", nullable = false, length = 250)
+    @Column(name = "tacgia",length = 50, nullable = false)
+    private String tacgia;
+
+    @Column(name = "mota",length = 250, nullable = false)
     private String mota;
 
-    @Column(name = "giaban", nullable = false, length = 10)
+    @Column(name = "giaban",nullable = false)
     private Long giaban;
 
-    @Column(name = "diachiluutru", nullable = false, length = 50)
+    @Column(name = "diachiluutru",length = 250, nullable = false)
     private String diachiluutru;
 
-    @Column(name = "kiemduyet", nullable = false,length = 50)
-    private String kiemduyet;
+    @Column(name = "tylephiquantri",nullable = false)
+    private Long tylephiquantri;
 
-    @Column(name = "ghichu",length = 150)
-    private String ghichu;
+    @Column(name = "tylethunhaptacgia",nullable = false)
+    private Long tylethunhaptacgia;
+
+    @Column(name = "trangthai",length = 20, nullable = false)
+    private String trangthai;
 
     @ManyToOne
     @JoinColumn(name = "madanhmuc")
@@ -45,14 +51,18 @@ public class Tailieu {
 
     @OneToMany(mappedBy = "tailieu", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Taikhoandabinhluan> dstaikhoandabinhluan;
+    private List<Dangtai> dsdangtai;
 
     @OneToMany(mappedBy = "tailieu", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Taikhoanthanhtoantailieu> dstaikhoanthanhtoantailieu;
+    private List<Thanhtoan> dsthanhtoan;
 
     @OneToMany(mappedBy = "tailieu", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Taikhoandangbantailieu> dstaikhoandangbantailieus;
+    private List<Baocaotailieu> dsbaocaotailieu;
+
+    @OneToMany(mappedBy = "tailieu", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Binhluan> dsbinhluan;
 
 }

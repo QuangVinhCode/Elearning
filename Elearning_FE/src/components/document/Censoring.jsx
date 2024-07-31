@@ -19,11 +19,10 @@ class Censoring extends Component {
       document: {
         matailieu: "",
         tentailieu: "",
-        mota: "",
-        giaban: "",
-        diachiluutru: "",
+        thoigiandangtai: "",
+        trangthai: "",
         mataikhoan: "",
-        danhmuc: { madanhmuc: "" },
+        tentaikhoan: "",
       },
       details: false,
       open: false,
@@ -35,7 +34,11 @@ class Censoring extends Component {
   };
 
   confirmDocument = () => {
-    this.props.confirmDocument(this.state.document.matailieu);
+    const censorship = {
+      ketqua: "Đã duyệt",
+      matailieu: this.state.document.matailieu,
+    };
+    this.props.confirmDocument(censorship);
     console.log("Delete lesson in ListLesson");
   };
 
@@ -83,7 +86,7 @@ class Censoring extends Component {
         />
         {this.state.details && (
           <DocumentDetails
-            document={this.state.document}
+            document={document}
             open={details}
             onCancel={() => {
               this.setState({ ...this.state, document: {}, details: false });
@@ -92,7 +95,7 @@ class Censoring extends Component {
         )}
         {this.state.open && (
           <DocumentNotes
-            document={this.state.document}
+            document={document}
             open={open}
             onCancel={() => {
               this.setState({ ...this.state, document: {}, open: false });
