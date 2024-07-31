@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_PAY, API_PAYMENT } from "./constant";
+import {  API_PAYMENT } from "./constant";
 
 export default class PayService {
   static checkDocumentView = async (matk, matl) => {

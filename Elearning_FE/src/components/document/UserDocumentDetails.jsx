@@ -7,6 +7,7 @@ import {
   payDocument,
   clearDocumentState,
 } from "../../redux/actions/documentAction";
+import { getAccount } from "../../redux/actions/accountAction";
 import {
   getCommentsByDocument,
   insertComment,
@@ -63,13 +64,21 @@ class UserDocumentDetails extends Component {
           : null;
         const mataikhoan = userSession ? userSession.data.mataikhoan : 0;
         const tendangnhap = userSession ? userSession.data.tendangnhap : "";
+        this.props.getAccount(mataikhoan);
         PayService.checkDocumentView(mataikhoan, id).then((status) => {
+          console.log(status);
           this.setState({
             status,
             mataikhoan,
             tendangnhap,
-            isPaid: status === "Đã thanh toán" || status === "Chủ sở hữu" || status === "Miễn phí",
-            canDownload: status === "Đã thanh toán" || status === "Chủ sở hữu" || status === "Miễn phí",
+            isPaid:
+              status === "Đã thanh toán" ||
+              status === "Chủ sở hữu" ||
+              status === "Miễn phí",
+            canDownload:
+              status === "Đã thanh toán" ||
+              status === "Chủ sở hữu" ||
+              status === "Miễn phí",
             documentNotFound: false,
           });
         });
@@ -136,9 +145,22 @@ class UserDocumentDetails extends Component {
     }
   };
   onPayConfirm = () => {
-    const { document } = this.props;
-    const message = "Bạn có chắt chắn muốn thanh toán " + document.tentailieu;
+    const { document, account } = this.props;
+    const formattedPrice = new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(document.giaban);
 
+    const sodu = new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(account.sodu);
+    const message = (
+      <div>
+        Bạn có muốn thanh toán với số tiền {formattedPrice},<br />
+        số dư còn lại trong tài khoản của bạn {sodu}
+      </div>
+    );
     Modal.confirm({
       title: "Thông báo",
       icon: <ExclamationCircleOutlined />,
@@ -382,9 +404,11 @@ class UserDocumentDetails extends Component {
 const mapStateToProps = (state) => ({
   document: state.documentReducer.document,
   comments: state.commentReducer.comments,
+  account: state.accountReducer.account,
 });
 
 const mapDispatchToProps = {
+  getAccount,
   getDocument,
   payDocument,
   insertComment,

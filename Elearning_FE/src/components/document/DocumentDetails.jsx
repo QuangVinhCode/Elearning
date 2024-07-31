@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import DocumentService from "../../services/documentService";
 import { message, Modal } from "antd";
 import Pdf from "@mikecousins/react-pdf";
-import PayService from "../../services/payService";
 import {
   getDocument,
   payDocument,
@@ -10,6 +9,7 @@ import {
 } from "../../redux/actions/documentAction";
 import withRouter from "../../helpers/withRouter";
 import { connect } from "react-redux";
+import "./UserDocumentDetails.css";
 class DocumentDetails extends Component {
   constructor(props) {
     super(props);
@@ -32,9 +32,9 @@ class DocumentDetails extends Component {
       (prevState) => ({ page: prevState.page + 1 }),
       () => {
         if (this.scrollableDivRef.current) {
-          this.scrollableDivRef.current.scrollTo({
-            top: 0,
+          this.scrollableDivRef.current.scrollIntoView({
             behavior: "smooth",
+            block: "start",
           });
         }
       }
@@ -61,10 +61,10 @@ class DocumentDetails extends Component {
     if (pageNumber > 0 && pageNumber <= this.state.numPages) {
       this.setState({ page: pageNumber }, () => {
         if (this.scrollableDivRef.current) {
-          this.scrollableDivRef.current.scrollTo({
-            top: 0,
+          this.scrollableDivRef.current.scrollIntoView({
             behavior: "smooth",
-          }); // Sử dụng tham chiếu
+            block: "start",
+          });
         }
       });
     } else {
@@ -86,7 +86,10 @@ class DocumentDetails extends Component {
   render() {
     const { document, onCancel, open } = this.props;
     const { page, maxPages, goToPage } = this.state;
-
+    const formattedPrice = new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(document.giaban);
     return (
       <Modal
         title="Chi tiết tài liệu"
@@ -95,60 +98,78 @@ class DocumentDetails extends Component {
         cancelText="Đóng"
         okButtonProps={{ style: { display: "none" } }}
         width="100%"
+        style={{ maxHeight: "80vh", overflowY: "auto" }}
       >
-        <div
-          style={{ height: "100%", overflow: "auto" }}
-          ref={this.scrollableDivRef}
-        >
-          <Pdf
-            file={DocumentService.getDocumentPDFUrl(document.diachiluutru)}
-            page={page}
-            onDocumentLoadSuccess={this.onLoadSuccess}
-            onPageLoadSuccess={this.onPageLoadSuccess}
-          >
-            {({ pdfDocument, canvas }) => (
-              <>
-                {!pdfDocument && <span>Loading...</span>}
-                {canvas}
-                {pdfDocument && (
-                  <div className="nav-buttons">
-                    <button
-                      className="prev-button"
-                      disabled={page === 1}
-                      onClick={this.handlePrevPage}
-                    >
-                      Trước
-                    </button>
-                    <button
-                      className="next-button"
-                      disabled={page === maxPages}
-                      onClick={this.handleNextPage}
-                    >
-                      Sau
-                    </button>
-                    <p>
-                      Trang {page} / {pdfDocument.numPages}
-                    </p>
-                    <div className="page-navigation">
-                      <input
-                        type="number"
-                        min="1"
-                        max={pdfDocument.numPages}
-                        value={goToPage}
-                        onChange={(e) =>
-                          this.setState({ goToPage: e.target.value })
-                        }
-                        placeholder="Nhập số trang"
-                      />
-                      <button onClick={this.handleGoToPage}>
-                        Đi đến trang
+        <div className="container">
+          <div className="pdf-viewer-container" ref={this.scrollableDivRef}>
+            <Pdf
+              file={DocumentService.getDocumentPDFUrl(document.diachiluutru)}
+              page={page}
+              onDocumentLoadSuccess={this.onLoadSuccess}
+              onPageLoadSuccess={this.onPageLoadSuccess}
+            >
+              {({ pdfDocument, pdfPage, canvas }) => (
+                <>
+                  {!pdfDocument && <span>Loading...</span>}
+                  {canvas}
+                  {pdfDocument && (
+                    <div className="nav-buttons">
+                      <button
+                        className="prev-button"
+                        disabled={page === 1}
+                        onClick={this.handlePrevPage}
+                      >
+                        Trước
                       </button>
+                      <button
+                        className="next-button"
+                        disabled={page === maxPages}
+                        onClick={this.handleNextPage}
+                      >
+                        Sau
+                      </button>
+                      <h3 className="pagenumber">
+                        Trang {page} / {pdfDocument.numPages}
+                      </h3>
+                      <div className="page-navigation">
+                        <input
+                          type="number"
+                          min="1"
+                          max={pdfDocument.numPages}
+                          value={goToPage}
+                          onChange={(e) =>
+                            this.setState({ goToPage: e.target.value })
+                          }
+                          placeholder="Nhập số "
+                        />
+                        <button
+                          onClick={this.handleGoToPage}
+                          className="go-page"
+                        >
+                          Đi đến trang
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </>
-            )}
-          </Pdf>
+                  )}
+                </>
+              )}
+            </Pdf>
+          </div>
+          <div className="divInformation">
+            <h1 className="document-title">{document.tentailieu}</h1>
+            <h2 className="document-title">{document.tacgia}</h2>
+            <p className="document-description">
+              <b>Mô tả:</b> {document.mota}
+            </p>
+            <p className="document-price">
+              <b>Giá:</b> {document.giaban === 0 ? "Miễn phí" : formattedPrice}
+            </p>
+            <p className="document-description">
+              <b>Tỷ lệ phân chia (Thu nhập tác giả/Phí quản trị)</b>{" "}
+              {document.tylephiquantri} / {document.tylethunhaptacgia}
+            </p>
+            <div></div>
+          </div>
         </div>
       </Modal>
     );

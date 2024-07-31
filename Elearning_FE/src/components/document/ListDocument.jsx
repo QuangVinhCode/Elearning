@@ -125,7 +125,7 @@ class ListDocument extends Component {
         />
         {this.state.details && (
           <DocumentDetails
-            document={document}
+            tailieu={document.matailieu}
             open={details}
             onCancel={() => {
               this.setState({ ...this.state, document: {}, details: false });

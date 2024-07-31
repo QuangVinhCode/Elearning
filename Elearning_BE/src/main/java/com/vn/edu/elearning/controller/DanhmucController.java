@@ -20,8 +20,6 @@ public class DanhmucController {
     DanhmucService danhmucService;
     @Autowired
     MapValidationErrorService mapValidationErrorService;
-
-
     @PostMapping
     public ResponseEntity<?> createCategory(@Validated @RequestBody DanhmucDto dto, BindingResult result){
 
