@@ -40,4 +40,12 @@ public class DangtaiService {
         return dangtaiRepository.findAll();
     }
 
+    public boolean checkDangtai(Long taikhoan, Long tailieu) {
+        Dangtai dangtai = dangtaiRepository.findByTaikhoan_MataikhoanAndTailieu_Matailieu(taikhoan,tailieu);
+        if (dangtai != null)
+        {
+            return  true;
+        }
+        return  false;
+    }
 }

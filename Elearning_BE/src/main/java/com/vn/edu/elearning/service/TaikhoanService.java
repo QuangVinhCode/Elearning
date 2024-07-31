@@ -117,6 +117,16 @@ public class TaikhoanService {
         return found.get();
     }
 
+    public Taikhoan findAccountRole(String role) {
+        Optional<Taikhoan> found = taikhoanRepository.findByQuyenhan(role);
+
+        if (!found.isPresent())
+        {
+            throw new TaikhoanException("Tài khoản có quyền hạn "+ role + " không tồn tại");
+        }
+        return found.get();
+    }
+
     public Taikhoan findByPostedDocuments(Long id) {
         Taikhoan found = taikhoanRepository.findByDsdangtai_Tailieu_Matailieu(id);
         return found;
@@ -194,7 +204,14 @@ public class TaikhoanService {
     }
 
     public void  incrementSodu(Long id,Long amount){
-
         taikhoanRepository.incrementSodu(id,amount);
+    }
+
+    public void  incrementSoduForAdmin(Long amount){
+        taikhoanRepository.incrementSoduForAdmin(amount);
+    }
+
+    public void  updateSodu(Long id,Long amount){
+        taikhoanRepository.updateSodu(id,amount);
     }
 }

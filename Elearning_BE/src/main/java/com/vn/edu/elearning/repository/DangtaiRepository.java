@@ -21,4 +21,6 @@ public interface DangtaiRepository extends JpaRepository<Dangtai, Madangtai> {
     @Query("update Dangtai d set d.thoigianduocduyet = ?1 where d.taikhoan = ?2 and d.tailieu = ?3")
     void updateThoigianduocduyetByTaikhoanAndTailieu(String thoigianduocduyet, Taikhoan taikhoan, Tailieu tailieu);
 
+    Dangtai findByTaikhoan_MataikhoanAndTailieu_Matailieu(Long mataikhoan, Long matailieu);
+
 }

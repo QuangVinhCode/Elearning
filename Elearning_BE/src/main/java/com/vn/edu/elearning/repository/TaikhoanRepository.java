@@ -26,6 +26,7 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     @Query("UPDATE Taikhoan t SET t.sodu = t.sodu + :amount WHERE t.quyenhan = 'Quản trị viên'")
     void incrementSoduForAdmin(@Param("amount") Long amount);
 
+
     @Modifying
     @Query("UPDATE Taikhoan t SET t.trangthaidangtai = :trangthai WHERE t.mataikhoan = :id")
     @Transactional
@@ -56,4 +57,5 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
 
     Taikhoan findByDsdangtai_Tailieu_Matailieu(Long matailieu);
 
+    Optional<Taikhoan> findByQuyenhan(String quyenhan);
 }
