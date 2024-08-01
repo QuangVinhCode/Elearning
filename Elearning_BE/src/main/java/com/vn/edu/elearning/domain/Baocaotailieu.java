@@ -28,8 +28,8 @@ public class Baocaotailieu {
     @JoinColumn(name = "matailieu")
     private Tailieu tailieu;
 
-    @Column(name = "thoigianthanhtoan",length = 50,nullable = false)
-    private String thoigianthanhtoan;
+    @Column(name = "thoigianbaocao",length = 50,nullable = false)
+    private String thoigianbaocao;
 
     @Column(length = 250, nullable = false)
     private String lydo;

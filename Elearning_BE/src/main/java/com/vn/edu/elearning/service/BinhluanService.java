@@ -11,6 +11,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +28,16 @@ public class BinhluanService {
         Binhluan entity = new Binhluan();
         BeanUtils.copyProperties(dto,entity);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
+        if (taikhoan.getTrangthaibinhluan().equals("Bình thường"))
+        {
+            entity.setTrangthai("Thành công");
+        }
+        else {
+            entity.setTrangthai("Thất bại");
+        }
         Tailieu tailieu = new Tailieu();
-        taikhoan.setMataikhoan(dto.getMataikhoan());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        entity.setThoigianbinhluan(LocalDateTime.now().format(formatter));
         tailieu.setMatailieu(dto.getMatailieu());
         entity.setTaikhoan(taikhoan);
         entity.setTailieu(tailieu);

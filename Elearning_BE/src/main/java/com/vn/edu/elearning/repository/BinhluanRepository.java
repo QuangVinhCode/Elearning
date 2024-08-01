@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BinhluanRepository extends JpaRepository<Binhluan, Long> {
     @Query("SELECT new com.vn.edu.elearning.dto.BinhluanTheoTailieuDto(b.mabinhluan, b.taikhoan.mataikhoan, b.taikhoan.tendangnhap, b.noidung, b.trangthai, b.matbinhluandatraloi, b.thoigianbinhluan) " +
-            "FROM Binhluan b WHERE b.tailieu.matailieu = :matailieu")
+            "FROM Binhluan b WHERE b.tailieu.matailieu = :matailieu and b.trangthai = 'Thành công'")
     List<BinhluanTheoTailieuDto> findBinhluansByMatailieu(@Param("matailieu") Long matailieu);
 
     List<Binhluan> findByTaikhoan_Mataikhoan(Long mataikhoan);

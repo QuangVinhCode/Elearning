@@ -6,6 +6,8 @@ import com.vn.edu.elearning.dto.TaikhoanDto;
 import com.vn.edu.elearning.exeception.TaikhoanException;
 import com.vn.edu.elearning.repository.TaikhoanRepository;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

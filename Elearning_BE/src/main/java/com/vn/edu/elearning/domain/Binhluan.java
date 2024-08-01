@@ -31,9 +31,9 @@ public class Binhluan {
     private String noidung;
     @Column(name = "trangthai",length = 20, nullable = false)
     private String trangthai;
-    @Column(name = "matbinhluandatraloi",length = 20, nullable = false)
+    @Column(name = "matbinhluandatraloi",length = 20)
     private Long matbinhluandatraloi;
-    @Column(name = "thoigianbinhluan",length = 50)
+    @Column(name = "thoigianbinhluan",length = 50, nullable = false)
     private String thoigianbinhluan;
     @OneToMany(mappedBy = "binhluan", cascade = CascadeType.ALL)
     @JsonIgnore

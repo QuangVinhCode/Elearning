@@ -184,4 +184,30 @@ public class TailieuController {
         }
     }
 
+    @GetMapping("/view/{filename}")
+    public ResponseEntity<Resource> viewPDF(@PathVariable String filename, HttpServletRequest request) {
+        Resource resource = fileStorageService.loadPDFFileAsResource(filename);
+
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            contentType = "application/pdf";
+        }
+
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    private boolean hasAccessToDocument(Long username, String filename) {
+
+        return true; // Change this to actual access check
+    }
+
 }

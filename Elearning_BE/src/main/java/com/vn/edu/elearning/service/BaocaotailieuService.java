@@ -1,9 +1,6 @@
 package com.vn.edu.elearning.service;
 
-import com.vn.edu.elearning.domain.Baocaotailieu;
-import com.vn.edu.elearning.domain.Binhluan;
-import com.vn.edu.elearning.domain.Taikhoan;
-import com.vn.edu.elearning.domain.Tailieu;
+import com.vn.edu.elearning.domain.*;
 import com.vn.edu.elearning.dto.BaocaotailieuDto;
 import com.vn.edu.elearning.dto.BinhluanDto;
 import com.vn.edu.elearning.dto.BinhluanTheoTailieuDto;
@@ -14,6 +11,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +24,20 @@ public class BaocaotailieuService {
     @Autowired
     private TaikhoanService taikhoanService;
 
+    @Autowired
+    private TailieuService tailieuService;
+
     public Baocaotailieu save(BaocaotailieuDto dto) {
         Baocaotailieu entity = new Baocaotailieu();
         BeanUtils.copyProperties(dto,entity);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
-        Tailieu tailieu = new Tailieu();
+        Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
+        Mabaocaotailieu mabaocaotailieu = new Mabaocaotailieu(dto.getMataikhoan(), dto.getMatailieu());
         entity.setTaikhoan(taikhoan);
         entity.setTailieu(tailieu);
+        entity.setMabaocaotailieu(mabaocaotailieu);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        entity.setThoigianbaocao(LocalDateTime.now().format(formatter));
         return baocaotailieuRepository.save(entity);
     }
 

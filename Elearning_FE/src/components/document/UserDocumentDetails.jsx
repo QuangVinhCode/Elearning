@@ -271,7 +271,7 @@ class UserDocumentDetails extends Component {
       <div className="container">
         <div className="pdf-viewer-container">
           <Pdf
-            file={DocumentService.getDocumentPDFUrl(document.diachiluutru)}
+            file={DocumentService.getPDFView(document.diachiluutru)}
             page={page}
             onDocumentLoadSuccess={this.onLoadSuccess}
             onPageLoadSuccess={this.onPageLoadSuccess}

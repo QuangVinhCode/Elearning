@@ -11,6 +11,6 @@ import java.io.Serializable;
 public class BaocaotailieuDto implements Serializable {
     Long mataikhoan;
     Long matailieu;
-    String thoigianthanhtoan;
+    String thoigianbaocao;
     String lydo;
 }
