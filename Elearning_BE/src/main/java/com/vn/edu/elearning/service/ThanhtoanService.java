@@ -31,7 +31,6 @@ public class ThanhtoanService {
 
     public Thanhtoan save(ThanhtoanDto dto) {
         Thanhtoan entity = new Thanhtoan();
-        Mathanhtoan mathanhtoan = new Mathanhtoan();
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
@@ -41,7 +40,7 @@ public class ThanhtoanService {
         }
         if (taikhoan.getSodu() < tailieu.getGiaban())
         {
-            throw  new TailieuException("Số dư trong tài khoản không đủ!");
+            dto.setTrangthai("Thất bại");
         }
         else {
             Taikhoan taikhoandangtai  = taikhoanService.findByPostedDocuments(dto.getMatailieu());
@@ -105,11 +104,9 @@ public class ThanhtoanService {
             }
 
         }
-        mathanhtoan.setMatailieu(dto.getMatailieu());
         entity.setTailieu(tailieu);
         entity.setTaikhoan(taikhoan);
         entity.setTrangthai(dto.getTrangthai());
-        entity.setMathanhtoan(mathanhtoan);
         entity.setThoigianthanhtoan(LocalDateTime.now().format(formatter));
         return thanhtoanRepository.save(entity);
     }
@@ -118,7 +115,7 @@ public class ThanhtoanService {
     }
 
     public boolean checkThanhtoan(Long taikhoan, Long tailieu) {
-        Thanhtoan thanhtoan = thanhtoanRepository.findByTaikhoan_MataikhoanAndTailieu_Matailieu(taikhoan,tailieu);
+        Thanhtoan thanhtoan = thanhtoanRepository.findByTaikhoan_MataikhoanAndTailieu_MatailieuAndTrangthai(taikhoan,tailieu,"Thành công");
         if (thanhtoan != null)
         {
             return  true;

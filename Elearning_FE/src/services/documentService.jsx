@@ -48,7 +48,7 @@ export default class DocumentService {
     return await axios.delete(API_DOCUMENT + "/" + id);
   };
   confirmDocument = async (object) => {
-    return await axios.post(API_CENSORSHIP,object);
+    return await axios.post(API_CENSORSHIP, object);
   };
   errorDocument = async (id, note) => {
     return await axios.patch(API_DOCUMENT + "/error/" + id + "/" + note);

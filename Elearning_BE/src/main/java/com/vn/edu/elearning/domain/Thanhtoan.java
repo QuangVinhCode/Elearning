@@ -15,16 +15,17 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "thanhtoan")
 public class Thanhtoan {
-    @EmbeddedId
-    private Mathanhtoan mathanhtoan;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mathanhtoan", nullable = false)
+    private Long mathanhtoan;
+
     @ManyToOne
-    @MapsId("mataikhoan")
-    @JoinColumn(name = "mataikhoan")
+    @JoinColumn(name = "mataikhoan", nullable = false)
     private Taikhoan taikhoan;
 
     @ManyToOne
-    @MapsId("matailieu")
-    @JoinColumn(name = "matailieu")
+    @JoinColumn(name = "matailieu", nullable = false)
     private Tailieu tailieu;
 
     @Column(name = "thoigianthanhtoan",length = 50,nullable = false)

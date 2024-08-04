@@ -64,7 +64,7 @@ const Navbar = ({ onUploadClick }) => {
       });
       return;
     }
-    if (userSession.data.trangthaidangtai !== "Bình thường") {
+    if (userSession.trangthaidangtai !== "Bình thường") {
       message.warning({
         content: "Tài khoản của bạn đã bị chặn quyền đăng tài liệu!",
         style: { marginTop: "20vh" },
@@ -144,7 +144,7 @@ const Navbar = ({ onUploadClick }) => {
                   className="nav-item nav-link"
                 >
                   <span className="nav-link">
-                    Chào, {userSession.data.tendangnhap}
+                    Chào, {userSession.tendangnhap}
                   </span>
                 </Link>
               ) : (

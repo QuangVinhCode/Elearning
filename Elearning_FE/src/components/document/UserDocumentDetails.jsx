@@ -20,6 +20,8 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import CommentDocument from "./CommentDocument";
 import ListComment from "./ListComment";
 import { Navigate } from "react-router-dom";
+import axios from "axios";
+import PDFViewer from "../../pages/PDFViewer";
 class UserDocumentDetails extends Component {
   constructor(props) {
     super(props);
@@ -46,6 +48,7 @@ class UserDocumentDetails extends Component {
 
   componentDidMount() {
     this.loadDocument();
+  
   }
   componentDidUpdate(prevProps) {
     const { id } = this.props.router.params;
@@ -62,8 +65,8 @@ class UserDocumentDetails extends Component {
         const userSession = storedUserSession
           ? JSON.parse(storedUserSession)
           : null;
-        const mataikhoan = userSession ? userSession.data.mataikhoan : 0;
-        const tendangnhap = userSession ? userSession.data.tendangnhap : "";
+        const mataikhoan = userSession ? userSession.mataikhoan : 0;
+        const tendangnhap = userSession ? userSession.tendangnhap : "";
         this.props.getAccount(mataikhoan);
         PayService.checkDocumentView(mataikhoan, id).then((status) => {
           console.log(status);
@@ -104,9 +107,6 @@ class UserDocumentDetails extends Component {
     this.setState({ numPages, maxPages });
   };
   onPageLoadSuccess = () => {
-    console.log("this.state.page " + this.state.page);
-    console.log("this.state.maxPages " + this.state.maxPages);
-    console.log("this.state.numPages " + this.state.numPages);
     if (this.state.page === this.state.maxPages) {
       this.setState({ showPaymentMessage: true });
     }
@@ -262,6 +262,10 @@ class UserDocumentDetails extends Component {
     if (documentNotFound) {
       return <Navigate to="/404" />;
     }
+    const jwtToken = sessionStorage.getItem('jwtToken');
+    const sessionToken = jwtToken
+    ? JSON.parse(jwtToken)
+    : null;
     // Format giá tiền thành tiền Việt Nam
     const formattedPrice = new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -270,95 +274,7 @@ class UserDocumentDetails extends Component {
     return (
       <div className="container">
         <div className="pdf-viewer-container">
-          <Pdf
-            file={DocumentService.getPDFView(document.diachiluutru)}
-            page={page}
-            onDocumentLoadSuccess={this.onLoadSuccess}
-            onPageLoadSuccess={this.onPageLoadSuccess}
-          >
-            {({ pdfDocument, pdfPage, canvas }) => (
-              <>
-                {!pdfDocument && <span>Loading...</span>}
-                {canvas}
-                {pdfDocument && (
-                  <div className="nav-buttons">
-                    <button
-                      className="prev-button"
-                      disabled={page === 1}
-                      onClick={this.handlePrevPage}
-                    >
-                      Trước
-                    </button>
-                    <button
-                      className="next-button"
-                      disabled={page === maxPages}
-                      onClick={this.handleNextPage}
-                    >
-                      Sau
-                    </button>
-                    <h3 className="pagenumber">
-                      Trang {page} / {pdfDocument.numPages}
-                    </h3>
-                    <div className="page-navigation">
-                      <input
-                        type="number"
-                        min="1"
-                        max={pdfDocument.numPages}
-                        value={goToPage}
-                        onChange={(e) =>
-                          this.setState({ goToPage: e.target.value })
-                        }
-                        placeholder="Nhập số "
-                      />
-                      <button onClick={this.handleGoToPage} className="go-page">
-                        Đi đến trang
-                      </button>
-                    </div>
-                    {showPaymentMessage && (
-                      <div className="message-notification">
-                        <p>
-                          Để xem toàn bộ nội dung và tải về, vui lòng thanh
-                          toán.
-                        </p>
-                        <button
-                          onClick={() =>
-                            this.setState({ showPaymentMessage: false })
-                          }
-                        >
-                          Đóng
-                        </button>
-                      </div>
-                    )}
-                    {reset && (
-                      <div className="message-notification">
-                        <p>Hãy nhấn reset website để có thể xem hoặc tải về</p>
-                        <button
-                          onClick={() => {
-                            this.setState({ reset: false });
-                            this.handleResetWebsite();
-                          }}
-                        >
-                          Đóng
-                        </button>
-                      </div>
-                    )}
-                    {login && (
-                      <div className="message-notification">
-                        <p>Hãy nhấn đăng nhập để có thể bình luận</p>
-                        <button
-                          onClick={() => {
-                            this.setState({ login: false });
-                          }}
-                        >
-                          Đóng
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </>
-            )}
-          </Pdf>
+         <PDFViewer filename={document.diachiluutru} token={sessionToken.token}/>
         </div>
         <div className="divInformation">
           <h1 className="document-title">{document.tentailieu}</h1>

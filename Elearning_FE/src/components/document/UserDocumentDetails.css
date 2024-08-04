@@ -18,7 +18,7 @@ button {
   margin-top: -50px;
 }
 .pdf-viewer-container {
-  width: 70%; /* 50% for the PDF viewer */
+  width: 100%; /* 50% for the PDF viewer */
   display: flex;
   margin-top: 100px;
   flex-direction: column;
@@ -27,7 +27,6 @@ button {
   background-color: #fff; /* White background, adjust as needed */
   padding: 10px;
   box-sizing: border-box;
-  overflow-y: auto; /* Allow vertical scrolling if content overflows */
 }
 
 .next-button {

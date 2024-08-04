@@ -30,11 +30,16 @@ export const loginAccount = (object, navigate) => async (dispatch) => {
       console.log("object in data login");
       console.log(response.data);
       const userSession = {
-        data: response.data,
+        mataikhoan: response.data.taikhoan.mataikhoan,
+        tendangnhap:response.data.taikhoan.tendangnhap,
+      };
+      const jwtToken = {
+        token: response.data.token,
       };
       sessionStorage.setItem("userSession", JSON.stringify(userSession));
+      sessionStorage.setItem("jwtToken", JSON.stringify(jwtToken));
       console.log(response.data);
-      if (response.data.quyenhan === "Quản trị viên") {
+      if (response.data.taikhoan.quyenhan === "Quản trị viên") {
         navigate("/dashboard/*");
       } else {
         navigate("/users");
@@ -564,7 +569,8 @@ export const changePassword =
       payload: false,
     });
     let sesion = sessionStorage.removeItem("userSession");
-    if (!sesion) {
+    let token = sessionStorage.removeItem("jwtToken");
+    if (!sesion && !token) {
       navigate("/users/login");
       dispatch({ type: LOG_OUT });
     }

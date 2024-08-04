@@ -1,5 +1,10 @@
 package com.vn.edu.elearning.service;
 
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import com.vn.edu.elearning.config.OTPGenerator;
 import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.dto.TaikhoanDto;
@@ -13,8 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -25,6 +33,7 @@ public class TaikhoanService {
     @Autowired
     private EmailService emailService;
 
+    protected static final  String SIGNER_KEY = "LWwRhNg8jexoFVR3TnJu3R/qtjpjZO9FVsXwllzFCpXLFoXMAKv0cMmIYCZBmZ+Q";
     private Map<String, String> otpStorage = new HashMap<>();
     public Taikhoan register(TaikhoanDto dto) {
         Optional<?> found = taikhoanRepository.findByTendangnhap(dto.getTendangnhap());
@@ -215,5 +224,42 @@ public class TaikhoanService {
 
     public void  updateSodu(Long id,Long amount){
         taikhoanRepository.updateSodu(id,amount);
+    }
+
+    public String generateToken(String username){
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                .subject(username)
+                .issuer("Elearning.com")
+                .issueTime(new Date())
+                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()))
+                .claim("role","role")
+                .build();
+
+        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+
+        JWSObject jwsObject = new JWSObject(header,payload);
+
+        try {
+            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+            return jwsObject.serialize();
+        } catch (JOSEException e) {
+            System.out.println("Error create token: " + e);
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public boolean introspect(String token) throws JOSEException, ParseException {
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        var verified =  signedJWT.verify(verifier);
+
+        return verified && expiryTime.after(new Date());
     }
 }

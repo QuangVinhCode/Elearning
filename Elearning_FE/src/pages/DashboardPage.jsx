@@ -14,7 +14,6 @@ import {
   MdOutlineHome,
   MdOutlinePlayLesson,
 } from "react-icons/md";
-import { FaHouseUser } from "react-icons/fa";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "../components/home/Home";
 import AddOrEditCategory from "../components/category/AddOrEditCategory";
@@ -201,7 +200,7 @@ function DashboardPage() {
             <Col md={6}>
               <div className="User">
                 <Avatar size="default" icon={<UserOutlined />}></Avatar>
-                {userSession ? userSession.data.tendangnhap : "Null"}
+                {userSession ? userSession.tendangnhap : "Null"}
               </div>
             </Col>
           </Row>

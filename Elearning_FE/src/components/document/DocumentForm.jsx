@@ -276,7 +276,7 @@ class DocumentForm extends Component {
           <Form.Item
             label="Tài khoản đăng tài liệu"
             name="mataikhoan"
-            initialValue={userSession.data.mataikhoan}
+            initialValue={userSession.mataikhoan}
             hidden={true}
           >
             <Input />

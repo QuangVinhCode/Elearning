@@ -1,6 +1,7 @@
 package com.vn.edu.elearning.controller;
 
 
+import com.nimbusds.jose.JOSEException;
 import com.vn.edu.elearning.domain.Dangtai;
 import com.vn.edu.elearning.domain.Madangtai;
 import com.vn.edu.elearning.domain.Taikhoan;
@@ -24,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -185,29 +187,33 @@ public class TailieuController {
     }
 
     @GetMapping("/view/{filename}")
-    public ResponseEntity<Resource> viewPDF(@PathVariable String filename, HttpServletRequest request) {
+    public ResponseEntity<?> viewPDF(@PathVariable("filename") String filename, HttpServletRequest request) throws ParseException, JOSEException {
         Resource resource = fileStorageService.loadPDFFileAsResource(filename);
 
-        String contentType = null;
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        String contentType;
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
             contentType = "application/pdf";
         }
 
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+        boolean isValidToken = taikhoanService.introspect(token);
+        if (isValidToken) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token không hợp lệ");
+        }
     }
-
-    private boolean hasAccessToDocument(Long username, String filename) {
-
-        return true; // Change this to actual access check
-    }
-
 }
