@@ -49,7 +49,7 @@ const EditAccount = ({ updateAccount, getAccount, account }) => {
   const navigate = useNavigate();
   useEffect(() => {
     if (userSession) {
-      const { mataikhoan } = userSession.data;
+      const { mataikhoan } = userSession;
       getAccount(mataikhoan);
     }
   }, []);
@@ -63,7 +63,8 @@ const EditAccount = ({ updateAccount, getAccount, account }) => {
       gmail: values.gmail,
       quyenhan: values.quyenhan,
       sodu: values.sodu,
-      trangthai: values.trangthai,
+      trangthaidangtai: values.trangthaidangtai,
+      trangthaibinhluan: values.trangthaibinhluan,
     };
     console.log("Received values of formdata: ", data);
     updateAccount(account.mataikhoan, data, navigate);
@@ -169,9 +170,16 @@ const EditAccount = ({ updateAccount, getAccount, account }) => {
           <Input readOnly />
         </Form.Item>
         <Form.Item
-          name="trangthai"
-          label="Trạng thái"
-          initialValue={account.trangthai}
+          name="trangthaidangtai"
+          label="Trạng thái đăng tải"
+          initialValue={account.trangthaidangtai}
+        >
+          <Input readOnly />
+        </Form.Item>
+        <Form.Item
+          name="trangthaibinhluan"
+          label="Trạng thái bình luận"
+          initialValue={account.trangthaibinhluan}
         >
           <Input readOnly />
         </Form.Item>

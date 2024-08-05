@@ -1,0 +1,91 @@
+.pdf-viewer-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 5px auto;
+  padding: 46px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.prev-button,
+.next-button,
+.go-page {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  margin-right: 10px;
+}
+
+.prev-button:disabled,
+.next-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.page-navigation {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.page-navigation input {
+  width: 80px;
+  padding: 5px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.pagenumber {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.message-notification {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+}
+
+.message-notification p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.message-notification button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #721c24;
+  color: white;
+  font-size: 14px;
+}
+button {
+  border-radius: 4px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+input {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}

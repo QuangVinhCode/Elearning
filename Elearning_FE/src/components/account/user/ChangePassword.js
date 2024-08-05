@@ -24,7 +24,7 @@ const ChangePassword = ({ changePassword }) => {
       return;
     }
     if (userSession) {
-      const { mataikhoan } = userSession.data;
+      const { mataikhoan } = userSession;
       changePassword(mataikhoan, oldPassword, newPassword,navigate);
     }
     // Xử lý việc cập nhật mật khẩu ở đây

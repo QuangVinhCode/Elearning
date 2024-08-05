@@ -20,17 +20,15 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import CommentDocument from "./CommentDocument";
 import ListComment from "./ListComment";
 import { Navigate } from "react-router-dom";
-import axios from "axios";
 import PDFViewer from "../../pages/PDFViewer";
 class UserDocumentDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: 1,
+      pageNumber: 1,
       numPages: null,
       maxPages: null,
       status: null,
-      showPaymentMessage: false,
       isPaid: false, // Trạng thái kiểm tra đã thanh toán
       canDownload: false, // Trạng thái xác nhận có thể tải xuống
       mataikhoan: null,
@@ -48,7 +46,6 @@ class UserDocumentDetails extends Component {
 
   componentDidMount() {
     this.loadDocument();
-  
   }
   componentDidUpdate(prevProps) {
     const { id } = this.props.router.params;
@@ -97,33 +94,7 @@ class UserDocumentDetails extends Component {
     }
     this.props.clearDocumentState();
   }
-  onLoadSuccess = (pdfDocument) => {
-    console.log("PDF loaded successfully", pdfDocument);
-    const numPages = pdfDocument.numPages;
-    const maxPages =
-      this.state.status === "Chưa thanh toán"
-        ? Math.ceil(numPages * 0.2)
-        : numPages;
-    this.setState({ numPages, maxPages });
-  };
-  onPageLoadSuccess = () => {
-    if (this.state.page === this.state.maxPages) {
-      this.setState({ showPaymentMessage: true });
-    }
-  };
-  handleNextPage = () => {
-    this.setState(
-      (prevState) => ({ page: prevState.page + 1 }),
-      () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    );
-  };
-  handlePrevPage = () => {
-    this.setState((prevState) => ({
-      page: prevState.page - 1,
-    }));
-  };
+
   // Xử lý sự kiện khi nhấn vào nút Tải
   handleDownload = () => {
     const { canDownload } = this.state;
@@ -140,8 +111,10 @@ class UserDocumentDetails extends Component {
       link.click();
       window.document.body.removeChild(link);
     } else {
-      // Nếu chưa thanh toán, hiển thị thông báo yêu cầu thanh toán trước khi tải
-      this.setState({ showPaymentMessage: true });
+      message.warning({
+        content: "Vui lòng thanh toán để tải về!",
+        style: { marginTop: "10vh" },
+      });
     }
   };
   onPayConfirm = () => {
@@ -229,7 +202,7 @@ class UserDocumentDetails extends Component {
     const pageNumber = parseInt(goToPage, 10);
     if (pageNumber > 0 && pageNumber <= this.state.numPages) {
       if (pageNumber <= this.state.maxPages) {
-        this.setState({ page: pageNumber }, () => {
+        this.setState({ pageNumber: pageNumber }, () => {
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
       } else {
@@ -245,27 +218,58 @@ class UserDocumentDetails extends Component {
       });
     }
   };
+  handleNextPage = () => {
+    const { pageNumber, maxPages, status } = this.state;
+    if (pageNumber >= maxPages && status === "Chưa thanh toán") {
+      message.warning({
+        content: "Bạn cần thanh toán để xem thêm trang.",
+        style: { marginTop: "10vh" },
+      });
+    } else {
+      this.setState(
+        (prevState) => ({ pageNumber: prevState.pageNumber + 1 }),
+        () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      );
+    }
+  };
+  handlePrevPage = () => {
+    this.setState(
+      (prevState) => ({
+        pageNumber: prevState.pageNumber - 1,
+      }),
+      () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    );
+  };
+  onLoadSuccess = ({ numPages }) => {
+    console.log("PDF loaded successfully numPages", numPages);
+    const maxPages =
+      this.state.status === "Chưa thanh toán"
+        ? Math.ceil(numPages * 0.2)
+        : numPages;
+    this.setState({ maxPages, numPages });
+  };
   render() {
     const { document, comments } = this.props;
     const {
-      page,
-      maxPages,
-      showPaymentMessage,
       isPaid,
-      reset,
-      login,
       value,
       submitting,
-      goToPage,
       documentNotFound,
+      pageNumber,
+      numPages,
+      maxPages,
+      goToPage,
+      reset,
     } = this.state;
     if (documentNotFound) {
       return <Navigate to="/404" />;
     }
-    const jwtToken = sessionStorage.getItem('jwtToken');
-    const sessionToken = jwtToken
-    ? JSON.parse(jwtToken)
-    : null;
+    const jwtToken = sessionStorage.getItem("jwtToken");
+    const sessionToken = jwtToken ? JSON.parse(jwtToken) : null;
     // Format giá tiền thành tiền Việt Nam
     const formattedPrice = new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -274,10 +278,56 @@ class UserDocumentDetails extends Component {
     return (
       <div className="container">
         <div className="pdf-viewer-container">
-         <PDFViewer filename={document.diachiluutru} token={sessionToken.token}/>
+          <PDFViewer
+            token={sessionToken.token}
+            filename={document.diachiluutru}
+            pageNumber={pageNumber}
+            onLoadSuccess={this.onLoadSuccess}
+          />
+          <div className="navigation-buttons">
+            <button disabled={pageNumber <= 1} onClick={this.handlePrevPage}>
+              Previous
+            </button>
+            <button
+              //    disabled={pageNumber >= maxPages}
+              onClick={this.handleNextPage}
+            >
+              Next
+            </button>
+            <p>
+              Trang {pageNumber} / {numPages}
+            </p>
+            <div className="page-navigation">
+              <input
+                type="number"
+                min="1"
+                max={numPages}
+                value={goToPage}
+                onChange={(e) => this.setState({ goToPage: e.target.value })}
+                placeholder="Nhập số "
+              />
+              <button onClick={this.handleGoToPage} className="go-page">
+                Đi đến trang
+              </button>
+            </div>
+          </div>
+          {reset && (
+            <div className="message-notification">
+              <p>Hãy nhấn reset website để có thể xem hoặc tải về</p>
+              <button
+                onClick={() => {
+                  this.setState({ reset: false });
+                  this.handleResetWebsite();
+                }}
+              >
+                Đóng
+              </button>
+            </div>
+          )}
         </div>
         <div className="divInformation">
           <h1 className="document-title">{document.tentailieu}</h1>
+          <h5 className="document-description">Tác giả: {document.tacgia}</h5>
           <p className="document-description">
             <b>Mô tả:</b> {document.mota}
           </p>

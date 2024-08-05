@@ -34,7 +34,7 @@ const AccountSettings = ({ account, getAccount }) => {
 
   useEffect(() => {
     if (userSession) {
-      const { mataikhoan } = userSession.data;
+      const { mataikhoan } = userSession;
       getAccount(mataikhoan);
     }
   }, []);

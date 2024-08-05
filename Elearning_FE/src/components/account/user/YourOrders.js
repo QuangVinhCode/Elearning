@@ -16,7 +16,7 @@ class YourOrders extends Component {
   componentDidMount() {
     const storedUserSession = sessionStorage.getItem("userSession");
     const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
-    this.props.getDocumentsByAccountPay(UserSesion.data.mataikhoan);
+    this.props.getDocumentsByAccountPay(UserSesion.mataikhoan);
     const { id } = this.props.router.params;
     this.props.getDocumentsByAccountPay(id);
   }

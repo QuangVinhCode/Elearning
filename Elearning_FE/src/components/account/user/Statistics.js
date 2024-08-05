@@ -16,7 +16,7 @@ class Statistics extends Component {
   componentDidMount() {
     const storedUserSession = sessionStorage.getItem("userSession");
     const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
-    this.props.getAllDocumentRevenueByAccount(UserSesion.data.mataikhoan);
+    this.props.getAllDocumentRevenueByAccount(UserSesion.mataikhoan);
   }
 
   render() {

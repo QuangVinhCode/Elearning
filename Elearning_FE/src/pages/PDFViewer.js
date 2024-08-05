@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { pdfjs, Document, Page } from "react-pdf/dist/esm/entry.webpack";
 import axios from "axios";
+import "./PDFViewer.css";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
 
 // Cấu hình workerSrc cho pdfjs
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
-const PDFViewer = ({ filename, token }) => {
+const PDFViewer = ({ filename, token, pageNumber, onLoadSuccess }) => {
   const [pdfUrl, setPdfUrl] = useState(null);
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
     const fetchPDF = async () => {
@@ -34,37 +35,23 @@ const PDFViewer = ({ filename, token }) => {
     };
 
     fetchPDF();
-  }, [filename]);
 
-  // Function to handle page load
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
-  };
+    // Cleanup the PDF URL when the component unmounts
+    return () => {
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+      }
+    };
+  }, [filename, token]);
+
 
   return (
-    <div>
+    <div className="pdf-viewer-container">
       {pdfUrl ? (
         <div>
-          <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+          <Document file={pdfUrl} onLoadSuccess={onLoadSuccess}>
             <Page pageNumber={pageNumber} />
           </Document>
-          <div>
-            <button
-              disabled={pageNumber <= 1}
-              onClick={() => setPageNumber(pageNumber - 1)}
-            >
-              Previous
-            </button>
-            <button
-              disabled={pageNumber >= numPages}
-              onClick={() => setPageNumber(pageNumber + 1)}
-            >
-              Next
-            </button>
-            <p>
-              Page {pageNumber} of {numPages}
-            </p>
-          </div>
         </div>
       ) : (
         <p>Loading PDF...</p>

@@ -82,7 +82,7 @@ class UserManage extends Component {
             {accounts.map((account) => (
               <tr key={account.mataikhoan}>
                 <td data-label="manguoidung">{account.tendangnhap}</td>
-                <td data-label="trangthai">{account.trangthai}</td>
+                <td data-label="trangthai">{account.trangthaidangtai}</td>
                 <td data-label="tacvu">
                   <div className="action-container">
                     <Select

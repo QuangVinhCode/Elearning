@@ -38,6 +38,7 @@ const Navbar = ({ onUploadClick }) => {
   const isMobile = useWindowSize();
   const handleLogout = () => {
     sessionStorage.removeItem("userSession");
+    sessionStorage.removeItem("jwtToken");
     navigate("/users/login");
     dispatch({ type: LOG_OUT });
   };

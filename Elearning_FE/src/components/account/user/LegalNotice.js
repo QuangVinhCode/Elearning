@@ -20,7 +20,7 @@ class LegalNotice extends Component {
   componentDidMount() {
     const storedUserSession = sessionStorage.getItem("userSession");
     const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
-    this.props.getCommentsByAccount(UserSesion.data.mataikhoan);
+    this.props.getCommentsByAccount(UserSesion.mataikhoan);
   }
   deleteComment = () => {
     this.props.deleteComment(

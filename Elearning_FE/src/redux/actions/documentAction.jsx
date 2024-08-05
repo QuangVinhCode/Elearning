@@ -633,38 +633,44 @@ export const payDocument = (matk, matl) => async (dispatch) => {
     if (response.status === 200) {
       console.log(response.data);
       console.log("so du: " + response.data.taikhoan.sodu);
-      // Lấy userSession từ sessionStorage
-      let userSession = JSON.parse(sessionStorage.getItem("userSession"));
-      console.log("session " + userSession.data.sodu);
-      // Kiểm tra userSession có tồn tại và có trường data không
-      if (userSession && userSession.data) {
-        // Cập nhật trường trong data
-        userSession.data.sodu =
-          userSession.data.sodu - response.data.tailieu.giaban; // Thay 'fieldToUpdate' bằng tên trường bạn muốn cập nhật
+      if (response.data.trangthai === "Thành công") {
+        dispatch({
+          type: COMMON_MESSAGE_SET,
+          payload: "Thanh toán thành công",
+        });
+        return true;
+      } else {
+        dispatch({
+          type: COMMON_ERROR_SET,
+          payload: "Thanh toán thất bại",
+        });
+        return false;
       }
-      console.log("session cập nhật " + userSession.data.sodu);
-      // Lưu lại userSession đã cập nhật vào sessionStorage
-      sessionStorage.setItem("userSession", JSON.stringify(userSession));
-      dispatch({
-        type: COMMON_MESSAGE_SET,
-        payload: "Thanh toán thành công",
-      });
-      return true; // Return true indicating successful payment
     } else {
       dispatch({
         type: COMMON_ERROR_SET,
         payload: response.message,
       });
-      return false; // Return false indicating payment failure
+      return false;
     }
   } catch (error) {
+    console.error("Payment error", error);
+    let errorMessage = "An error occurred";
+    if (error.response) {
+      errorMessage = error.response.data
+        ? error.response.data.message
+        : error.response.statusText;
+    } else if (error.request) {
+      errorMessage = "No response received from the server";
+    } else {
+      errorMessage = error.message;
+    }
+
     dispatch({
       type: COMMON_ERROR_SET,
-      payload: error.response.data
-        ? error.response.data.message
-        : error.message,
+      payload: errorMessage,
     });
-    return false; // Return false indicating payment failure
+    return false; // Payment failure
   } finally {
     dispatch({
       type: COMMON_LOADING_SET,

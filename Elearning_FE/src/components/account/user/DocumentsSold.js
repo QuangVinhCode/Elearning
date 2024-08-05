@@ -28,7 +28,7 @@ class DocumentsSold extends Component {
   componentDidMount() {
     const storedUserSession = sessionStorage.getItem("userSession");
     const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
-    this.props.getDocumentsByAccountSale(UserSesion.data.mataikhoan);
+    this.props.getDocumentsByAccountSale(UserSesion.mataikhoan);
   }
   onEdit = (value) => {
     this.setState({ ...this.state, document: value, open: true });

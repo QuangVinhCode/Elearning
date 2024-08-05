@@ -20,8 +20,6 @@ import AddOrEditCategory from "../components/category/AddOrEditCategory";
 import ListCategory from "../components/category/ListCategory";
 import ListDocument from "../components/document/ListDocument";
 import Censoring from "../components/document/Censoring";
-import Censored from "../components/document/Censored";
-import ErrorCensorship from "../components/document/ErrorCensorship";
 import { useDispatch, useSelector } from "react-redux";
 import { LOG_OUT } from "../redux/actions/actionTypes";
 import { setError, setMessage } from "../redux/actions/commonAction";
@@ -40,8 +38,8 @@ function DashboardPage() {
   const dispatch = useDispatch();
   const handleLogout = () => {
     let sesion = sessionStorage.removeItem("userSession");
-
-    if (!sesion) {
+    let token = sessionStorage.removeItem("jwtToken");
+    if (!sesion && !token) {
       navigate("/users/login");
       dispatch({ type: LOG_OUT });
     }
@@ -119,29 +117,9 @@ function DashboardPage() {
             },
             {
               key: "5",
-              icon: <MdClass />,
+              icon: <MdFormatListBulleted />,
               label: "Kiểm duyệt",
-              children: [
-                {
-                  key: "51",
-                  icon: <MdFormatListBulleted />,
-                  label: "Chưa kiểm duyệt",
-                  onClick: () => navigate("/dashboard/document/censoring"),
-                },
-                {
-                  key: "52",
-                  icon: <MdAddCircleOutline />,
-                  label: "Đã kiểm duyệt",
-                  onClick: () => navigate("/dashboard/document/censored"),
-                },
-                {
-                  key: "53",
-                  icon: <MdAddCircleOutline />,
-                  label: "Lỗi kiểm duyệt",
-                  onClick: () =>
-                    navigate("/dashboard/document/error_censorship"),
-                },
-              ],
+              onClick: () => navigate("/dashboard/document/censoring"),
             },
             {
               key: "6",
@@ -227,11 +205,6 @@ function DashboardPage() {
               <Route path="/category/list" element={<ListCategory />}></Route>
               <Route path="/document/list" element={<ListDocument />}></Route>
               <Route path="/document/censoring" element={<Censoring />}></Route>
-              <Route path="/document/censored" element={<Censored />}></Route>
-              <Route
-                path="/document/error_censorship"
-                element={<ErrorCensorship />}
-              ></Route>
               <Route
                 path="/account/usermanage"
                 element={<UserManage />}

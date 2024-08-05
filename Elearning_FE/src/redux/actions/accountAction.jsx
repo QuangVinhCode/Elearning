@@ -32,6 +32,8 @@ export const loginAccount = (object, navigate) => async (dispatch) => {
       const userSession = {
         mataikhoan: response.data.taikhoan.mataikhoan,
         tendangnhap:response.data.taikhoan.tendangnhap,
+        trangthaidangtai:response.data.taikhoan.trangthaidangtai,
+        trangthaibinhluan:response.data.taikhoan.trangthaibinhluan,
       };
       const jwtToken = {
         token: response.data.token,
