@@ -14,9 +14,9 @@ const VNPayForm = ({ getVnPay }) => {
 
   const handleSubmit = (values) => {
     console.log("Số tiền:", values.amount);
-    console.log("Mã tài khoản:", userSession.data.mataikhoan);
+    console.log("Mã tài khoản:", userSession.mataikhoan);
     console.log("Tài khoản ngân hàng:", values.bankAccount);
-    getVnPay(values.amount, values.bankAccount, userSession.data.mataikhoan);
+    getVnPay(values.amount, values.bankAccount, userSession.mataikhoan);
   };
   const formatCurrency = (value) => {
     if (!value) return "";

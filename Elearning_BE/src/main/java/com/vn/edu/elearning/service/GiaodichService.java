@@ -5,6 +5,7 @@ import com.vn.edu.elearning.domain.Giaodich;
 import com.vn.edu.elearning.domain.Lichsukiemduyet;
 import com.vn.edu.elearning.dto.DanhmucDto;
 import com.vn.edu.elearning.dto.GiaodichDto;
+import com.vn.edu.elearning.dto.LichsuthuchiDto;
 import com.vn.edu.elearning.exeception.DanhmucException;
 import com.vn.edu.elearning.repository.DanhmucRepository;
 import com.vn.edu.elearning.repository.GiaodichRepository;
@@ -25,6 +26,12 @@ public class GiaodichService {
 
     public List<Giaodich> findAllByAccount(Long id) {
         return giaodichRepository.findByTaikhoan_Mataikhoan(id);
+
+    }
+
+    public List<LichsuthuchiDto> findAllTransactionByAccount(Long id) {
+        return giaodichRepository.findLichsuthuchiByTaikhoan(id);
+
     }
 
 }
