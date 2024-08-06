@@ -175,16 +175,16 @@ public class TaikhoanService {
         taikhoanRepository.delete(existed);
     }
 
-    public void  updateTrangThai(Long id,String stautus){
+    public void  updateTrangThaiDangTai(Long id,String stautus){
         taikhoanRepository.updateTrangThaiDangTai(id,stautus);
     }
 
-    public List<Taikhoan>  findBinhThuongWithoutAdmin(){
-        return taikhoanRepository.findBinhThuongWithoutAdmin();
+    public void  updateTrangThaiBinhLuan(Long id,String stautus){
+        taikhoanRepository.updateTrangThaiBinhlLuan(id,stautus);
     }
 
-    public List<Taikhoan>  findNotBinhThuongWithoutAdmin(){
-        return taikhoanRepository.findNotBinhThuongWithoutAdmin();
+    public List<Taikhoan>  findAllWithoutAdmin(){
+        return taikhoanRepository.findAllWithoutAdmin();
     }
 
     public Taikhoan update(Long id ,TaikhoanDto dto) {

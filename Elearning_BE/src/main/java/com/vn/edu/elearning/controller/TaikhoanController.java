@@ -117,14 +117,8 @@ public class TaikhoanController {
     }
 
     @GetMapping("/status")
-    public ResponseEntity<?> getAccountsByStatus() {
-        List<Taikhoan> taikhoanList = taikhoanService.findBinhThuongWithoutAdmin();
-        return new ResponseEntity<>(taikhoanList, HttpStatus.OK);
-    }
-
-    @GetMapping("/stateless")
-    public ResponseEntity<?> getAccountsByStateless() {
-        List<Taikhoan> taikhoanList = taikhoanService.findNotBinhThuongWithoutAdmin();
+    public ResponseEntity<?> getAccountsByPostingStatus() {
+        List<Taikhoan> taikhoanList = taikhoanService.findAllWithoutAdmin();
         return new ResponseEntity<>(taikhoanList, HttpStatus.OK);
     }
 
@@ -136,9 +130,16 @@ public class TaikhoanController {
         return new ResponseEntity<>(Map.of("taikhoan",loggedInAccount,"token",token), HttpStatus.OK);
     }
 
-    @PatchMapping("/status/{id}/{status}")
-    public ResponseEntity<?> statusAccount(@PathVariable("id") Long id,@PathVariable("status") String status) {
-        taikhoanService.updateTrangThai(id,status);
+    @PatchMapping("/status-document/{id}/{status}")
+    public ResponseEntity<?> statusDocumentAccount(@PathVariable("id") Long id,@PathVariable("status") String status) {
+        taikhoanService.updateTrangThaiDangTai(id,status);
+        Taikhoan taikhoan = taikhoanService.findById(id);
+        return new ResponseEntity<>(taikhoan, HttpStatus.OK);
+    }
+
+    @PatchMapping("/status-comment/{id}/{status}")
+    public ResponseEntity<?> statusCommentAccount(@PathVariable("id") Long id,@PathVariable("status") String status) {
+        taikhoanService.updateTrangThaiBinhLuan(id,status);
         Taikhoan taikhoan = taikhoanService.findById(id);
         return new ResponseEntity<>(taikhoan, HttpStatus.OK);
     }

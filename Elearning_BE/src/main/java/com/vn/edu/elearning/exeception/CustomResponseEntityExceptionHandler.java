@@ -27,6 +27,13 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return  new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BaocaoException.class)
+    public final ResponseEntity<Object> handleBaocaoException(BaocaoException ex, WebRequest request){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
+
+        return  new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(TaikhoanException.class)
     public final ResponseEntity<Object> handleTaikhoanException(TaikhoanException ex, WebRequest request){
         ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());

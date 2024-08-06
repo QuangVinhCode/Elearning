@@ -37,6 +37,8 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     @Transactional
     void updateTrangThaiBinhlLuan(@Param("id") Long id, @Param("trangthai") String trangthai);
 
+    @Query("SELECT t FROM Taikhoan t WHERE t.quyenhan <> 'Quản trị viên'")
+    List<Taikhoan> findAllWithoutAdmin();
     @Query("SELECT t FROM Taikhoan t WHERE t.trangthaidangtai = 'Bình thường' AND t.quyenhan <> 'Quản trị viên'")
     List<Taikhoan> findBinhThuongWithoutAdmin();
 
@@ -46,7 +48,12 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     @Modifying
     @Transactional
     @Query("UPDATE Taikhoan t SET t.trangthaidangtai = 'Bình thường' WHERE t.trangthaidangtai = ?1")
-    void updateTrangthaiIfDateMatches(String currentDate);
+    void updateTrangthaiDangtaiIfDateMatches(String currentDate);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Taikhoan t SET t.trangthaibinhluan = 'Bình thường' WHERE t.trangthaidangtai = ?1")
+    void updateTrangthaiBinhluanIfDateMatches(String currentDate);
 
 
     Optional<Taikhoan> findByTendangnhapAndGmail(String tendangnhap, String gmail);

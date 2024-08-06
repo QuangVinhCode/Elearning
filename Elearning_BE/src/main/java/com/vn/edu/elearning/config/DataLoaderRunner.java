@@ -39,10 +39,12 @@ public class DataLoaderRunner {
 
             taikhoanRepository.save(adminAccount);
         }
-//        LocalDate currentDate = LocalDate.now();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        String currentDateString = currentDate.format(formatter);
-//
-//        taikhoanRepository.updateTrangthaiIfDateMatches(currentDateString);
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String currentDateString = currentDate.format(formatter);
+
+        taikhoanRepository.updateTrangthaiDangtaiIfDateMatches(currentDateString);
+        taikhoanRepository.updateTrangthaiBinhluanIfDateMatches(currentDateString);
+
     }
 }

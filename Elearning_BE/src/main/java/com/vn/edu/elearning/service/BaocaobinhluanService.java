@@ -1,8 +1,8 @@
 package com.vn.edu.elearning.service;
 
 import com.vn.edu.elearning.domain.*;
-import com.vn.edu.elearning.dto.BaocaobinhluanDto;
-import com.vn.edu.elearning.dto.BaocaotailieuDto;
+import com.vn.edu.elearning.dto.*;
+import com.vn.edu.elearning.exeception.BaocaoException;
 import com.vn.edu.elearning.repository.BaocaobinhluanRepository;
 import com.vn.edu.elearning.repository.BaocaotailieuRepository;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +26,11 @@ public class BaocaobinhluanService {
 
     public Baocaobinhluan save(BaocaobinhluanDto dto) {
         Baocaobinhluan entity = new Baocaobinhluan();
+        Baocaobinhluan baocaobinhluan = baocaobinhluanRepository.findByTaikhoan_MataikhoanAndBinhluan_Mabinhluan(dto.getMataikhoan(), dto.getMabinhluan());
+        if (baocaobinhluan!=null)
+        {
+            throw new BaocaoException("Báo cáo của bạn đã được ghi nhận!");
+        }
         BeanUtils.copyProperties(dto,entity);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
         Binhluan binhluan = binhluanService.findById(dto.getMabinhluan());
@@ -42,6 +47,13 @@ public class BaocaobinhluanService {
         return baocaobinhluanRepository.findAll();
     }
 
+    public List<ThongtinbaocaobinhluanDto> findReportedCommentsInfo() {
+        return baocaobinhluanRepository.findReportedCommentsInfo();
+    }
+
+    public List<TheodoibaocaoDto> findReportMonitor() {
+        return baocaobinhluanRepository.findReportMonitor();
+    }
     public List<Baocaobinhluan> findReportsByAccount(Long matl) {
         return baocaobinhluanRepository.findByTaikhoan_Mataikhoan(matl);
     }

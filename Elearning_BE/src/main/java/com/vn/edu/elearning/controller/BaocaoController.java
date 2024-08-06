@@ -67,5 +67,23 @@ public class BaocaoController {
         return new ResponseEntity<>(baocaobinhluanService.findAll(),HttpStatus.OK);
     }
 
+    @GetMapping("/thongtintailieu")
+    public ResponseEntity<?> getReportedDocumentInfo(){
+        return new ResponseEntity<>(baocaotailieuService.findReportedDocumentInfo(),HttpStatus.OK);
+    }
+
+    @GetMapping("/thongtinbinhluan")
+    public ResponseEntity<?> getReportedCommentsInfo(){
+        return new ResponseEntity<>(baocaobinhluanService.findReportedCommentsInfo(),HttpStatus.OK);
+    }
+    @GetMapping("/theodoitailieu")
+    public ResponseEntity<?> getReportDocumentMonitor(){
+        return new ResponseEntity<>(baocaotailieuService.findReportMonitor(),HttpStatus.OK);
+    }
+
+    @GetMapping("/theodoibinhluan")
+    public ResponseEntity<?> getReportCommentMonitor(){
+        return new ResponseEntity<>(baocaobinhluanService.findReportMonitor(),HttpStatus.OK);
+    }
 
 }
