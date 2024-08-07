@@ -7,6 +7,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.vn.edu.elearning.config.OTPGenerator;
 import com.vn.edu.elearning.domain.Taikhoan;
+import com.vn.edu.elearning.dto.OTPInfo;
 import com.vn.edu.elearning.dto.TaikhoanDto;
 import com.vn.edu.elearning.exeception.TaikhoanException;
 import com.vn.edu.elearning.repository.DangtaiRepository;
@@ -37,8 +38,9 @@ public class TaikhoanService {
     @Autowired
     private DangtaiRepository dangtaiRepository;
 
+    private static final long OTP_EXPIRATION_TIME = 5 * 60 * 1000;
     protected static final  String SIGNER_KEY = "LWwRhNg8jexoFVR3TnJu3R/qtjpjZO9FVsXwllzFCpXLFoXMAKv0cMmIYCZBmZ+Q";
-    private Map<String, String> otpStorage = new HashMap<>();
+    private Map<String, OTPInfo> otpStorage = new HashMap<>();
     public Taikhoan register(TaikhoanDto dto) {
 
         Taikhoan entity = new Taikhoan();
@@ -82,7 +84,7 @@ public class TaikhoanService {
         String otp = OTPGenerator.generateOTP(6);
 
         // Lưu mã xác nhận cùng với email người dùng
-        otpStorage.put(email, otp);
+        otpStorage.put(email, new OTPInfo(otp, System.currentTimeMillis()));
 
         // Gửi email chứa mã xác nhận
         String subject = "Xác nhận đăng ký tài khoản";
@@ -96,7 +98,7 @@ public class TaikhoanService {
         String otp = OTPGenerator.generateOTP(6);
 
         // Lưu mã xác nhận cùng với email người dùng
-        otpStorage.put(email, otp);
+        otpStorage.put(email, new OTPInfo(otp, System.currentTimeMillis()));
 
         // Gửi email chứa mã xác nhận
         String subject = "Xác nhận lấy lại tài khoản";
@@ -106,8 +108,15 @@ public class TaikhoanService {
     }
 
     public boolean verifyOTP(String email, String otp) {
-        String storedOtp = otpStorage.get(email);
-        return storedOtp != null && storedOtp.equals(otp);
+        OTPInfo otpInfo = otpStorage.get(email);
+        if (otpInfo != null) {
+            long currentTime = System.currentTimeMillis();
+            // Check if OTP is valid and not expired
+            if (otpInfo.getOtp().equals(otp) && (currentTime - otpInfo.getCreationTime() <= OTP_EXPIRATION_TIME)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public List<?> findAll() {
