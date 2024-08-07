@@ -8,13 +8,14 @@ import com.vn.edu.elearning.dto.KiemduyettailieuDto;
 import com.vn.edu.elearning.dto.LichsukiemduyetDto;
 import com.vn.edu.elearning.dto.TailieuDto;
 import com.vn.edu.elearning.exeception.TailieuException;
-import com.vn.edu.elearning.repository.DangtaiRepository;
-import com.vn.edu.elearning.repository.TaikhoanRepository;
-import com.vn.edu.elearning.repository.TailieuRepository;
+import com.vn.edu.elearning.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,15 @@ public class TailieuService {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private DangtaiService dangtaiService;
+
+    @Autowired
+    private ThanhtoanRepository thanhtoanRepository;
+
+    @Autowired
+    private DangtaiRepository dangtaiRepository;
+
     public Tailieu save(TailieuDto dto) {
         Tailieu entity = new Tailieu();
         BeanUtils.copyProperties(dto,entity);
@@ -40,6 +50,10 @@ public class TailieuService {
         entity.setDanhmuc(danhmuc);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
         System.out.println("entity  taikhoan:" + taikhoan.getTendangnhap().toString());
+        if (!taikhoan.getTrangthaidangtai().equals("Bình thường"))
+        {
+            throw new TailieuException("Tài koản của bạn đã bị chặn đăng tải");
+        }
         if (taikhoan.getQuyenhan().equals("Quản trị viên"))
         {
             entity.setTrangthai("Đã kiểm duyệt");
@@ -76,6 +90,14 @@ public class TailieuService {
         return tailieuRepository.findByDanhmuc_MadanhmucAndTrangthai(madm,"Đã kiểm duyệt");
     }
 
+    public List<?> findAllUploadByAccount(Long mtk) {
+        return tailieuRepository.findTailieudangtaiDtosByMataikhoan(mtk);
+    }
+
+    public List<?> findAllPayByAccount(Long mtk) {
+        return tailieuRepository.findTailieuthanhtoanByMataikhoan(mtk) ;
+    }
+
     public List<Tailieu> getTop5TaiLieuThanhToanNhieuNhat(){
         return tailieuRepository.findTop5TailieuByThanhtoanNhieuNhat();
     }
@@ -92,9 +114,18 @@ public class TailieuService {
         }
         return found.get();
     }
+    @Transactional
     public void  deleteById(Long id){
+        List<?> list = thanhtoanRepository.findByTailieu_Matailieu(id);
+
+        if (!list.isEmpty())
+        {
+            throw new TailieuException("Tài liệu đã có người thanh toán");
+        }
         Tailieu existed = findById(id);
 
+        kiemduyetService.deleteLichSuKiemDuyetByTaiLieu(existed);
+        dangtaiService.deleteById(id);
         tailieuRepository.delete(existed);
     }
 
@@ -104,7 +135,7 @@ public class TailieuService {
 
     public Tailieu update(Long id ,TailieuDto dto) {
         Tailieu found = findById(id);
-
+        List<?> list = thanhtoanRepository.findByTailieu_Matailieu(id);
         if (found==null)
         {
             throw  new TailieuException("Không tìm thấy tài liệu");
@@ -121,30 +152,48 @@ public class TailieuService {
         System.out.println("entity  taikhoan:" + taikhoan.getTendangnhap().toString());
         if (found.getTrangthai().equals("Đã kiểm duyệt"))
         {
-            LichsukiemduyetDto lichsukiemduyetDto = new LichsukiemduyetDto();
-            lichsukiemduyetDto.setMatailieu(id);
-            lichsukiemduyetDto.setKetqua("Chờ kiểm duyệt");
-            lichsukiemduyetDto.setLydo("Người dùng cập nhật thông tin mới cần kiểm duyệt lại");
-            kiemduyetService.save(lichsukiemduyetDto);
-            kiemduyetService.updateCensorshipTime("",taikhoan,found);
+            if (taikhoan.getQuyenhan().equals("Quản trị viên"))
+            {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+                LichsukiemduyetDto lichsukiemduyetDto = new LichsukiemduyetDto();
+                lichsukiemduyetDto.setMatailieu(id);
+                lichsukiemduyetDto.setKetqua("Đã duyệt");
+                lichsukiemduyetDto.setLydo("Quản trị viên đã cập nhật thông tin mới");
+                kiemduyetService.save(lichsukiemduyetDto);
+                kiemduyetService.updateCensorshipTime(LocalDateTime.now().format(formatter),taikhoan,found);
+            }else {
+                LichsukiemduyetDto lichsukiemduyetDto = new LichsukiemduyetDto();
+                lichsukiemduyetDto.setMatailieu(id);
+                lichsukiemduyetDto.setKetqua("Chờ kiểm duyệt");
+                lichsukiemduyetDto.setLydo("Người dùng cập nhật thông tin mới cần kiểm duyệt lại");
+                kiemduyetService.save(lichsukiemduyetDto);
+                kiemduyetService.updateCensorshipTime("",taikhoan,found);
+            }
         }
         if (taikhoan.getQuyenhan().equals("Quản trị viên"))
         {
+
             entity.setTrangthai("Đã kiểm duyệt");
         }
         else{
             entity.setTrangthai("Chờ kiểm duyệt");
         }
         System.out.println("entity trang thai: " + entity.getTrangthai());
-        if (dto.getPdfFile() != null)
+        if (list.isEmpty())
         {
-            String filename = fileStorageService.storePDFFile(dto.getPdfFile());
+            if (dto.getPdfFile() != null)
+            {
+                String filename = fileStorageService.storePDFFile(dto.getPdfFile());
 
-            entity.setDiachiluutru(filename);
-            dto.setPdfFile(null);
-        }else{
+                entity.setDiachiluutru(filename);
+                dto.setPdfFile(null);
+            }else{
+                entity.setDiachiluutru(found.getDiachiluutru());
+            }
+        }else {
             entity.setDiachiluutru(found.getDiachiluutru());
         }
+
         return tailieuRepository.save(entity);
     }
 

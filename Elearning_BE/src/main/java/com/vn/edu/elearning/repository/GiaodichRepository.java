@@ -19,7 +19,7 @@ public interface GiaodichRepository extends JpaRepository<Giaodich, Long> {
             "SUBSTRING(g.thoigiangiaodich, 6, 7) " + // Lấy phần tháng năm từ chuỗi
             ") " +
             "FROM Giaodich g " +
-            "WHERE g.taikhoan.mataikhoan = :mataikhoan AND g.trangthai='Thành cô    ng'" +
+            "WHERE g.taikhoan.mataikhoan = :mataikhoan AND g.trangthai='Thành công'" +
             "GROUP BY SUBSTRING(g.thoigiangiaodich, 6, 7)")
     List<LichsuthuchiDto> findLichsuthuchiByTaikhoan(@Param("mataikhoan") Long mataikhoan);
 

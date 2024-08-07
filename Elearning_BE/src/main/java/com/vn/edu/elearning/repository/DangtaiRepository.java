@@ -13,14 +13,15 @@ public interface DangtaiRepository extends JpaRepository<Dangtai, Madangtai> {
 
     @Transactional
     @Modifying
-    @Query("update Dangtai d set d.thoigianduocduyet = ?1 where d.madangtai = ?2")
-    int updateThoigianduocduyetByMadangtai(String thoigianduocduyet, Madangtai madangtai);
-
-    @Transactional
-    @Modifying
     @Query("update Dangtai d set d.thoigianduocduyet = ?1 where d.taikhoan = ?2 and d.tailieu = ?3")
     void updateThoigianduocduyetByTaikhoanAndTailieu(String thoigianduocduyet, Taikhoan taikhoan, Tailieu tailieu);
 
     Dangtai findByTaikhoan_MataikhoanAndTailieu_Matailieu(Long mataikhoan, Long matailieu);
+
+    @Modifying
+    @Query("DELETE FROM Dangtai d WHERE d.tailieu.matailieu = :matailieu")
+    void deleteByMatailieu(Long matailieu);
+
+
 
 }

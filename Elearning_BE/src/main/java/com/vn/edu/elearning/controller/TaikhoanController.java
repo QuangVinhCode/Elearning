@@ -39,7 +39,7 @@ public class TaikhoanController {
 
         try {
             // Send OTP to the provided email
-            taikhoanService.registerUser(dto.getGmail());
+            taikhoanService.registerUser(dto.getGmail(),dto.getTendangnhap());
 
             // Lưu DTO đã đăng ký vào biến cục bộ
             registeredDto = dto;

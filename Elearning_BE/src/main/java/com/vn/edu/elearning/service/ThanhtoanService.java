@@ -34,6 +34,10 @@ public class ThanhtoanService {
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        if (tailieu==null)
+        {
+            throw  new TailieuException("Tài liệu không tồn tại");
+        }
         if (taikhoan==null)
         {
             throw  new TailieuException("Yêu cầu đăng nhập");
@@ -41,6 +45,13 @@ public class ThanhtoanService {
         if (taikhoan.getSodu() < tailieu.getGiaban())
         {
             dto.setTrangthai("Thất bại");
+            Giaodich giaodichThanhtoan = new Giaodich();
+            giaodichThanhtoan.setLydo("Thanh toán tài liệu " + tailieu.getTentailieu());
+            giaodichThanhtoan.setSotien(tailieu.getGiaban());
+            giaodichThanhtoan.setThoigiangiaodich(LocalDateTime.now().format(formatter));
+            giaodichThanhtoan.setTaikhoan(taikhoan);
+            giaodichThanhtoan.setTrangthai("Thất bại");
+            giaodichRepository.save(giaodichThanhtoan);
         }
         else {
             Taikhoan taikhoandangtai  = taikhoanService.findByPostedDocuments(dto.getMatailieu());

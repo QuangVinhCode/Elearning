@@ -8,6 +8,7 @@ import com.vn.edu.elearning.repository.DangtaiRepository;
 import com.vn.edu.elearning.repository.DanhmucRepository;
 import com.vn.edu.elearning.repository.LichsukiemduyetRepository;
 import com.vn.edu.elearning.repository.TailieuRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +57,10 @@ public class KiemduyetService {
 
     public void  updateCensorshipTime(String thoigian,Taikhoan taikhoan,Tailieu tailieu){
         dangtaiRepository.updateThoigianduocduyetByTaikhoanAndTailieu(thoigian, taikhoan,tailieu);
+    }
+
+    @Transactional
+    public void deleteLichSuKiemDuyetByTaiLieu(Tailieu tailieu) {
+        lichsukiemduyetRepository.deleteByTailieu(tailieu);
     }
 }

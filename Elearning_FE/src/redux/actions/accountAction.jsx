@@ -24,6 +24,10 @@ export const loginAccount = (object, navigate) => async (dispatch) => {
     console.log(response);
     if (response.status === 200) {
       dispatch({
+        type: ACCOUNT_SET,
+        payload: response.data.taikhoan,
+      });
+      dispatch({
         type: LOG_IN,
         payload: response.data,
       });
@@ -31,9 +35,9 @@ export const loginAccount = (object, navigate) => async (dispatch) => {
       console.log(response.data);
       const userSession = {
         mataikhoan: response.data.taikhoan.mataikhoan,
-        tendangnhap:response.data.taikhoan.tendangnhap,
-        trangthaidangtai:response.data.taikhoan.trangthaidangtai,
-        trangthaibinhluan:response.data.taikhoan.trangthaibinhluan,
+        tendangnhap: response.data.taikhoan.tendangnhap,
+        trangthaidangtai: response.data.taikhoan.trangthaidangtai,
+        trangthaibinhluan: response.data.taikhoan.trangthaibinhluan,
       };
       const jwtToken = {
         token: response.data.token,
@@ -576,4 +580,43 @@ export const changePassword =
       navigate("/users/login");
       dispatch({ type: LOG_OUT });
     }
+  };
+
+  export const logout = (navigate) => async (dispatch) => {
+    try {
+      console.log("Đăng xuất Action");
+  
+      // Đặt trạng thái đang tải
+      dispatch({
+        type: COMMON_LOADING_SET,
+        payload: true,
+      });
+  
+      // Xóa thông tin người dùng và token
+      sessionStorage.removeItem("userSession");
+      sessionStorage.removeItem("jwtToken");
+  
+      // Cập nhật state để phản ánh trạng thái đã đăng xuất
+      dispatch({
+        type: LOG_OUT,
+      });
+  
+      // Hiển thị thông báo thành công
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "Đăng xuất thành công!",
+      });
+  
+      // Chuyển hướng đến trang đăng nhập
+      navigate("/users/login");
+    } catch (error) {
+      console.log(error);
+    
+    }
+  
+    // Đặt trạng thái không còn tải nữa
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: false,
+    });
   };

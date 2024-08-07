@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface ThanhtoanRepository extends JpaRepository<Thanhtoan, Long> {
 
     @Transactional
@@ -15,8 +17,9 @@ public interface ThanhtoanRepository extends JpaRepository<Thanhtoan, Long> {
 
     Thanhtoan findByTaikhoan_MataikhoanAndTailieu_Matailieu(Long mataikhoan, Long matailieu);
 
-
-
     Thanhtoan findByTaikhoan_MataikhoanAndTailieu_MatailieuAndTrangthai(Long mataikhoan, Long matailieu, String trangthai);
+
+    List<Thanhtoan> findByTailieu_Matailieu(Long matailieu);
+
 
 }

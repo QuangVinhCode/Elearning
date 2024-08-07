@@ -9,6 +9,7 @@ import com.vn.edu.elearning.config.OTPGenerator;
 import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.dto.TaikhoanDto;
 import com.vn.edu.elearning.exeception.TaikhoanException;
+import com.vn.edu.elearning.repository.DangtaiRepository;
 import com.vn.edu.elearning.repository.TaikhoanRepository;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,17 +34,13 @@ public class TaikhoanService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private DangtaiRepository dangtaiRepository;
+
     protected static final  String SIGNER_KEY = "LWwRhNg8jexoFVR3TnJu3R/qtjpjZO9FVsXwllzFCpXLFoXMAKv0cMmIYCZBmZ+Q";
     private Map<String, String> otpStorage = new HashMap<>();
     public Taikhoan register(TaikhoanDto dto) {
-        Optional<?> found = taikhoanRepository.findByTendangnhap(dto.getTendangnhap());
-        if (!found.isEmpty()) {
-            throw new TaikhoanException("Tên tài khoản đã tồn tại trong hệ thống");
-        }
-        Optional<?> foundGmail = taikhoanRepository.findByGmail(dto.getGmail());
-        if (!foundGmail.isEmpty()) {
-            throw new TaikhoanException("Gmail đã từng được dùng để đăng ký tài khoản khác!");
-        }
+
         Taikhoan entity = new Taikhoan();
         BeanUtils.copyProperties(dto,entity);
         Random random = new Random();
@@ -72,7 +69,15 @@ public class TaikhoanService {
         return taikhoanRepository.save(entity);
     }
 
-    public void registerUser(String email) throws MessagingException {
+    public void registerUser(String email,String name) throws MessagingException {
+        Optional<?> found = taikhoanRepository.findByTendangnhap(name);
+        if (!found.isEmpty()) {
+            throw new TaikhoanException("Tên tài khoản đã tồn tại trong hệ thống");
+        }
+        Optional<?> foundGmail = taikhoanRepository.findByGmail(email);
+        if (!foundGmail.isEmpty()) {
+            throw new TaikhoanException("Gmail đã từng được dùng để đăng ký tài khoản khác!");
+        }
         // Sinh mã xác nhận
         String otp = OTPGenerator.generateOTP(6);
 

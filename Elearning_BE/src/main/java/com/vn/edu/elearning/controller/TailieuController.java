@@ -139,6 +139,16 @@ public class TailieuController {
         return new ResponseEntity<>(tailieuService.getListDocumentByName(tentailieu),HttpStatus.OK);
     }
 
+    @GetMapping("/upload-account/{id}")
+    public ResponseEntity<?> getDocumentUploadByCategory(@PathVariable("id") Long id){
+        return new ResponseEntity<>(tailieuService.findAllUploadByAccount(id),HttpStatus.OK);
+    }
+
+    @GetMapping("/pay-account/{id}")
+    public ResponseEntity<?> getDocumentPayByCategory(@PathVariable("id") Long id){
+        return new ResponseEntity<>(tailieuService.findAllPayByAccount(id),HttpStatus.OK);
+    }
+
     @GetMapping("/category/{id}")
     public ResponseEntity<?> getDocumentsByCategory(@PathVariable("id") Long id){
         return new ResponseEntity<>(tailieuService.findAllByCategory(id),HttpStatus.OK);
@@ -149,18 +159,6 @@ public class TailieuController {
         return new ResponseEntity<>(tailieuService.findAllDocumentCensorship(),HttpStatus.OK);
     }
 
-//    @GetMapping("/revenue/{id}")
-//    public ResponseEntity<?> getAllDocumentRevenueByAccount(@PathVariable("id") Long id){
-//        return new ResponseEntity<>(tailieuService.findAllDocumentRevenueByAccount(id),HttpStatus.OK);
-//    }
-
-
-//    @GetMapping("/censorship/{censorship}")
-//    public ResponseEntity<?> getDocumentsByCensorship(@PathVariable("censorship") String censorship){
-//        return new ResponseEntity<>(tailieuService.findAllByCensorship(censorship),HttpStatus.OK);
-//    }
-
-
     @GetMapping("/{id}/get")
     public  ResponseEntity<?> getDocument(@PathVariable("id") Long id){
         return new ResponseEntity<>(tailieuService.findById(id),HttpStatus.OK);
@@ -169,6 +167,7 @@ public class TailieuController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteDocument(@PathVariable("id") Long id)
     {
+
         tailieuService.deleteById(id);
 
         return  new ResponseEntity<>("Tài liệu có id " + id + " đã được xóa",HttpStatus.OK);

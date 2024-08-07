@@ -3,6 +3,7 @@ package com.vn.edu.elearning.service;
 import com.vn.edu.elearning.domain.*;
 import com.vn.edu.elearning.dto.DanhmucDto;
 import com.vn.edu.elearning.exeception.DanhmucException;
+import com.vn.edu.elearning.exeception.TailieuException;
 import com.vn.edu.elearning.repository.DangtaiRepository;
 import com.vn.edu.elearning.repository.DanhmucRepository;
 import com.vn.edu.elearning.repository.TailieuRepository;
@@ -47,5 +48,9 @@ public class DangtaiService {
             return  true;
         }
         return  false;
+    }
+
+    public void  deleteById(Long matl){
+        dangtaiRepository.deleteByMatailieu(matl);
     }
 }

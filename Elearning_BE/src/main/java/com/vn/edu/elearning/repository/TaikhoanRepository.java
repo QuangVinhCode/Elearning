@@ -65,4 +65,7 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     Taikhoan findByDsdangtai_Tailieu_Matailieu(Long matailieu);
 
     Optional<Taikhoan> findByQuyenhan(String quyenhan);
+
+
+
 }

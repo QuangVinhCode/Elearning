@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import withRouter from "../../helpers/withRouter";
 import DocumentService from "../../services/documentService";
 import { getCategories } from "../../redux/actions/categoryAction";
-
+import { getAccount } from "../../redux/actions/accountAction";
 const { Option } = Select;
 
 class DocumentForm extends Component {
@@ -26,7 +26,7 @@ class DocumentForm extends Component {
       document: {
         matailieu: "",
         tentailieu: "",
-        tacgia:"",
+        tacgia: "",
         mota: "",
         giaban: "",
         diachiluutru: "",
@@ -42,6 +42,12 @@ class DocumentForm extends Component {
   }
 
   componentDidMount() {
+    const storedUserSession = sessionStorage.getItem("userSession");
+
+    const userSession = storedUserSession
+      ? JSON.parse(storedUserSession)
+      : null;
+    this.props.getAccount(userSession.mataikhoan);
     this.props.getCategories();
   }
 
@@ -125,7 +131,7 @@ class DocumentForm extends Component {
   render() {
     const { open, onCreate, onCancel } = this.props;
     const { document } = this.props;
-    const { categories } = this.props;
+    const { categories, account } = this.props;
     const storedUserSession = sessionStorage.getItem("userSession");
 
     const userSession = storedUserSession
@@ -247,32 +253,55 @@ class DocumentForm extends Component {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item
-            label="Tỷ lệ thu nhập tác giả (%)"
-            name="tylethunhaptacgia"
-            initialValue={document.tylethunhaptacgia}
-            rules={[
-              {
-                required: true,
-                message: "Yêu cầu nhập tỷ lệ thu nhập tác giả",
-              },
-            ]}
-          >
-            <InputNumber min={0} max={10} />
-          </Form.Item>
-          <Form.Item
-            label="Tỷ lệ phí quản trị viên (%)"
-            name="tylephiquantri"
-            initialValue={document.tylephiquantri}
-            rules={[
-              {
-                required: true,
-                message: "Yêu cầu nhập tỷ lệ phí quản trị viên",
-              },
-            ]}
-          >
-            <InputNumber min={1} max={10} />
-          </Form.Item>
+          {account.quyenhan !== "Quản trị viên" ? (
+            <>
+              <Form.Item
+                label="Tỷ lệ thu nhập tác giả (%)"
+                name="tylethunhaptacgia"
+                initialValue={document.tylethunhaptacgia}
+                rules={[
+                  {
+                    required: true,
+                    message: "Yêu cầu nhập tỷ lệ thu nhập tác giả",
+                  },
+                ]}
+              >
+                <InputNumber min={0} max={10} />
+              </Form.Item>
+              <Form.Item
+                label="Tỷ lệ phí quản trị viên (%)"
+                name="tylephiquantri"
+                initialValue={document.tylephiquantri}
+                rules={[
+                  {
+                    required: true,
+                    message: "Yêu cầu nhập tỷ lệ phí quản trị viên",
+                  },
+                ]}
+              >
+                <InputNumber min={0} max={10} />
+              </Form.Item>
+            </>
+          ) : (
+            <>
+              <Form.Item
+                label="Tỷ lệ thu nhập tác giả (%)"
+                name="tylethunhaptacgia"
+                initialValue={10}
+                hidden={true}
+              >
+                <InputNumber />
+              </Form.Item>
+              <Form.Item
+                label="Tỷ lệ phí quản trị viên (%)"
+                name="tylephiquantri"
+                initialValue={0}
+                hidden={true}
+              >
+                <InputNumber />
+              </Form.Item>
+            </>
+          )}
           <Form.Item
             label="Tài khoản đăng tài liệu"
             name="mataikhoan"
@@ -306,10 +335,12 @@ class DocumentForm extends Component {
 
 const mapStateToProps = (state) => ({
   categories: state.categoryReducer.objects,
+  account: state.accountReducer.account,
 });
 
 const mapDispatchToProps = {
   getCategories,
+  getAccount,
 };
 
 export default connect(

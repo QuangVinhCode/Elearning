@@ -3,6 +3,7 @@ package com.vn.edu.elearning.service;
 import com.vn.edu.elearning.domain.Binhluan;
 import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.domain.Tailieu;
+import com.vn.edu.elearning.dto.BinhluanConTheoTailieuDto;
 import com.vn.edu.elearning.dto.BinhluanDto;
 import com.vn.edu.elearning.dto.BinhluanTheoTailieuDto;
 import com.vn.edu.elearning.exeception.DanhmucException;
@@ -54,6 +55,10 @@ public class BinhluanService {
 
     public List<BinhluanTheoTailieuDto> findBinhluansByMatailieu(Long matl) {
         return binhluanRepository.findBinhluansByMatailieu(matl);
+    }
+
+    public List<BinhluanConTheoTailieuDto> findBinhluanconsByMatailieu(Long mabl) {
+        return binhluanRepository.findBinhluansByMatbinhluandatraloi(mabl);
     }
 
     public Binhluan findById(Long id) {

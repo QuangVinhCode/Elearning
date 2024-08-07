@@ -42,6 +42,7 @@ function DashboardPage() {
     if (!sesion && !token) {
       navigate("/users/login");
       dispatch({ type: LOG_OUT });
+    
     }
   };
   useEffect(() => {
