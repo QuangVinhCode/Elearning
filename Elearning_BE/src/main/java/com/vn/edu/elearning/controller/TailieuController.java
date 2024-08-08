@@ -140,13 +140,18 @@ public class TailieuController {
     }
 
     @GetMapping("/upload-account/{id}")
-    public ResponseEntity<?> getDocumentUploadByCategory(@PathVariable("id") Long id){
+    public ResponseEntity<?> getDocumentUploadByAccount(@PathVariable("id") Long id){
         return new ResponseEntity<>(tailieuService.findAllUploadByAccount(id),HttpStatus.OK);
     }
 
     @GetMapping("/pay-account/{id}")
-    public ResponseEntity<?> getDocumentPayByCategory(@PathVariable("id") Long id){
+    public ResponseEntity<?> getDocumentPayByAccount(@PathVariable("id") Long id){
         return new ResponseEntity<>(tailieuService.findAllPayByAccount(id),HttpStatus.OK);
+    }
+
+    @GetMapping("/collection-account/{id}")
+    public ResponseEntity<?> getDocumentCollectionByAccount(@PathVariable("id") Long id){
+        return new ResponseEntity<>(tailieuService.findAllDocumentCollectionByAccount(id),HttpStatus.OK);
     }
 
     @GetMapping("/category/{id}")

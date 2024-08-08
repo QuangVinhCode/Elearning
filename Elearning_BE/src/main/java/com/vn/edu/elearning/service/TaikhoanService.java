@@ -151,7 +151,7 @@ public class TaikhoanService {
 
         if (!found.isPresent())
         {
-            throw new TaikhoanException("Tài khoản có mã "+ id + "không tồn tại");
+            throw new TaikhoanException("Yêu cầu đăng nhập");
         }
         return found.get();
     }

@@ -4,6 +4,7 @@ import com.vn.edu.elearning.domain.Tailieu;
 import com.vn.edu.elearning.dto.KiemduyettailieuDto;
 import com.vn.edu.elearning.dto.TailieudangtaiDto;
 import com.vn.edu.elearning.dto.TailieuthanhtoanDto;
+import com.vn.edu.elearning.dto.ThunhaptailieuDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,8 +34,12 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "FROM Tailieu t JOIN t.dsdangtai dt JOIN dt.taikhoan tk")
     List<KiemduyettailieuDto> findDSTailieukiemduyet();
 
-    @Query("SELECT new com.vn.edu.elearning.dto.TailieudangtaiDto(t.matailieu, t.tentailieu, t.trangthai, dt.thoigiantailen, dt.thoigianduocduyet) " +
+    @Query("SELECT new com.vn.edu.elearning.dto.TailieudangtaiDto(" +
+            "t.matailieu, t.tentailieu, t.tacgia, t.mota, t.giaban, t.diachiluutru, " +
+            "t.tylephiquantri, t.tylethunhaptacgia, t.trangthai, dm, tk.mataikhoan, " +
+            "dt.thoigiantailen, dt.thoigianduocduyet) " +
             "FROM Tailieu t " +
+            "JOIN t.danhmuc dm " +
             "JOIN t.dsdangtai dt " +
             "JOIN dt.taikhoan tk " +
             "WHERE tk.mataikhoan = :mataikhoan")
@@ -47,6 +52,18 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "WHERE tt.taikhoan.mataikhoan = :mataikhoan")
     List<TailieuthanhtoanDto> findTailieuthanhtoanByMataikhoan(@Param("mataikhoan") Long mataikhoan);
 
-
+    @Query("SELECT new com.vn.edu.elearning.dto.ThunhaptailieuDto(" +
+            "t.matailieu, " +
+            "t.tentailieu, " +
+            "t.giaban, " +
+            "COUNT(tt.mathanhtoan), " +
+            "SUM((t.giaban * t.tylethunhaptacgia) / 10), " +
+            "SUM((t.giaban * t.tylephiquantri) / 10)) " +
+            "FROM Tailieu t " +
+            "JOIN t.dsthanhtoan tt " +
+            "JOIN t.dsdangtai dt " +
+            "WHERE dt.taikhoan.mataikhoan = :mataikhoan AND tt.trangthai='Thành công'" +
+            "GROUP BY t.matailieu, t.tentailieu")
+    List<ThunhaptailieuDto> findThunhaptailieuByMataikhoan(@Param("mataikhoan") Long mataikhoan);
 
 }

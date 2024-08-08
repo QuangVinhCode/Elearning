@@ -98,6 +98,10 @@ public class TailieuService {
         return tailieuRepository.findTailieuthanhtoanByMataikhoan(mtk) ;
     }
 
+    public List<?> findAllDocumentCollectionByAccount(Long mtk) {
+        return tailieuRepository.findThunhaptailieuByMataikhoan(mtk) ;
+    }
+
     public List<Tailieu> getTop5TaiLieuThanhToanNhieuNhat(){
         return tailieuRepository.findTop5TailieuByThanhtoanNhieuNhat();
     }

@@ -329,20 +329,10 @@ export const getAccount = (id) => async (dispatch) => {
         type: ACCOUNT_SET,
         payload: response.data,
       });
-    } else {
-      dispatch({
-        type: COMMON_ERROR_SET,
-        payload: response.message,
-      });
-    }
+    } 
   } catch (error) {
-    console.log(error);
-    dispatch({
-      type: COMMON_ERROR_SET,
-      payload: error.response.data
-        ? error.response.data.message
-        : error.message,
-    });
+    console.log("error" + error);
+    
   }
   dispatch({
     type: COMMON_LOADING_SET,

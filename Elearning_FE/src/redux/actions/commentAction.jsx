@@ -54,6 +54,7 @@ export const insertComment = (object) => async (dispatch) => {
     type: COMMON_LOADING_SET,
     payload: false,
   });
+  dispatch(getCommentsByDocument(object.matailieu));
 };
 
 export const getComments = () => async (dispatch) => {

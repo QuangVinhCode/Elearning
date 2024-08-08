@@ -265,11 +265,15 @@ class UserDocumentDetails extends Component {
       goToPage,
       reset,
     } = this.state;
+   
+    const jwtToken = sessionStorage.getItem("jwtToken");
+    const sessionToken = jwtToken ? JSON.parse(jwtToken) : null;
+    if (!sessionToken) {
+      return <Navigate to="/users/login" />;
+    }
     if (documentNotFound) {
       return <Navigate to="/404" />;
     }
-    const jwtToken = sessionStorage.getItem("jwtToken");
-    const sessionToken = jwtToken ? JSON.parse(jwtToken) : null;
     // Format giá tiền thành tiền Việt Nam
     const formattedPrice = new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -351,7 +355,7 @@ class UserDocumentDetails extends Component {
           </div>
           <div>
             <div className="comment-section">
-              <ListComment comments={comments} />
+              <ListComment document={document} comments={comments} />
             </div>
             <div>
               <Comment
