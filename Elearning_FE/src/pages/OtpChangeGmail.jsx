@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Input, Button, Row, Col, Typography, Space, Tag } from "antd";
 import "antd/dist/antd.css";
 import "./OtpVerification.css";
-import { forgotPasswordOpt } from "../redux/actions/accountAction";
+import { changeGmailOpt } from "../redux/actions/accountAction";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ContentHeader from "../components/common/ContentHeader";
 
 const { Text } = Typography;
 
-const OtpVerification = ({ forgotPasswordOpt }) => {
+const OtpVerification = ({ changeGmailOpt }) => {
   const [values, setValues] = useState(Array(6).fill(""));
   const [otp, setOtp] = useState("");
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
@@ -52,7 +52,7 @@ const OtpVerification = ({ forgotPasswordOpt }) => {
   };
 
   const handleSubmit = () => {
-    forgotPasswordOpt(otp, navigate);
+    changeGmailOpt(otp, navigate);
     console.log("OTP Entered:", otp);
   };
 
@@ -132,7 +132,7 @@ const OtpVerification = ({ forgotPasswordOpt }) => {
 };
 
 const mapDispatchToProps = {
-  forgotPasswordOpt,
+  changeGmailOpt,
 };
 
 export default connect(null, mapDispatchToProps)(OtpVerification);

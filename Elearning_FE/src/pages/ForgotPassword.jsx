@@ -4,13 +4,15 @@ import { MailOutlined, UserOutlined } from "@ant-design/icons";
 import "./ForgotPassword.css";
 import { forgotPassword } from "../redux/actions/accountAction";
 import { connect } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const { Title, Text } = Typography;
 
-const ForgotPassword = ({forgotPassword}) => {
+const ForgotPassword = ({ forgotPassword }) => {
+  const navigate = useNavigate();
   const onFinish = (values) => {
     console.log("Received values from form: ", values);
     // Xử lý logic gửi yêu cầu quên mật khẩu tại đây
-    forgotPassword(values.username,values.gmail)
+    forgotPassword(values.username, values.gmail, navigate);
   };
 
   return (

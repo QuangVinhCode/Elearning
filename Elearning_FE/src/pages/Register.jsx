@@ -19,7 +19,7 @@ export default function Register() {
       gmail: values.email,
       sodienthoai: values.sodienthoai,
     };
-    dispatch(insertAccount(data));
+    dispatch(insertAccount(data,navigate));
   };
 
   return (

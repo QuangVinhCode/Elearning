@@ -63,7 +63,7 @@ export const loginAccount = (object, navigate) => async (dispatch) => {
   }
 };
 
-export const insertAccount = (object) => async (dispatch) => {
+export const insertAccount = (object, navigate) => async (dispatch) => {
   const service = new AccountService();
 
   try {
@@ -80,8 +80,8 @@ export const insertAccount = (object) => async (dispatch) => {
     console.log(response);
     if (response.status === 200) {
       const OtpUrl = response.data.url;
-      console.log(OtpUrl);
-      window.location.href = OtpUrl; // Redirect to paymentUrl
+      console.log("OtpUrl " + OtpUrl);
+      navigate(OtpUrl);
     } else {
       dispatch({
         type: COMMON_ERROR_SET,
@@ -102,47 +102,48 @@ export const insertAccount = (object) => async (dispatch) => {
   });
 };
 
-export const forgotPassword = (username, gmail) => async (dispatch) => {
-  const service = new AccountService();
+export const forgotPassword =
+  (username, gmail, navigate) => async (dispatch) => {
+    const service = new AccountService();
 
-  try {
-    console.log("Quên mật khẩu Action");
+    try {
+      console.log("Quên mật khẩu Action");
 
+      dispatch({
+        type: COMMON_LOADING_SET,
+        payload: true,
+      });
+      console.log("object in action");
+      console.log(username);
+      console.log(gmail);
+      const response = await service.forgotPassword(username, gmail);
+      console.log("response ");
+      console.log(response);
+      if (response.status === 200) {
+        const OtpUrl = response.data.url;
+        console.log("OtpUrl " + OtpUrl);
+        navigate(OtpUrl);
+      } else {
+        dispatch({
+          type: COMMON_ERROR_SET,
+          payload: response.message,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: error.response.data
+          ? error.response.data.message
+          : error.message,
+      });
+    }
     dispatch({
       type: COMMON_LOADING_SET,
-      payload: true,
+      payload: false,
     });
-    console.log("object in action");
-    console.log(username);
-    console.log(gmail);
-    const response = await service.forgotPassword(username, gmail);
-    console.log("response ");
-    console.log(response);
-    if (response.status === 200) {
-      const OtpUrl = response.data.url;
-      console.log(OtpUrl);
-      window.location.href = OtpUrl; // Redirect to paymentUrl
-    } else {
-      dispatch({
-        type: COMMON_ERROR_SET,
-        payload: response.message,
-      });
-    }
-  } catch (error) {
-    dispatch({
-      type: COMMON_ERROR_SET,
-      payload: error.response.data
-        ? error.response.data.message
-        : error.message,
-    });
-  }
-  dispatch({
-    type: COMMON_LOADING_SET,
-    payload: false,
-  });
-};
+  };
 
-export const forgotPasswordOpt = (otp) => async (dispatch) => {
+export const forgotPasswordOpt = (otp, navigate) => async (dispatch) => {
   const service = new AccountService();
 
   try {
@@ -160,8 +161,47 @@ export const forgotPasswordOpt = (otp) => async (dispatch) => {
     console.log(response.message);
     if (response.status === 200) {
       const OtpUrl = response.data.url;
-      console.log(OtpUrl);
-      window.location.href = OtpUrl; // Redirect to paymentUrl
+      console.log("OtpUrl " + OtpUrl);
+      navigate(OtpUrl);
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+    console.log(response);
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const changeGmailOpt = (otp, navigate) => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Kiểm tra gmail lấy lại tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    console.log("otp in action ");
+    console.log(otp);
+    const response = await service.changeGmailOpt(otp);
+    console.log("response");
+    console.log(response);
+    console.log(response.message);
+    if (response.status === 201) {
+      navigate("/users/profile/accountsettings");
     } else {
       dispatch({
         type: COMMON_ERROR_SET,
@@ -203,6 +243,7 @@ export const resetPassword = (newPassword, navigate) => async (dispatch) => {
         type: COMMON_MESSAGE_SET,
         payload: response.data,
       });
+
       navigate("/users/login");
     } else {
       dispatch({
@@ -401,14 +442,10 @@ export const clearAccount = () => (dispatch) => {
   dispatch({
     type: ACCOUNT_SET,
     payload: {
-      id: "",
-      username: "",
-      password: "",
-      fullname: "",
-      date: "",
-      adress: "",
-      phone_number: "",
-      role_id: "",
+      tendangnhap: "",
+      matkhau: "",
+      gmail: "",
+      sodienthoai: "",
     },
   });
 };
@@ -435,7 +472,13 @@ export const updateAccount = (id, object, navigate) => async (dispatch) => {
         type: COMMON_MESSAGE_SET,
         payload: "Thông tin tài khoản đã được thay đổi!",
       });
-      navigate("/users/profile/accountsettings");
+      const OtpUrl = response.data.url;
+      if (OtpUrl) {
+        console.log("OtpUrl " + OtpUrl);
+        navigate(OtpUrl);
+      } else {
+        navigate("/users/profile/accountsettings");
+      }
     } else {
       dispatch({
         type: COMMON_ERROR_SET,

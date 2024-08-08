@@ -23,6 +23,7 @@ import { message } from "antd";
 import DocumentHome from "../components/document/DocumentHome";
 import Footer from "../components/home/Footer";
 import NotFound from "./NotFound";
+import OtpChangeGmail from "./OtpChangeGmail";
 
 function Users({ insertDocumentUser, updateDocument }) {
   const [showDocumentForm, setShowDocumentForm] = useState(false);
@@ -97,6 +98,7 @@ function Users({ insertDocumentUser, updateDocument }) {
         <Route path="/forget" element={<ForgotPassword />} />
         <Route path="/otp-forget" element={<OtpForgotPassword />} />
         <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/otp-change-gmail" element={<OtpChangeGmail />} />
         <Route path="*" element={<NotFound />} />{" "}
         {/* Route cho các đường dẫn không hợp lệ */}
       </Routes>

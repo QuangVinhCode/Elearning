@@ -29,6 +29,8 @@ public class TaikhoanController {
 
     private Taikhoan taikhoan;
 
+    private Long mataikhoan;
+
     @PostMapping()
     public ResponseEntity<?> register(@Validated @RequestBody TaikhoanDto dto, BindingResult result) {
         // Validate input DTO fields
@@ -46,7 +48,7 @@ public class TaikhoanController {
 
             // Return URL for OTP verification
             return ResponseEntity.ok(Map.of("message", "Mã xác nhận đã được gửi đến email của bạn. Vui lòng nhập mã để hoàn tất đăng ký tài khoản.",
-                    "url", "http://localhost:3000/users/otp"));
+                    "url", "/users/otp"));
         } catch (MessagingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi gửi mã xác nhận: " + e.getMessage());
         }
@@ -79,7 +81,7 @@ public class TaikhoanController {
 
             // Return URL for OTP verification
             return ResponseEntity.ok(Map.of("message", "Mã xác nhận đã được gửi đến email của bạn. Vui lòng nhập mã để hoàn tất lấy lại tài khoản.",
-                    "url", "http://localhost:3000/users/otp-forget"));
+                    "url", "/users/otp-forget"));
         } catch (MessagingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi gửi mã xác nhận: " + e.getMessage());
         }
@@ -92,7 +94,7 @@ public class TaikhoanController {
         // Validate OTP
         if (taikhoanService.verifyOTP(taikhoan.getGmail(), otp)) {
             return ResponseEntity.ok(Map.of("message", "Thành công lấy lại tài khoản!",
-                    "url", "http://localhost:3000/users/reset"));
+                    "url", "/users/reset"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Mã xác nhận không chính xác!"));
         }
@@ -151,14 +153,40 @@ public class TaikhoanController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateAccount(@PathVariable("id") Long id, @Validated @RequestBody TaikhoanDto dto, BindingResult result) {
+    public ResponseEntity<?> updateAccount(@PathVariable("id") Long id, @Validated @RequestBody TaikhoanDto dto, BindingResult result) throws MessagingException {
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(result);
         if (responseEntity != null) {
             return responseEntity;
         }
+        boolean check = taikhoanService.checkGmail(id, dto.getGmail());
+        if (!check)
+        {
+            mataikhoan=id;
+            registeredDto = dto;
+            taikhoanService.changeGmail(dto.getGmail());
+            return ResponseEntity.ok(Map.of("message", "Mã xác nhận đã được gửi đến email mới của bạn. Vui lòng nhập mã để hoàn tất đăng ký tài khoản.",
+                    "url", "/users/otp-change-gmail"));
 
-        Taikhoan updatedAccount = taikhoanService.update(id, dto);
-        return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
+        }else {
+            Taikhoan updatedAccount = taikhoanService.update(id, dto);
+            return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
+        }
+    }
+
+    @PatchMapping("/change-gmail/{otp}")
+    public ResponseEntity<?> changeGmail(@PathVariable("otp") String otp) {
+        if (registeredDto == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không có dữ liệu tài khoản để xác nhận.");
+        }
+
+        // Validate OTP
+        if (taikhoanService.verifyOTP(registeredDto.getGmail(), otp)) {
+            // Đăng ký tài khoản từ DTO đã lưu
+            Taikhoan registeredAccount = taikhoanService.update(mataikhoan,registeredDto);
+            return new ResponseEntity<>(registeredAccount, HttpStatus.CREATED);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Mã xác nhận không chính xác!"));
+        }
     }
 
     @PatchMapping("/change/{id}/{oldpassword}/{newpassword}")
