@@ -42,7 +42,6 @@ function DashboardPage() {
     if (!sesion && !token) {
       navigate("/users/login");
       dispatch({ type: LOG_OUT });
-    
     }
   };
   useEffect(() => {
@@ -126,20 +125,7 @@ function DashboardPage() {
               key: "6",
               icon: <MdOutlinePlayLesson />,
               label: "Quản lý tài khoản",
-              children: [
-                {
-                  key: "61",
-                  icon: <MdFormatListBulleted />,
-                  label: "DS Tài khoản",
-                  onClick: () => navigate("/dashboard/account/usermanage"),
-                },
-                {
-                  key: "62",
-                  icon: <MdAddCircleOutline />,
-                  label: "DS Đã chặn",
-                  onClick: () => navigate("/dashboard/account/userblocked"),
-                },
-              ],
+              onClick: () => navigate("/dashboard/account/usermanage"),
             },
             {
               key: "7",
@@ -209,11 +195,7 @@ function DashboardPage() {
               <Route
                 path="/account/usermanage"
                 element={<UserManage />}
-              ></Route>
-              <Route
-                path="/account/userblocked"
-                element={<AccountBlocked />}
-              ></Route>
+              ></Route>         
             </Routes>
             <Outlet></Outlet>
           </div>

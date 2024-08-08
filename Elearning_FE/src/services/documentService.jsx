@@ -44,11 +44,21 @@ export default class DocumentService {
   getDocumentsByAccountPay = async (id) => {
     return await axios.get(API_DOCUMENT + "/pay/" + id);
   };
+  getDocumentUploadByCategory = async (id) => {
+    return await axios.get(API_DOCUMENT + "/upload-account/" + id);
+  };
+  getDocumentPayByCategory = async (id) => {
+    return await axios.get(API_DOCUMENT + "/pay-account/" + id);
+  };
+
   deleteDocument = async (id) => {
     return await axios.delete(API_DOCUMENT + "/" + id);
   };
   confirmDocument = async (object) => {
     return await axios.post(API_CENSORSHIP, object);
+  };
+  getCensorshipByDocument = async (id) => {
+    return await axios.get(API_CENSORSHIP + "/document/" + id);
   };
   errorDocument = async (id, note) => {
     return await axios.patch(API_DOCUMENT + "/error/" + id + "/" + note);

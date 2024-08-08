@@ -115,6 +115,9 @@ public class FileStorageService {
 
             return baos.toByteArray();
         } catch (IOException ex) {
+            if (ex.getMessage().contains("JPEG2000")) {
+                throw new FileNotFoundException("Cannot read JPEG2000 image: Java Advanced Imaging (JAI) Image I/O Tools are not installed.", ex);
+            }
             throw new FileNotFoundException("Error converting PDF to image", ex);
         }
     }

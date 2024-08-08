@@ -38,19 +38,6 @@
 .input-box input::placeholder {
   color: #fff;
 }
-.register-form-container button {
-  width: 100%;
-  height: 45px;
-  background: #fff;
-  border: none;
-  outline: none;
-  border-radius: 40px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  font-size: 16px;
-  color: #333;
-  font-weight: 700;
-}
 
 .register-page {
   height: 170vh;
@@ -67,6 +54,12 @@
   font-size: 14.5px;
   text-align: center;
   margin: 20px 0 15px;
+  margin-top: 20px;
+  display: flex; /* Đặt các phần tử con theo chiều ngang */
+  justify-content: center; /* Canh giữa theo chiều ngang */
+  margin-top: 20px; /* Khoảng cách trên */
+  flex-direction: column;
+  align-items: center;
 }
 .login-link p a {
   color: #fff;
@@ -100,4 +93,31 @@
 }
 .ant-row {
   margin-top: 0px;
+}
+.dangnhap2 {
+  background-color: #4caf50; /* Màu nền của nút */
+  color: white; /* Màu chữ của nút */
+  border: none; /* Không viền */
+
+  border-radius: 4px; /* Bo tròn các góc của nút */
+  cursor: pointer; /* Con trỏ chuột khi di chuột qua nút */
+  font-size: 16px; /* Kích thước chữ của nút */
+  margin-left: 10px; /* Khoảng cách trái để tách nút ra khỏi đoạn văn */
+  transition: background-color 0.3s, transform 0.3s; /* Hiệu ứng chuyển đổi */
+}
+.dangky2 {
+  width: 100%;
+  height: 45px;
+  background: blue;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 700;
+  display: flex; /* Thêm thuộc tính này */
+  justify-content: center; /* Canh giữa theo chiều ngang */
+  align-items: center; /* Canh giữa theo chiều dọc */
 }

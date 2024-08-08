@@ -131,6 +131,7 @@ button {
   outline: none;
   border-radius: 4px;
   transition: background-color 0.3s ease;
+  align-items: center;
 }
 
 .message-notification button:hover {
@@ -249,4 +250,28 @@ button {
   border-color: #66afe9;
   outline: none;
   box-shadow: 0 0 5px rgba(102, 175, 233, 0.6);
+}
+.navigation-buttons button.buttontruoc:disabled {
+  background-color: #d6d6d6;
+  cursor: not-allowed;
+}
+
+.navigation-buttons button.buttontruoc {
+  background-color: #dc3545;
+}
+
+.navigation-buttons button.buttonsau {
+  background-color: #0056b3;
+}
+.navigation-buttons button.go-page {
+  background-color: #28a745;
+}
+
+.navigation-buttons button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.navigation-buttons p {
+  margin: 0 15px;
+  font-size: 16px;
 }

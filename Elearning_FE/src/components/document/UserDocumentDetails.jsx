@@ -285,14 +285,19 @@ class UserDocumentDetails extends Component {
             onLoadSuccess={this.onLoadSuccess}
           />
           <div className="navigation-buttons">
-            <button disabled={pageNumber <= 1} onClick={this.handlePrevPage}>
-              Previous
+            <button
+              className="buttontruoc"
+              disabled={pageNumber <= 1}
+              onClick={this.handlePrevPage}
+            >
+              Trước
             </button>
             <button
+              className="buttonsau"
               //    disabled={pageNumber >= maxPages}
               onClick={this.handleNextPage}
             >
-              Next
+              Sau
             </button>
             <p>
               Trang {pageNumber} / {numPages}

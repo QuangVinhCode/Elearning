@@ -74,24 +74,38 @@ const AccountSettings = ({ account, getAccount }) => {
         </div>
         <div className="form-group">
           <label htmlFor="password">
-            Mật khẩu:{" "}
-            <span>
-             **********
-            </span>
+            Mật khẩu: <span>**********</span>
+          </label>
+        </div>
+        <div className="form-group">
+          <label htmlFor="phone">
+            Quyền hạn: <span>{account.quyenhan}</span>
+          </label>
+        </div>
+        <div className="form-group">
+          <label htmlFor="phone">
+            Trạng thái bình luận: <span>{account.trangthaibinhluan}</span>
+          </label>
+        </div>
+        <div className="form-group">
+          <label htmlFor="phone">
+            Trạng thái đăng tài liệu: <span>{account.trangthaidangtai}</span>
           </label>
         </div>
         <div className="form-group">
           <label htmlFor="sodu">
-            Số dư:{" "}
-            <span>
-              {new Intl.NumberFormat("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              }).format(account.sodu)}
-            </span>{" "}
-            <button className="recharge" onClick={handleOpenVNpay}>
-              <FaMoneyCheck /> Nạp
-            </button>
+            <div className="sodu-container">
+              Số dư:{" "}
+              <span>
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(account.sodu)}
+              </span>{" "}
+              <button className="recharge" onClick={handleOpenVNpay}>
+                <FaMoneyCheck /> Nạp
+              </button>
+            </div>
           </label>
         </div>
       </div>

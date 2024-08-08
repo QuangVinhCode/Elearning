@@ -4,12 +4,13 @@ import { useDispatch } from "react-redux";
 import { insertAccount } from "../redux/actions/accountAction";
 import { FaUser, FaLock, FaPhoneAlt } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import "./Register.css";
 
 export default function Register() {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
     const data = {
@@ -151,15 +152,25 @@ export default function Register() {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <button type="primary" htmlType="submit" className="dangky2">
               Đăng ký
-            </Button>
+            </button>
           </Form.Item>
         </Form>
         <div className="login-link">
-          <p className="dn">
-            Đã có tài khoản? <a href="/users/login">Đăng nhập</a>
-          </p>
+          <div>
+            <p className="dn">
+              Đã có tài khoản?{" "}
+              <button
+                className="dangnhap2"
+                onClick={() => {
+                  navigate("/users/login");
+                }}
+              >
+                Đăng nhập
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>

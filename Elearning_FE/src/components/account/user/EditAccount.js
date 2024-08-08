@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./AccountSettings.css";
+import "./EditAccount.css";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, InputNumber, message } from "antd";
 import { connect } from "react-redux";
@@ -33,7 +33,7 @@ const formItemLayout = {
 const tailFormItemLayout = {
   wrapperCol: {
     xs: {
-      span: 24,
+      span: 26,
       offset: 0,
     },
     sm: {
@@ -70,8 +70,8 @@ const EditAccount = ({ updateAccount, getAccount, account }) => {
     updateAccount(account.mataikhoan, data, navigate);
   };
   return (
-    <div className="accountsettings">
-      <h1 className="mainhead1">Sửa Thông Tin Cá Nhân</h1>
+    <div className="accountsettings1">
+      <h1 className="mainhead2">Sửa Thông Tin Cá Nhân</h1>
       <Form
         {...formItemLayout}
         form={form}
@@ -162,28 +162,8 @@ const EditAccount = ({ updateAccount, getAccount, account }) => {
         >
           <InputNumber />
         </Form.Item>
-        <Form.Item
-          name="quyenhan"
-          label="Người dùng"
-          initialValue={account.quyenhan}
-        >
-          <Input readOnly />
-        </Form.Item>
-        <Form.Item
-          name="trangthaidangtai"
-          label="Trạng thái đăng tải"
-          initialValue={account.trangthaidangtai}
-        >
-          <Input readOnly />
-        </Form.Item>
-        <Form.Item
-          name="trangthaibinhluan"
-          label="Trạng thái bình luận"
-          initialValue={account.trangthaibinhluan}
-        >
-          <Input readOnly />
-        </Form.Item>
-        <Form.Item {...tailFormItemLayout} className="button-container">
+
+        <Form.Item {...tailFormItemLayout} className="button-container1">
           <Button type="primary" htmlType="submit">
             Cập nhật
           </Button>

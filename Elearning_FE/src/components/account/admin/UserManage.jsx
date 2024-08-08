@@ -1,20 +1,27 @@
 import React, { Component } from "react";
-import { getAccountsByStatus,updateAccountStatus } from "../../../redux/actions/accountAction";
+import {
+  getAccountsByPostingStatus,
+  updateAccountStatus,
+  updateAccountStatusBL,
+} from "../../../redux/actions/accountAction";
 import "./UserManage.css";
+import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
-import { Select, Button, message } from "antd";
+import { Select, Button, message, Skeleton, Table, Space } from "antd";
+import Column from "antd/lib/table/Column";
 
 class UserManage extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      selectedDates: {}, // Object to store selected dates for each account
+      selectedDates: {},
+      accounts: {}, // Object to store selected dates for each account
     };
   }
 
   componentDidMount() {
-    this.props.getAccountsByStatus();
+    this.props.getAccountsByPostingStatus();
   }
 
   calculateDate = (daysToAdd) => {
@@ -39,7 +46,7 @@ class UserManage extends Component {
     const selectedDate = this.state.selectedDates[accountId];
     if (selectedDate) {
       console.log(`Sending date ${selectedDate} for account ${accountId}`);
-      this.props.updateAccountStatus(accountId,selectedDate);
+      this.props.updateAccountStatus(accountId, selectedDate);
       // Perform your send logic here
     } else {
       message.warning({
@@ -49,8 +56,45 @@ class UserManage extends Component {
     }
   };
 
+  handleSendDateBL = (accountId) => {
+    const selectedDate = this.state.selectedDates[accountId];
+    if (selectedDate) {
+      console.log(`Sending date ${selectedDate} for account ${accountId}`);
+      this.props.updateAccountStatusBL(accountId, selectedDate);
+      // Perform your send logic here
+    } else {
+      message.warning({
+        content: "Chọn thời hạn",
+        style: { marginTop: "20vh" },
+      });
+    }
+  };
+
+  calculateRemainingDays = (endDateStr) => {
+    if (!endDateStr) {
+      console.error("Invalid endDateStr:", endDateStr);
+      return 0; // Or any default value or behavior you want
+    }
+
+    const parts = endDateStr.split("-");
+    if (parts.length !== 3) {
+      console.error("Invalid date format:", endDateStr);
+      return 0;
+    }
+
+    const endDate = new Date(parts[2], parts[1] - 1, parts[0]); // Create a Date object from day, month, year
+
+    const currentDate = new Date(); // Current date
+
+    const differenceMs = endDate - currentDate; // Difference in milliseconds
+    const differenceDays = Math.ceil(differenceMs / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+
+    return differenceDays;
+  };
+
   render() {
-    const { accounts } = this.props;
+    const { navigate } = this.props.router;
+    const { accounts, isLoading } = this.props;
     const options = [
       {
         value: this.calculateDate(3),
@@ -66,62 +110,120 @@ class UserManage extends Component {
       },
     ];
 
-    return (
-      <div className="usermanage">
-        <h1 className="mainhead2">Tài khoản người dùng</h1>
-        <table className="yourorderstable1">
-          <thead>
-            <tr>
-              <th scope="col">Tên tài khoản</th>
+    if (isLoading) {
+      return (
+        <>
+          <ContentHeader
+            navigate={navigate}
+            title="Quản lý chặn"
+            className="site-page-header"
+          />
+          <Skeleton active />
+        </>
+      );
+    }
 
-              <th scope="col">Trạng thái</th>
-              <th scope="col">Tác vụ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {accounts.map((account) => (
-              <tr key={account.mataikhoan}>
-                <td data-label="manguoidung">{account.tendangnhap}</td>
-                <td data-label="trangthai">{account.trangthaidangtai}</td>
-                <td data-label="tacvu">
-                  <div className="action-container">
-                    <Select
-                      showSearch
-                      placeholder="Chọn ngày"
-                      filterOption={(input, option) =>
-                        (option?.label ?? "")
-                          .toLowerCase()
-                          .includes(input.toLowerCase())
-                      }
-                      options={options}
-                      onChange={(value) =>
-                        this.handleDateChange(account.mataikhoan, value)
-                      }
-                    />
-                    <Button
-                      type="primary"
-                      onClick={() => this.handleSendDate(account.mataikhoan)}
-                    >
-                      Xác nhận
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    return (
+      <>
+        <ContentHeader
+          navigate={navigate}
+          title="Quản lý chặn"
+          className="site-page-header"
+        />
+        <Table dataSource={accounts} size="small" rowKey="mataikhoan">
+          <Column
+            title="Tên tài khoản"
+            key="tendangnhap"
+            dataIndex="tendangnhap"
+            width={40}
+            align="center"
+          />
+          <Column
+            title="Trạng thái đăng tài liệu"
+            key="trangthaidangtai"
+            dataIndex="trangthaidangtai"
+            width={80}
+            align="center"
+            render={(text) => (
+              <div>
+                {text === "Bình thường" ? (
+                  <span className="trangthai1">{text}</span>
+                ) : (
+                  <span className="trangthai1">
+                    Bị chặn {this.calculateRemainingDays(text)} ngày
+                  </span>
+                )}
+              </div>
+            )}
+          />
+          <Column
+            title="Trạng thái bình luận"
+            key="trangthaibinhluan"
+            dataIndex="trangthaibinhluan"
+            width={80}
+            align="center"
+            render={(text) => (
+              <div>
+                {text === "Bình thường" ? (
+                  <span className="trangthai1">{text}</span>
+                ) : (
+                  <span className="trangthai1">
+                    Bị chặn {this.calculateRemainingDays(text)} ngày
+                  </span>
+                )}
+              </div>
+            )}
+          />
+          <Column
+            title="Tác vụ"
+            key="action"
+            dataIndex="action"
+            width={140}
+            align="center"
+            render={(_, record) => (
+              <Space size="middle">
+                <Select
+                  showSearch={false}
+                  placeholder="Chọn ngày"
+                  options={options}
+                  onChange={(value) =>
+                    this.handleDateChange(record.mataikhoan, value)
+                  }
+                />
+                <Button
+                  key={record.key}
+                  type="primary"
+                  size="small"
+                  onClick={() => this.handleSendDate(record.mataikhoan)}
+                >
+                  Chặn đăng tài liệu
+                </Button>
+                <Button
+                  key={record.key}
+                  type="primary"
+                  size="small"
+                  onClick={() => this.handleSendDateBL(record.mataikhoan)}
+                >
+                  Chặn bình luận
+                </Button>
+              </Space>
+            )}
+          />
+        </Table>
+      </>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
   accounts: state.accountReducer.accounts,
+  isLoading: state.commonReducer.isLoading,
 });
 
 const mapDispatchToProps = {
-  getAccountsByStatus,
+  getAccountsByPostingStatus,
   updateAccountStatus,
+  updateAccountStatusBL,
 };
 
 export default withRouter(

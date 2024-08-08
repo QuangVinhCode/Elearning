@@ -23,6 +23,9 @@ export default class ClassService {
   getAccountsByStatus = async () => {
     return await axios.get(API_ACCOUNT + "/status");
   };
+  getAccountsByPostingStatus = async () => {
+    return await axios.get(API_ACCOUNT + "/status");
+  };
   getAccountsByStateless = async () => {
     return await axios.get(API_ACCOUNT + "/stateless");
   };
@@ -44,7 +47,14 @@ export default class ClassService {
     return await axios.patch(API_ACCOUNT + "/" + id, object);
   };
   updateAccountStatus = async (id, status) => {
-    return await axios.patch(API_ACCOUNT + "/status/" + id + "/" + status);
+    return await axios.patch(
+      API_ACCOUNT + "/status-document/" + id + "/" + status
+    );
+  };
+  updateAccountStatusBL = async (id, status) => {
+    return await axios.patch(
+      API_ACCOUNT + "/status-comment/" + id + "/" + status
+    );
   };
   changePassword = async (id, oldPassword, newPassword) => {
     return await axios.patch(

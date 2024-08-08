@@ -63,17 +63,30 @@ const Login = () => {
               <input type="checkbox" />
               Nhớ mật khẩu
             </label>
-            <a onClick={() => navigate("/users/forget")}>Quên mật khẩu</a>
+            <button
+              className="quenmatkhau"
+              onClick={() => {
+                navigate("/users/forget");
+              }}
+            >
+              Quên mật khẩu
+            </button>
           </div>
-          <Button type="primary" htmlType="submit">
+          <button type="primary" htmlType="submit" className="dangnhap">
             Đăng nhập
-          </Button>
+          </button>
           <div className="register-link">
             <p className="cctk">
               Chưa có tài khoản?{" "}
-              <a onClick={() => navigate("/users/register")}>
+              <button
+                className="dangky"
+                onClick={() => {
+                  navigate("/users/register");
+                }}
+              >
+                {" "}
                 Đăng ký
-              </a>
+              </button>
             </p>
           </div>
         </Form>

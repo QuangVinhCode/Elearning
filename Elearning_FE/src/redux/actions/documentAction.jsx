@@ -8,6 +8,8 @@ import {
   DOCUMENT_SET,
   DOCUMENT_UPDATE,
   DOCUMENT_STATE_CLEAR,
+  CENSORSHIP_SET,
+  CENSORSHIPS_SET,
 } from "./actionTypes";
 import DocumentService from "../../services/documentService";
 import PayService from "../../services/payService";
@@ -258,6 +260,108 @@ export const getDocumentsByCategory = (id) => async (dispatch) => {
     payload: false,
   });
 };
+
+export const getCensorshipByDocument = (id) => async (dispatch) => {
+  const service = new DocumentService();
+
+  try {
+    console.log("Lịch sử kiểm duyệt");
+
+    const response = await service.getCensorshipByDocument(id);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: CENSORSHIPS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+};
+
+export const getDocumentUploadByCategory = (id) => async (dispatch) => {
+  const service = new DocumentService();
+
+  try {
+    console.log("Danh sách tài liệu đã tải lên");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getDocumentUploadByCategory(id);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: DOCUMENTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const getDocumentPayByCategory = (id) => async (dispatch) => {
+  const service = new DocumentService();
+
+  try {
+    console.log("Danh sách tài liệu đã thanh toán");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getDocumentPayByCategory(id);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: DOCUMENTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
 export const getAllDocumentRevenueByAccount = (id) => async (dispatch) => {
   const service = new DocumentService();
 

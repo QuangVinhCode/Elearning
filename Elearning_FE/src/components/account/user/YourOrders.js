@@ -1,83 +1,141 @@
 import React, { Component } from "react";
-import "./YourOrders.css";
+import { getDocumentPayByCategory } from "../../../redux/actions/documentAction";
+
+import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
-import {
-  getDocumentsByAccountPay,
-  updateDocument,
-} from "../../../redux/actions/documentAction";
 import { connect } from "react-redux";
-import { Tooltip, Button } from "antd";
-import { FaRegEye } from "react-icons/fa";
+import { Select, Button, Tooltip, Skeleton, Table, Space } from "antd";
+import Column from "antd/lib/table/Column";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 class YourOrders extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+  constructor() {
+    super();
+    this.state = {
+      documents: {}, // Object to store selected dates for each account
+    };
   }
+
   componentDidMount() {
     const storedUserSession = sessionStorage.getItem("userSession");
     const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
-    this.props.getDocumentsByAccountPay(UserSesion.mataikhoan);
+    this.props.getDocumentPayByCategory(UserSesion.mataikhoan);
     const { id } = this.props.router.params;
-    this.props.getDocumentsByAccountPay(id);
+    this.props.getDocumentPayByCategory(id);
   }
   onDocument = (id) => {
     const { navigate } = this.props.router;
     navigate("/users/detail/" + id);
   };
+
   render() {
-    const { documents } = this.props;
+    const { navigate } = this.props.router;
+    const { documents, isLoading } = this.props;
+    const formatCurrency = (value) => {
+      return new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(value);
+    };
+    if (isLoading) {
+      return (
+        <>
+          <ContentHeader
+            navigate={navigate}
+            title="Tài liệu đã thanh toán"
+            className="site-page-header"
+          />
+          <Skeleton active />
+        </>
+      );
+    }
 
     return (
-      <div className="yourorders">
-        <h1 className="mainhead1">Tài Liệu Đã Thanh Toán</h1>
-        <table className="yourorderstable">
-          <thead>
-            <tr>
-              <th scope="col">Tên tài liệu</th>
-              <th scope="col">Mô tả</th>
-              <th scope="col">Tác vụ</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {documents.map((document) => (
-              <tr>
-                <td data-label="tentailieu" className="tentailieu">
-                  <Tooltip placement="topLeft" title={document.tentailieu}>
-                    {document.tentailieu}
-                  </Tooltip>
-                </td>
-
-                <td data-label="mota" className="mota">
-                  <Tooltip placement="topLeft" title={document.mota}>
-                    {document.mota}
-                  </Tooltip>
-                </td>
-                <td data-label="tacvu">
-                  <Button
-                    type="primary"
-                    size="big"
-                    onClick={() => this.onDocument(document.matailieu)}
-                  >
-                    <FaRegEye style={{ marginBottom: 8 }} />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <>
+        <ContentHeader
+          navigate={navigate}
+          title="Tài liệu đã thanh toán"
+          className="site-page-header"
+        />
+        <Table dataSource={documents} size="small" rowKey="matailieu">
+          <Column
+            title="Tên tài liệu"
+            key="tentailieu"
+            dataIndex="tentailieu"
+            width={40}
+            align="center"
+          />
+          <Column
+            title="Giá bán"
+            key="giaban"
+            dataIndex="giaban"
+            width={40}
+            align="center"
+            render={(text) => (
+              <Tooltip placement="topLeft" title={formatCurrency(text)}>
+                {formatCurrency(text)}
+              </Tooltip>
+            )}
+          />
+          <Column
+            title="Thời gian thanh toán"
+            key="thoigianthanhtoan"
+            dataIndex="thoigianthanhtoan"
+            width={40}
+            align="center"
+          />
+          <Column
+            title="Trạng thái"
+            key="trangthai"
+            dataIndex="trangthai"
+            width={40}
+            align="center"
+            render={(text) => (
+              <div>
+                {text === "Thành công" ? (
+                  <span style={{ color: "green" }}>{text}</span>
+                ) : (
+                  <span style={{ color: "red" }}>{text}</span>
+                )}
+              </div>
+            )}
+          />
+          <Column
+            title="Tác vụ "
+            key="action"
+            dataIndex="action"
+            width={40}
+            align="center"
+            render={(_, record) => (
+              <Space size="middle">
+                <Button
+                  key={record.key}
+                  type="primary"
+                  size="small"
+                  onClick={() => this.onDocument(record.matailieu)}
+                >
+                  <EditOutlined style={{ marginRight: 8 }} />
+                  Xem
+                </Button>
+              </Space>
+            )}
+          />
+        </Table>
+      </>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
   documents: state.documentReducer.documents,
+  isLoading: state.commonReducer.isLoading,
 });
 
 const mapDispatchToProps = {
-  getDocumentsByAccountPay,
-  updateDocument,
+  getDocumentPayByCategory,
 };
 
 export default withRouter(

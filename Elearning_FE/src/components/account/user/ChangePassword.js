@@ -25,7 +25,7 @@ const ChangePassword = ({ changePassword }) => {
     }
     if (userSession) {
       const { mataikhoan } = userSession;
-      changePassword(mataikhoan, oldPassword, newPassword,navigate);
+      changePassword(mataikhoan, oldPassword, newPassword, navigate);
     }
     // Xử lý việc cập nhật mật khẩu ở đây
     console.log("Mật khẩu cũ:", oldPassword);
@@ -63,7 +63,7 @@ const ChangePassword = ({ changePassword }) => {
             onChange={(e) => setNewPassword(e.target.value)}
           />
         </div>
-        <div className="form-group" style={{ marginLeft: 410 }}>
+        <div className="form-group" style={{ marginLeft: 382 }}>
           <label htmlFor="confirmNewPass">
             Nhập lại mật khẩu mới <span>*</span>
           </label>

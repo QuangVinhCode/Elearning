@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getRevenues } from "../../../redux/actions/transactionAction";
+import { getTransactionsbyAccount } from "../../../redux/actions/transactionAction";
 
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { Select, Button, message, Skeleton, Table, Space } from "antd";
 import Column from "antd/lib/table/Column";
 
-class Statistics extends Component {
+class TradingHistory extends Component {
   constructor() {
     super();
     this.state = {
@@ -18,7 +18,7 @@ class Statistics extends Component {
   componentDidMount() {
     const storedUserSession = sessionStorage.getItem("userSession");
     const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
-    this.props.getRevenues(UserSesion.mataikhoan);
+    this.props.getTransactionsbyAccount(UserSesion.mataikhoan);
   }
 
   render() {
@@ -30,7 +30,7 @@ class Statistics extends Component {
         <>
           <ContentHeader
             navigate={navigate}
-            title="Thống kê"
+            title="Lịch sử giao dịch"
             className="site-page-header"
           />
           <Skeleton active />
@@ -42,19 +42,28 @@ class Statistics extends Component {
       <>
         <ContentHeader
           navigate={navigate}
-          title="Thống kê"
+          title="Lịch sử giao dịch"
           className="site-page-header"
         />
-        <Table dataSource={transactions} size="small" rowKey="mataikhoan">
+        <Table dataSource={transactions} size="small">
           <Column
-            title="Tiền nạp"
-            key="tiennap"
-            dataIndex="tiennap"
+            title="Mã giao dịch"
+            key="magiaodich"
+            dataIndex="magiaodich"
             width={40}
             align="center"
-            render={(text) => (
+          />
+          <Column
+            title="Số tiền"
+            key="sotien"
+            dataIndex="sotien"
+            width={40}
+            align="center"
+            render={(text, record) => (
               <div>
-                {text === "Nạp tiền" || "Thu nhập" ? (
+                {record.lydo === "Nạp tiền vào tài khoản" ||
+                (record.lydo &&
+                  record.lydo.startsWith("Thu nhập từ bán tài liệu")) ? (
                   <span style={{ color: "green" }}>+ {text}</span>
                 ) : (
                   <span style={{ color: "red" }}>- {text}</span>
@@ -63,43 +72,27 @@ class Statistics extends Component {
             )}
           />
           <Column
-            title="Thanh toán"
-            key="thanhtoan"
-            dataIndex="thanhtoan"
-            width={40}
+            title="Lý do"
+            key="lydo"
+            dataIndex="lydo"
+            width={80}
             align="center"
-            render={(text) => (
-              <div>
-                {text === "Thanh toán" ? (
-                  <span style={{ color: "red" }}>- {text}</span>
-                ) : (
-                  <span style={{ color: "red" }}>- {text}</span>
-                )}
-              </div>
-            )}
           />
           <Column
-            title="Thu nhập"
-            key="thunhap"
-            dataIndex="thunhap"
+            title="Trạng thái "
+            key="trangthai"
+            dataIndex="trangthai"
             width={80}
             align="center"
             render={(text) => (
               <div>
-                {text === "Nạp tiền" || "Thu nhập" ? (
-                  <span style={{ color: "green" }}>+ {text}</span>
+                {text === "Thành công" ? (
+                  <span style={{ color: "green" }}>{text}</span>
                 ) : (
-                  <span style={{ color: "red" }}>- {text}</span>
+                  <span style={{ color: "red" }}>{text}</span>
                 )}
               </div>
             )}
-          />
-          <Column
-            title="Thời gian"
-            key="thangnam"
-            dataIndex="thangnam"
-            width={80}
-            align="center"
           />
         </Table>
       </>
@@ -113,9 +106,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  getRevenues,
+  getTransactionsbyAccount,
 };
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Statistics)
+  connect(mapStateToProps, mapDispatchToProps)(TradingHistory)
 );

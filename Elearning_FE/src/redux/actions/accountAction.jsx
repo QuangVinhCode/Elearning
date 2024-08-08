@@ -24,10 +24,6 @@ export const loginAccount = (object, navigate) => async (dispatch) => {
     console.log(response);
     if (response.status === 200) {
       dispatch({
-        type: ACCOUNT_SET,
-        payload: response.data.taikhoan,
-      });
-      dispatch({
         type: LOG_IN,
         payload: response.data,
       });
@@ -350,6 +346,51 @@ export const updateAccountStatus = (id, status) => async (dispatch) => {
         : error.message,
     });
   }
+  dispatch(getAccountsByPostingStatus());
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const updateAccountStatusBL = (id, status) => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Lấy thông tin tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+
+    const response = await service.updateAccountStatusBL(id, status);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: UPDATE_STATUS,
+        payload: id,
+      });
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "Chặn thành công!",
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch(getAccountsByPostingStatus());
   dispatch({
     type: COMMON_LOADING_SET,
     payload: false,
@@ -493,6 +534,45 @@ export const getAccountsByStatus = () => async (dispatch) => {
   });
 };
 
+export const getAccountsByPostingStatus = () => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Kiểm tra trạng thái tài khoản tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+
+    const response = await service.getAccountsByPostingStatus();
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: ACCOUNTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
 export const getAccountsByStateless = () => async (dispatch) => {
   const service = new AccountService();
 
@@ -580,43 +660,4 @@ export const changePassword =
       navigate("/users/login");
       dispatch({ type: LOG_OUT });
     }
-  };
-
-  export const logout = (navigate) => async (dispatch) => {
-    try {
-      console.log("Đăng xuất Action");
-  
-      // Đặt trạng thái đang tải
-      dispatch({
-        type: COMMON_LOADING_SET,
-        payload: true,
-      });
-  
-      // Xóa thông tin người dùng và token
-      sessionStorage.removeItem("userSession");
-      sessionStorage.removeItem("jwtToken");
-  
-      // Cập nhật state để phản ánh trạng thái đã đăng xuất
-      dispatch({
-        type: LOG_OUT,
-      });
-  
-      // Hiển thị thông báo thành công
-      dispatch({
-        type: COMMON_MESSAGE_SET,
-        payload: "Đăng xuất thành công!",
-      });
-  
-      // Chuyển hướng đến trang đăng nhập
-      navigate("/users/login");
-    } catch (error) {
-      console.log(error);
-    
-    }
-  
-    // Đặt trạng thái không còn tải nữa
-    dispatch({
-      type: COMMON_LOADING_SET,
-      payload: false,
-    });
   };
