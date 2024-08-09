@@ -1,0 +1,16 @@
+package com.vn.edu.elearning.dto;
+
+import lombok.Value;
+
+import java.io.Serializable;
+
+/**
+ * DTO for {@link com.vn.edu.elearning.domain.Baocaobinhluan}
+ */
+@Value
+public class BaocaobinhluanDto implements Serializable {
+    Long mataikhoan;
+    Long mabinhluan;
+    String thoigianthanhtoan;
+    String lydo;
+}
