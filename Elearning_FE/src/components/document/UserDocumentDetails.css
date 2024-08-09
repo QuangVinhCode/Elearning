@@ -11,31 +11,22 @@ button {
 /* Layout styles */
 .container {
   display: flex;
+
   width: 100%;
   height: 100%; /* Full viewport height */
   overflow: hidden; /* Prevent content overflow */
   margin-top: -50px;
 }
 .pdf-viewer-container {
-  width: 100%; /* Adjust the width as needed */
-  max-width: 600px; /* Set a maximum width for the PDF viewer */
-  height: auto;
-  max-height: 900px; /* Set a maximum height for the PDF viewer */
-  overflow: hidden; /* Ensure content does not overflow */
+  width: 100%; /* 50% for the PDF viewer */
   display: flex;
-  justify-content: center;
+  margin-top: 100px;
+  flex-direction: column;
   align-items: center;
-  margin: 0 auto; /* Center the container */
+  justify-content: center;
+  background-color: #fff; /* White background, adjust as needed */
   padding: 10px;
-  background-color: #fff;
   box-sizing: border-box;
-}
-
-.pdf-viewer-container canvas {
-  width: 100% !important; /* Make sure the PDF scales to the container width */
-  height: auto !important; /* Maintain aspect ratio */
-  max-width: 100%; /* Ensure the canvas does not exceed the container width */
-  max-height: 100%; /* Ensure the canvas does not exceed the container height */
 }
 
 .next-button {
@@ -203,6 +194,7 @@ button {
 
 .button-pay {
   background-color: #28a745;
+  margin-top: 10px;
 }
 .button-pay:hover {
   opacity: 0.8;
@@ -283,4 +275,17 @@ button {
 .navigation-buttons p {
   margin: 0 15px;
   font-size: 16px;
+}
+.button-report {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 60px;
+  margin-top: 10px;
+}
+
+.button-report:hover {
+  background-color: #ff7875;
 }

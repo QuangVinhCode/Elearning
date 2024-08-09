@@ -63,14 +63,6 @@ const Login = () => {
               <input type="checkbox" />
               Nhớ mật khẩu
             </label>
-            <button
-              className="quenmatkhau"
-              onClick={() => {
-                navigate("/users/forget");
-              }}
-            >
-              Quên mật khẩu
-            </button>
           </div>
           <button type="primary" htmlType="submit" className="dangnhap">
             Đăng nhập
@@ -89,6 +81,14 @@ const Login = () => {
               </button>
             </p>
           </div>
+          <button
+            className="quenmatkhau"
+            onClick={() => {
+              navigate("/users/forget");
+            }}
+          >
+            Quên mật khẩu
+          </button>
         </Form>
       </div>
     </div>

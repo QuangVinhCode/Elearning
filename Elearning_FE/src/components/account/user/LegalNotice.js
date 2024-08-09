@@ -5,36 +5,46 @@ import {
   getCommentsByAccount,
   deleteComment,
 } from "../../../redux/actions/commentAction";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { ExclamationCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { Modal, Button } from "antd";
-import { MdOutlineDelete } from "react-icons/md";
-import { Tooltip } from "antd";
+import { Tooltip, Skeleton, Table, Space } from "antd";
+import Column from "antd/lib/table/Column";
+import ContentHeader from "../../common/ContentHeader";
+
 class LegalNotice extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      object: {},
+      comments: {},
+      object: null, // Initialize the object state
     };
   }
+
   componentDidMount() {
     const storedUserSession = sessionStorage.getItem("userSession");
-    const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
-    this.props.getCommentsByAccount(UserSesion.mataikhoan);
+    const UserSession = storedUserSession
+      ? JSON.parse(storedUserSession)
+      : null;
+    this.props.getCommentsByAccount(UserSession.mataikhoan);
   }
+
   deleteComment = () => {
-    this.props.deleteComment(
-      this.state.object.mabinhluan,
-      this.state.object.mataikhoan,
-      this.state.object.matailieu
-    );
-    console.log("Delete lesson in ListLesson");
+    const { object } = this.state;
+    if (object) {
+      this.props.deleteComment(
+        object.mabinhluan,
+        object.mataikhoan,
+        object.matailieu
+      );
+      console.log("Deleted comment:", object);
+    }
   };
 
-  onDeleteConfirm = (object) => {
-    this.setState({ ...this.state, object: object });
-    console.log(object);
-    const message = "Bạn có chắt chắn muốn xóa bình luận: " + object.noidung;
+  onDeleteConfirm = (record) => {
+    this.setState({ object: record });
+    console.log(record);
+    const message = "Bạn có chắc chắn muốn xóa bình luận: " + record.noidung;
 
     Modal.confirm({
       title: "Xác nhận",
@@ -45,52 +55,99 @@ class LegalNotice extends Component {
       cancelText: "Hủy",
     });
   };
+
   render() {
-    const { comments } = this.props;
+    const { navigate } = this.props.router;
+    const { comments, isLoading } = this.props;
+
+    if (isLoading) {
+      return (
+        <>
+          <ContentHeader
+            navigate={navigate}
+            title="Lịch sử bình luận"
+            className="site-page-header"
+          />
+          <Skeleton active />
+        </>
+      );
+    }
 
     return (
-      <div className="legalnotice">
-        <h1 className="mainhead1">Nội Dung Đã Bình Luận</h1>
-        <table className="yourorderstable">
-          <thead>
-            <tr>
-              <th scope="col">Tên tài liệu</th>
-              <th scope="col">Nội dung đã bình luận</th>
-              <th scope="col">Thời gian bình luận</th>
-              <th scope="col">Tác vụ</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {comments.map((comment) => (
-              <tr>
-                <td data-label="tentailieu">
-                  <Tooltip placement="topLeft" title={comment.tentailieu}>
-                    {comment.tentailieu}
-                  </Tooltip>
-                </td>
-                <td data-label="ndbinhluan">{comment.noidung}</td>
-                <td data-label="thoigianbl">{comment.thoigianbinhluan}</td>
-                <td data-label="tacvu">
-                  <Button
-                    type="primary"
-                    danger
-                    size="big"
-                    onClick={() => this.onDeleteConfirm(comment)}
-                  >
-                    <MdOutlineDelete style={{ marginBottom: 8 }} />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <>
+        <ContentHeader
+          navigate={navigate}
+          title="Lịch sử bình luận"
+          className="site-page-header"
+        />
+        <Table dataSource={comments} size="small">
+          <Column
+            title="Mã bình luận"
+            key="mabinhluan"
+            dataIndex="mabinhluan"
+            width={40}
+            align="center"
+          />
+          <Column
+            title="Nội dung"
+            key="noidung"
+            dataIndex="noidung"
+            width={40}
+            align="center"
+          />
+          <Column
+            title="Thời gian bình luận"
+            key="thoigianbinhluan"
+            dataIndex="thoigianbinhluan"
+            width={80}
+            align="center"
+          />
+          <Column
+            title="Trạng thái "
+            key="trangthai"
+            dataIndex="trangthai"
+            width={80}
+            align="center"
+            render={(text) => (
+              <div>
+                {text === "Thành công" ? (
+                  <span style={{ color: "green" }}>{text}</span>
+                ) : (
+                  <span style={{ color: "red" }}>{text}</span>
+                )}
+              </div>
+            )}
+          />
+          <Column
+            title="Tác vụ"
+            key="action"
+            dataIndex="action"
+            width={80}
+            align="center"
+            render={(_, record) => (
+              <Space size="middle">
+                <Button
+                  key={record.key}
+                  type="primary"
+                  danger
+                  size="small"
+                  onClick={() => this.onDeleteConfirm(record)}
+                >
+                  <DeleteOutlined style={{ marginRight: 8 }} />
+                  Xóa
+                </Button>
+              </Space>
+            )}
+          />
+        </Table>
+      </>
     );
   }
 }
+
 const mapStateToProps = (state) => ({
   comments: state.commentReducer.comments,
+  isLoading: state.commentReducer.isLoading, // Make sure to include isLoading in your reducer
 });
 
 const mapDispatchToProps = {

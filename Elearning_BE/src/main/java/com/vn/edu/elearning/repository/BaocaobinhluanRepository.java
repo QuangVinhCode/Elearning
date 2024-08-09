@@ -2,9 +2,12 @@ package com.vn.edu.elearning.repository;
 
 import com.vn.edu.elearning.domain.Baocaobinhluan;
 import com.vn.edu.elearning.domain.Mabaocaobinhluan;
+import com.vn.edu.elearning.dto.BaocaotailieuDto;
 import com.vn.edu.elearning.dto.TheodoibaocaoDto;
 import com.vn.edu.elearning.dto.ThongtinbaocaobinhluanDto;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -31,5 +34,8 @@ public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, 
 
     Baocaobinhluan findByTaikhoan_MataikhoanAndBinhluan_Mabinhluan(Long mataikhoan, Long mabinhluan);
 
-
+    @Modifying
+    @Transactional
+    @Query("UPDATE Baocaobinhluan b SET b.trangthai = :trangthai WHERE b.binhluan.mabinhluan = :mabinhluan")
+    void updateTrangthaiByMabinhluan(String trangthai, Long mabinhluan);
 }

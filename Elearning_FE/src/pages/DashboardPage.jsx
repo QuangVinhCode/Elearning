@@ -24,7 +24,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { LOG_OUT } from "../redux/actions/actionTypes";
 import { setError, setMessage } from "../redux/actions/commonAction";
 import UserManage from "../components/account/admin/UserManage";
-import AccountBlocked from "../components/account/admin/AccountBlocked";
+import CommentReport from "../components/account/admin/CommentReport";
+import DocumentReport from "../components/account/admin/DocumentReport";
+import TradingHistoryAdmin from "../components/document/TradingHistoryAdmin";
+import DocumentReportNumber from "../components/account/admin/DocumentReportNumber";
+import CommentReportNumber from "../components/account/admin/CommentReportNumber";
+import StatisticsAdmin from "../components/document/StatisticsAdmin";
 const { Header, Sider, Content } = Layout;
 
 function DashboardPage() {
@@ -129,6 +134,52 @@ function DashboardPage() {
             },
             {
               key: "7",
+              icon: <MdOutlinePlayLesson />,
+              label: "Quản lý báo cáo",
+              children: [
+                {
+                  key: "71",
+                  icon: <MdFormatListBulleted />,
+                  label: "DS báo cáo tài liệu",
+                  onClick: () => navigate("/dashboard/account/documentreport"),
+                },
+                {
+                  key: "72",
+                  icon: <MdAddCircleOutline />,
+                  label: "DS báo cáo bình luận",
+                  onClick: () => navigate("/dashboard/account/commentreport"),
+                },
+                {
+                  key: "73",
+                  icon: <MdAddCircleOutline />,
+                  label: "DS số lần báo cáo bình luận",
+                  onClick: () =>
+                    navigate("/dashboard/account/commentreportnumber"),
+                },
+                {
+                  key: "74",
+                  icon: <MdAddCircleOutline />,
+                  label: "DS số lần báo cáo tài liệu",
+                  onClick: () =>
+                    navigate("/dashboard/account/documentreportnumber"),
+                },
+              ],
+            },
+            {
+              key: "8",
+              icon: <MdOutlinePlayLesson />,
+              label: "Lịch sử giao dịch admin",
+              onClick: () =>
+                navigate("/dashboard/document/tradinghistoryadmin"),
+            },
+            {
+              key: "9",
+              icon: <MdOutlinePlayLesson />,
+              label: "Thống kê",
+              onClick: () => navigate("/dashboard/document/statisticsadmin"),
+            },
+            {
+              key: "10",
               icon: <MdLogout />,
               label: "Đăng xuất",
               onClick: handleLogout,
@@ -193,9 +244,33 @@ function DashboardPage() {
               <Route path="/document/list" element={<ListDocument />}></Route>
               <Route path="/document/censoring" element={<Censoring />}></Route>
               <Route
+                path="/document/tradinghistoryadmin"
+                element={<TradingHistoryAdmin />}
+              ></Route>
+              <Route
                 path="/account/usermanage"
                 element={<UserManage />}
-              ></Route>         
+              ></Route>
+              <Route
+                path="/account/documentreport"
+                element={<DocumentReport />}
+              ></Route>
+              <Route
+                path="/account/commentreport"
+                element={<CommentReport />}
+              ></Route>
+              <Route
+                path="/account/documentreportnumber"
+                element={<DocumentReportNumber />}
+              ></Route>
+              <Route
+                path="/account/commentreportnumber"
+                element={<CommentReportNumber />}
+              ></Route>
+              <Route
+                path="/document/statisticsadmin"
+                element={<StatisticsAdmin />}
+              ></Route>
             </Routes>
             <Outlet></Outlet>
           </div>

@@ -170,8 +170,7 @@ public class TailieuController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteDocument(@PathVariable("id") Long id)
-    {
+    public ResponseEntity<?> deleteDocument(@PathVariable("id") Long id) {
 
         tailieuService.deleteById(id);
 

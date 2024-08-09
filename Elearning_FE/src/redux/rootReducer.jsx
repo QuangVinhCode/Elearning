@@ -6,6 +6,7 @@ import commentReducer from "./reducers/commentReducer";
 import accountReducer from "./reducers/accountReducer";
 import transactionReducer from "./reducers/transactionReducer";
 import censorshipReducer from "./reducers/censorshipReducer";
+import reportReducer from "./reducers/reportReducer";
 const rootReducer = combineReducers({
   categoryReducer: categoryReducer,
   accountReducer: accountReducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   commentReducer: commentReducer,
   transactionReducer: transactionReducer,
   censorshipReducer: censorshipReducer,
+  reportReducer: reportReducer,
 });
 
 export default rootReducer;

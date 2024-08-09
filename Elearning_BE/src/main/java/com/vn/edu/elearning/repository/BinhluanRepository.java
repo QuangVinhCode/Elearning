@@ -1,9 +1,10 @@
 package com.vn.edu.elearning.repository;
 
 import com.vn.edu.elearning.domain.Binhluan;
-import com.vn.edu.elearning.dto.BinhluanConTheoTailieuDto;
 import com.vn.edu.elearning.dto.BinhluanTheoTailieuDto;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,11 +17,15 @@ public interface BinhluanRepository extends JpaRepository<Binhluan, Long> {
             "AND b.trangthai = 'Thành công'")
     List<BinhluanTheoTailieuDto> findBinhluansByMatailieu(@Param("matailieu") Long matailieu);
 
-    @Query("SELECT new com.vn.edu.elearning.dto.BinhluanConTheoTailieuDto(b.mabinhluan, b.taikhoan.mataikhoan, b.taikhoan.tendangnhap, b.noidung, b.trangthai, b.thoigianbinhluan) " +
-            "FROM Binhluan b " +
-            "WHERE b.matbinhluandatraloi = :matbinhluandatraloi")
-    List<BinhluanConTheoTailieuDto> findBinhluansByMatbinhluandatraloi(@Param("matbinhluandatraloi") Long matbinhluandatraloi);
-
     List<Binhluan> findByTaikhoan_Mataikhoan(Long mataikhoan);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE Binhluan b SET b.trangthai = :status WHERE b.mabinhluan = :mabinhluan")
+    int updateCommentStatus(Long mabinhluan, String status);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Binhluan b SET b.trangthai = :status WHERE b.matbinhluandatraloi = :mabinhluan AND b.trangthai = :parentStatus")
+    int updateRepliesStatus(Long mabinhluan, String status, String parentStatus);
 }

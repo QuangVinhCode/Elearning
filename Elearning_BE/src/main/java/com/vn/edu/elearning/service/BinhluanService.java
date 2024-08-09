@@ -3,7 +3,6 @@ package com.vn.edu.elearning.service;
 import com.vn.edu.elearning.domain.Binhluan;
 import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.domain.Tailieu;
-import com.vn.edu.elearning.dto.BinhluanConTheoTailieuDto;
 import com.vn.edu.elearning.dto.BinhluanDto;
 import com.vn.edu.elearning.dto.BinhluanTheoTailieuDto;
 import com.vn.edu.elearning.exeception.DanhmucException;
@@ -57,10 +56,6 @@ public class BinhluanService {
         return binhluanRepository.findBinhluansByMatailieu(matl);
     }
 
-    public List<BinhluanConTheoTailieuDto> findBinhluanconsByMatailieu(Long mabl) {
-        return binhluanRepository.findBinhluansByMatbinhluandatraloi(mabl);
-    }
-
     public Binhluan findById(Long id) {
         Optional<Binhluan> found = binhluanRepository.findById(id);
 
@@ -75,5 +70,16 @@ public class BinhluanService {
 
         Binhluan existed = findById(id);
         binhluanRepository.delete(existed);
+    }
+
+    public void blockCommentAndReplies(Long mabinhluan) {
+        // Attempt to update the main comment's status
+        int updated = binhluanRepository.updateCommentStatus(mabinhluan, "Chặn");
+
+        // Only proceed if the comment status update was successful
+        if (updated > 0) {
+            // Update the status of all replies only if the main comment status was successfully updated
+            binhluanRepository.updateRepliesStatus(mabinhluan, "Chặn", "Thành công");
+        }
     }
 }

@@ -317,11 +317,6 @@ export const getAccount = (id) => async (dispatch) => {
   try {
     console.log("Lấy thông tin tài khoản Action");
 
-    dispatch({
-      type: COMMON_LOADING_SET,
-      payload: true,
-    });
-
     const response = await service.getAccount(id);
     console.log(response);
     if (response.status === 200) {
@@ -329,15 +324,21 @@ export const getAccount = (id) => async (dispatch) => {
         type: ACCOUNT_SET,
         payload: response.data,
       });
-    } 
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
   } catch (error) {
-    console.log("error" + error);
-    
+    console.log(error);
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
   }
-  dispatch({
-    type: COMMON_LOADING_SET,
-    payload: false,
-  });
 };
 
 export const updateAccountStatus = (id, status) => async (dispatch) => {

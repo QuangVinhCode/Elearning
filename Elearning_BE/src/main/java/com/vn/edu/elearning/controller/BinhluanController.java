@@ -47,11 +47,6 @@ public class BinhluanController {
         return new ResponseEntity<>(binhluanService.findBinhluansByMatailieu(id),HttpStatus.OK);
     }
 
-    @GetMapping("/document-child/{id}")
-    public ResponseEntity<?> getCommentChildByDocument(@PathVariable("id") Long id){
-        return new ResponseEntity<>(binhluanService.findBinhluanconsByMatailieu(id),HttpStatus.OK);
-    }
-
     @GetMapping("/{id}/get")
     public  ResponseEntity<?> getComment(@PathVariable("id") Long id){
         return new ResponseEntity<>(binhluanService.findById(id),HttpStatus.OK);
@@ -62,6 +57,12 @@ public class BinhluanController {
     {
         binhluanService.deleteById(mabl);
         return  new ResponseEntity<>("Xóa thành công",HttpStatus.OK);
+    }
+
+    @PatchMapping("/block/{mabinhluan}")
+    public ResponseEntity<?> blockCommentAndReplies(@PathVariable Long mabinhluan) {
+        binhluanService.blockCommentAndReplies(mabinhluan);
+        return  new ResponseEntity<>("Chặn thành công",HttpStatus.OK);
     }
 
 }

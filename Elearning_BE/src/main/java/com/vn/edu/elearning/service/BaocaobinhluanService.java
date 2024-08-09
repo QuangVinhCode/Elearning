@@ -38,6 +38,7 @@ public class BaocaobinhluanService {
         entity.setTaikhoan(taikhoan);
         entity.setBinhluan(binhluan);
         entity.setMabaocaobinhluan(mabaocaobinhluan);
+        entity.setTrangthai("Chờ xem xét");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
         entity.setThoigianbaocao(LocalDateTime.now().format(formatter));
         return baocaobinhluanRepository.save(entity);
@@ -58,19 +59,7 @@ public class BaocaobinhluanService {
         return baocaobinhluanRepository.findByTaikhoan_Mataikhoan(matl);
     }
 
-//    public Baocaotailieu findById(Long id) {
-//        Optional<Baocaotailieu> found = baocaotailieuRepository.findById(id);
-//
-//        if (!found.isPresent())
-//        {
-//            throw new DanhmucException("Bình luận có id "+ id + "không tồn tại");
-//        }
-//        return found.get();
-//    }
-//
-//    public void  deleteById(Long id){
-//
-//        Binhluan existed = findById(id);
-//        baocaotailieuRepository.delete(existed);
-//    }
+    public void updateTrangthaiByMabinhluan(Long mabl,String trangthai) {
+        baocaobinhluanRepository.updateTrangthaiByMabinhluan(trangthai,mabl);
+    }
 }

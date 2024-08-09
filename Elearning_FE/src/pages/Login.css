@@ -139,6 +139,7 @@
   border: none; /* Không viền */
   border-radius: 10px; /* Bo tròn viền */
   transition: background-color 0.3s, transform 0.3s; /* Hiệu ứng chuyển đổi */
+  margin-left: 90px;
 }
 .quenmatkhau:hover {
   background-color: #45a049; /* Màu nền khi di chuột qua */

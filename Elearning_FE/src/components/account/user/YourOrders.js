@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { Select, Button, Tooltip, Skeleton, Table, Space } from "antd";
 import Column from "antd/lib/table/Column";
 import {
-  EditOutlined,
+  EyeOutlined,
   DeleteOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
@@ -117,7 +117,7 @@ class YourOrders extends Component {
                   size="small"
                   onClick={() => this.onDocument(record.matailieu)}
                 >
-                  <EditOutlined style={{ marginRight: 8 }} />
+                  <EyeOutlined style={{ marginRight: 8 }} />
                   Xem
                 </Button>
               </Space>

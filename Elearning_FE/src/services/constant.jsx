@@ -13,3 +13,5 @@ export const API_COMMENT = "http://localhost:8080/api/v1/binhluan";
 export const API_PAYMENT = "http://localhost:8080/api/v1/thanhtoan";
 
 export const API_TRANSACTION = "http://localhost:8080/api/v1/giaodich";
+
+export const API_REPORT = "http://localhost:8080/api/v1/baocao";

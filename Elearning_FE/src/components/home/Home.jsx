@@ -1,58 +1,74 @@
 import React, { Component } from "react";
-import withRouter from "../../helpers/withRouter";
-import { connect } from "react-redux";
-import { getCategories } from "../../redux/actions/categoryAction";
-import { getDocuments } from "../../redux/actions/documentAction";
-import Column from "antd/lib/table/Column";
+import { getRevenues } from "../../redux/actions/transactionAction";
 import ContentHeader from "../common/ContentHeader";
-import { Table } from "antd";
-class Home extends Component {
-  componentDidMount = () => {
-    this.props.getCategories();
-    this.props.getDocuments();
-    console.log("Did Mount");
-  };
+import withRouter from "../../helpers/withRouter";
+
+import { connect } from "react-redux";
+import { Select, Button, message, Skeleton, Table, Space } from "antd";
+import Column from "antd/lib/table/Column";
+
+class Statistics extends Component {
+  constructor() {
+    super();
+    this.state = {
+      transactions: {}, // Object to store selected dates for each account
+    };
+  }
+
+  componentDidMount() {
+    const storedUserSession = sessionStorage.getItem("userSession");
+    const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
+    this.props.getRevenues(UserSesion.mataikhoan);
+  }
+
   render() {
     const { navigate } = this.props.router;
-    const { objects, documents } = this.props;
+    const { transactions, isLoading } = this.props;
+
+    if (isLoading) {
+      return (
+        <>
+          <ContentHeader
+            navigate={navigate}
+            title="Doanh thu"
+            className="site-page-header"
+          />
+          <Skeleton active />
+        </>
+      );
+    }
+
     return (
       <>
         <ContentHeader
           navigate={navigate}
-          title="Danh sách danh mục"
+          title="Doanh thu"
           className="site-page-header"
-        ></ContentHeader>
-        <Table dataSource={objects} size="small" rowKey="madanhmuc">
+        />
+        <Table dataSource={transactions} size="small" rowKey="mataikhoan">
           <Column
-            title="Mã danh mục"
-            key="madanhmuc"
-            dataIndex="madanhmuc"
-            width={40}
-            align="center"
-          ></Column>
-          <Column
-            title="Tên danh mục"
-            key="tendanhmuc"
-            dataIndex="tendanhmuc"
+            title="Thu nhập"
+            key="phiquangtri"
+            dataIndex="phiquangtri"
             width={80}
             align="center"
-          ></Column>
-        </Table>
-        <Table dataSource={documents} size="small" rowKey="matailieu">
+            render={(text) => (
+              <div>
+                {text === "Nạp tiền" || "Thu nhập" ? (
+                  <span style={{ color: "green" }}>+ {text}</span>
+                ) : (
+                  <span style={{ color: "red" }}>- {text}</span>
+                )}
+              </div>
+            )}
+          />
           <Column
-            title="Mã tài liệu"
-            key="matailieu"
-            dataIndex="matailieu"
-            width={40}
-            align="center"
-          ></Column>
-          <Column
-            title="Tên tài liệu"
-            key="tentailieu"
-            dataIndex="tentailieu"
+            title="Thời gian"
+            key="thangnam"
+            dataIndex="thangnam"
             width={80}
             align="center"
-          ></Column>
+          />
         </Table>
       </>
     );
@@ -60,14 +76,14 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  objects: state.categoryReducer.objects,
-  documents: state.documentReducer.documents,
+  transactions: state.transactionReducer.transactions,
   isLoading: state.commonReducer.isLoading,
 });
 
 const mapDispatchToProps = {
-  getCategories,
-  getDocuments,
+  getRevenues,
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Statistics)
+);

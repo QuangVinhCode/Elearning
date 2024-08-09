@@ -4,6 +4,7 @@ import com.vn.edu.elearning.domain.*;
 import com.vn.edu.elearning.dto.*;
 import com.vn.edu.elearning.exeception.BaocaoException;
 import com.vn.edu.elearning.exeception.DanhmucException;
+import com.vn.edu.elearning.exeception.TailieuException;
 import com.vn.edu.elearning.repository.BaocaotailieuRepository;
 import com.vn.edu.elearning.repository.BinhluanRepository;
 import org.springframework.beans.BeanUtils;
@@ -40,6 +41,7 @@ public class BaocaotailieuService {
         entity.setTaikhoan(taikhoan);
         entity.setTailieu(tailieu);
         entity.setMabaocaotailieu(mabaocaotailieu);
+        entity.setTrangthai("Chờ xem xét");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
         entity.setThoigianbaocao(LocalDateTime.now().format(formatter));
         return baocaotailieuRepository.save(entity);
@@ -60,19 +62,7 @@ public class BaocaotailieuService {
         return baocaotailieuRepository.findByTaikhoan_Mataikhoan(matl);
     }
 
-//    public Baocaotailieu findById(Long id) {
-//        Optional<Baocaotailieu> found = baocaotailieuRepository.findById(id);
-//
-//        if (!found.isPresent())
-//        {
-//            throw new DanhmucException("Bình luận có id "+ id + "không tồn tại");
-//        }
-//        return found.get();
-//    }
-//
-//    public void  deleteById(Long id){
-//
-//        Binhluan existed = findById(id);
-//        baocaotailieuRepository.delete(existed);
-//    }
+    public void updateTrangthaiByMatailieu(Long matl,String trangthai) {
+        baocaotailieuRepository.updateTrangthaiByMatailieu(trangthai,matl);
+    }
 }

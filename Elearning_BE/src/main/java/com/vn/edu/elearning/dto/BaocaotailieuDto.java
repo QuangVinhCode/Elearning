@@ -13,4 +13,6 @@ public class BaocaotailieuDto implements Serializable {
     Long matailieu;
     String thoigianbaocao;
     String lydo;
+    String trangthai;
+
 }

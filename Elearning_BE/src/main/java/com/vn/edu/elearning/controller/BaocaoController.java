@@ -86,4 +86,15 @@ public class BaocaoController {
         return new ResponseEntity<>(baocaobinhluanService.findReportMonitor(),HttpStatus.OK);
     }
 
+    @PatchMapping("/trangthai-tailieu/{id}")
+    public ResponseEntity<?> updateDocumentReportStatus(@PathVariable("id") Long id){
+        baocaotailieuService.updateTrangthaiByMatailieu(id,"Đã xem xét");
+        return new ResponseEntity<>("Xác nhận",HttpStatus.OK);
+    }
+
+    @PatchMapping("/trangthai-binhluan/{id}")
+    public ResponseEntity<?> updateCommentReportStatus(@PathVariable("id") Long id){
+        baocaobinhluanService.updateTrangthaiByMabinhluan(id,"Đã xem xét");
+        return new ResponseEntity<>("Xác nhận",HttpStatus.OK);
+    }
 }

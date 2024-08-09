@@ -46,9 +46,6 @@ public class KiemduyetController {
        Lichsukiemduyet entity = kiemduyetService.save(dto);
         Taikhoan taikhoan = taikhoanService.findByPostedDocuments(dto.getMatailieu());
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
-        Madangtai madangtai = new Madangtai(taikhoan.getMataikhoan(),dto.getMatailieu());
-        System.out.println("tai khoan " + taikhoan.getTendangnhap());
-        System.out.println("madangtai " + madangtai.getMataikhoan());
         if (entity.getKetqua().equals("Đã duyệt"))
         {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
@@ -59,6 +56,28 @@ public class KiemduyetController {
             tailieuService.updateTrangthai("Cần chỉnh sửa",entity.getTailieu().getMatailieu());
         }
 
+
+        return new ResponseEntity<>(entity, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/re-censorship")
+    public ResponseEntity<?> updateStatusReCensorship(@Validated @RequestBody LichsukiemduyetDto dto){
+        Lichsukiemduyet entity = kiemduyetService.save(dto);
+        Taikhoan taikhoan = taikhoanService.findByPostedDocuments(dto.getMatailieu());
+        Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
+        kiemduyetService.updateCensorshipTime("",taikhoan,tailieu);
+        tailieuService.updateTrangthai("Cần chỉnh sửa",entity.getTailieu().getMatailieu());
+
+        return new ResponseEntity<>(entity, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/ban")
+    public ResponseEntity<?> updateStatusBan(@Validated @RequestBody LichsukiemduyetDto dto){
+        Lichsukiemduyet entity = kiemduyetService.save(dto);
+        Taikhoan taikhoan = taikhoanService.findByPostedDocuments(dto.getMatailieu());
+        Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
+        kiemduyetService.updateCensorshipTime("",taikhoan,tailieu);
+        tailieuService.updateTrangthai("Cấm",entity.getTailieu().getMatailieu());
 
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }

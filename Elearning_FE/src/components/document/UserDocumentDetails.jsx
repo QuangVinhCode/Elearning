@@ -12,10 +12,16 @@ import {
   getCommentsByDocument,
   insertComment,
 } from "../../redux/actions/commentAction";
+import {
+  insertReportDocument,
+  getReportDocuments,
+} from "../../redux/actions/reportAction";
+
 import DocumentService from "../../services/documentService";
 import PayService from "../../services/payService";
 import "./UserDocumentDetails.css";
-import { Comment, message, Modal } from "antd";
+import { Comment, message, Modal, Form, Select, Button } from "antd";
+
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import CommentDocument from "./CommentDocument";
 import ListComment from "./ListComment";
@@ -39,13 +45,17 @@ class UserDocumentDetails extends Component {
       submitting: false,
       pdfUrl: null,
       goToPage: "",
+      selectedError: "",
+      additionalContent: "",
       documentNotFound: false,
+      open: false,
     };
     this.intervalId = null;
   }
 
   componentDidMount() {
     this.loadDocument();
+    this.props.getReportDocuments();
   }
   componentDidUpdate(prevProps) {
     const { id } = this.props.router.params;
@@ -197,6 +207,37 @@ class UserDocumentDetails extends Component {
       }
     }
   };
+
+  handleConfirmReport = () => {
+    const { selectedError, additionalContent } = this.state;
+    const { document } = this.props;
+    const currentDateTime = new Date();
+    const day = String(currentDateTime.getDate()).padStart(2, "0");
+    const month = String(currentDateTime.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+    const year = currentDateTime.getFullYear();
+    const hours = String(currentDateTime.getHours()).padStart(2, "0");
+    const minutes = String(currentDateTime.getMinutes()).padStart(2, "0");
+    const formattedDateTime = `${hours}:${minutes} ${day}/${month}/${year}`;
+    if (!selectedError) {
+      message.error("Vui lòng chọn lỗi tài liệu.");
+      return;
+    }
+
+    const content = `${selectedError}${
+      additionalContent ? ": " + additionalContent : ""
+    }`;
+    const report = {
+      lydo: content,
+      matailieu: document.matailieu,
+      mataikhoan: this.state.mataikhoan,
+      thoigianbaocao: formattedDateTime,
+    };
+    console.log("Tên tài liệu lỗi " + document.tentailieu);
+    console.log("Tên tài liệu lỗi " + content);
+    this.props.insertReportDocument(report);
+    this.setState({ selectedError: null, additionalContent: "" });
+  };
+
   handleGoToPage = () => {
     const { goToPage } = this.state;
     const pageNumber = parseInt(goToPage, 10);
@@ -252,6 +293,17 @@ class UserDocumentDetails extends Component {
         : numPages;
     this.setState({ maxPages, numPages });
   };
+  showReportModal = (value) => {
+    this.setState({ ...this.state, document: value, open: true });
+  };
+  handleErrorChange = (value) => {
+    this.setState({ selectedError: value });
+  };
+
+  handleCancelReport = () => {
+    this.setState({ reportModalVisible: false, selectedViolation: null });
+  };
+
   render() {
     const { document, comments } = this.props;
     const {
@@ -265,15 +317,23 @@ class UserDocumentDetails extends Component {
       goToPage,
       reset,
     } = this.state;
-   
-    const jwtToken = sessionStorage.getItem("jwtToken");
-    const sessionToken = jwtToken ? JSON.parse(jwtToken) : null;
-    if (!sessionToken) {
-      return <Navigate to="/users/login" />;
-    }
+    const errorOptions = [
+      "Tài liệu không đầy đủ thông tin",
+      "Tài liệu vi phạm bản quyền",
+      "Nội dung không phù hợp",
+      "Tài liệu không rõ ràng",
+      "Tài liệu bị lỗi định dạng",
+      "Tài liệu trùng lặp",
+      "Tài liệu không thể tải xuống",
+      "Tài liệu chứa thông tin sai lệch",
+      "Tài liệu có chất lượng hình ảnh kém",
+    ];
+    const { selectedError, open } = this.state;
     if (documentNotFound) {
       return <Navigate to="/404" />;
     }
+    const jwtToken = sessionStorage.getItem("jwtToken");
+    const sessionToken = jwtToken ? JSON.parse(jwtToken) : null;
     // Format giá tiền thành tiền Việt Nam
     const formattedPrice = new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -352,6 +412,9 @@ class UserDocumentDetails extends Component {
                 Thanh toán
               </button>
             )}
+            <button className="button-report" onClick={this.showReportModal}>
+              Báo cáo
+            </button>
           </div>
           <div>
             <div className="comment-section">
@@ -370,6 +433,55 @@ class UserDocumentDetails extends Component {
               />
             </div>
           </div>
+          <Modal
+            title="Báo cáo vi phạm"
+            visible={open}
+            onCancel={() => {
+              this.setState({ open: false, selectedError: "" });
+            }}
+            footer={[
+              <Button
+                key="back"
+                onClick={() => {
+                  this.setState({ open: false, selectedError: "" });
+                }}
+              >
+                Đóng
+              </Button>,
+              <Button
+                key="submit"
+                type="primary"
+                onClick={this.handleConfirmReport}
+              >
+                Xác nhận
+              </Button>,
+            ]}
+          >
+            <p>Vui lòng chọn loại vi phạm:</p>
+            <Form
+              labelCol={{
+                span: 6,
+              }}
+              wrapperCol={{
+                span: 14,
+              }}
+              layout="horizontal"
+            >
+              <Form.Item label="Lỗi tài liệu">
+                <Select
+                  placeholder="Chọn lỗi tài liệu"
+                  value={selectedError}
+                  onChange={this.handleErrorChange}
+                >
+                  {errorOptions.map((error, index) => (
+                    <Select.Option key={index} value={error}>
+                      {error}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
       </div>
     );
@@ -380,6 +492,7 @@ const mapStateToProps = (state) => ({
   document: state.documentReducer.document,
   comments: state.commentReducer.comments,
   account: state.accountReducer.account,
+  reports: state.reportReducer.reports,
 });
 
 const mapDispatchToProps = {
@@ -389,6 +502,8 @@ const mapDispatchToProps = {
   insertComment,
   getCommentsByDocument,
   clearDocumentState,
+  getReportDocuments,
+  insertReportDocument,
 };
 
 export default withRouter(

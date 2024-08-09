@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { getDocumentUploadByCategory } from "../../../redux/actions/documentAction";
+import {
+  getDocumentUploadByCategory,
+  updateDocument,
+} from "../../../redux/actions/documentAction";
 import DocumentForm from "../../document/DocumentForm";
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
@@ -10,6 +13,7 @@ import {
   EditOutlined,
   DeleteOutlined,
   ExclamationCircleOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 import CensorshipHistory from "../../document/CensorshipHistory";
 class DocumentsSold extends Component {
@@ -17,7 +21,8 @@ class DocumentsSold extends Component {
     super();
     this.state = {
       open: false,
-      documents: {
+      open1: false,
+      document: {
         matailieu: "",
         tentailieu: "",
         mota: "",
@@ -83,19 +88,6 @@ class DocumentsSold extends Component {
     const { navigate } = this.props.router;
     const { documents, isLoading } = this.props;
 
-    if (isLoading) {
-      return (
-        <>
-          <ContentHeader
-            navigate={navigate}
-            title="Tài liệu đã tải lên"
-            className="site-page-header"
-          />
-          <Skeleton active />
-        </>
-      );
-    }
-
     return (
       <>
         <ContentHeader
@@ -122,10 +114,10 @@ class DocumentsSold extends Component {
                 {record.trangthai === "Đã kiểm duyệt" && (
                   <span style={{ color: "green" }}>{text}</span>
                 )}
-                {record.trangthai === "Chưa kiểm duyệt" && (
+                {record.trangthai === "Chờ kiểm duyệt" && (
                   <span style={{ color: "yellow" }}>{text}</span>
                 )}
-                {record.trangthai === "Lỗi kiểm duyệt" && (
+                {record.trangthai === "Cần chỉnh sửa" && (
                   <span style={{ color: "red" }}>{text}</span>
                 )}
               </div>
@@ -143,55 +135,60 @@ class DocumentsSold extends Component {
             title="Thời gian được duyệt"
             key="thoigianduocduyet"
             dataIndex="thoigianduocduyet"
-            width={40}
+            width={60}
             align="center"
           />
           <Column
-            title="Tác vụ "
+            title="Tác vụ"
             key="action"
             dataIndex="action"
-            width={40}
+            width={20}
             align="center"
             render={(_, record) => (
               <Space size="middle">
-                <Button
-                  key={record.key}
-                  type="primary"
-                  size="small"
-                  onClick={() => this.onDetails(record)}
-                >
-                  <EditOutlined style={{ marginRight: 8 }} />
-                  Xem
-                </Button>
-                <Button
-                  key={record.key}
-                  type="primary"
-                  size="small"
-                  onClick={() => this.onEdit(record)}
-                >
-                  <EditOutlined style={{ marginRight: 8 }} />
-                  Sửa
-                </Button>
-                <Button
-                  key={record.key}
-                  type="primary"
-                  danger
-                  size="small"
-                  onClick={() => this.onDeleteConfirm(record)}
-                >
-                  <DeleteOutlined style={{ marginRight: 8 }} />
-                  Xóa
-                </Button>
-                <Button
-                  key={record.key}
-                  type="primary"
-                  danger
-                  size="small"
-                  onClick={() => this.openHistory(record)}
-                >
-                  <DeleteOutlined style={{ marginRight: 8 }} />
-                  Lịch sử
-                </Button>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <Space>
+                    <Button
+                      key={record.key}
+                      type="primary"
+                      size="small"
+                      onClick={() => this.onDetails(record)}
+                    >
+                      <EyeOutlined style={{ marginRight: 8 }} />
+                      Xem
+                    </Button>
+                    <Button
+                      key={record.key}
+                      type="primary"
+                      size="small"
+                      onClick={() => this.onEdit(record)}
+                    >
+                      <EditOutlined style={{ marginRight: 8 }} />
+                      Sửa
+                    </Button>
+                  </Space>
+                  <Space style={{ marginTop: 8 }}>
+                    <Button
+                      key={record.key}
+                      type="primary"
+                      danger
+                      size="small"
+                      onClick={() => this.onDeleteConfirm(record)}
+                    >
+                      <DeleteOutlined style={{ marginRight: 8 }} />
+                      Xóa
+                    </Button>
+                    <Button
+                      key={record.key}
+                      type="primary"
+                      size="small"
+                      onClick={() => this.openHistory(record)}
+                    >
+                      <EyeOutlined style={{ marginRight: 8 }} />
+                      Lịch sử
+                    </Button>
+                  </Space>
+                </div>
               </Space>
             )}
           />
@@ -205,16 +202,15 @@ class DocumentsSold extends Component {
             }}
           />
         )}
-        {this.state.open1 && (
-          <DocumentForm
-            document={this.state.document.matailieu}
-            open={this.state.open1}
-            onCreate={this.onCreate}
-            onCancel={() => {
-              this.setState({ ...this.state, document: {}, open1: false });
-            }}
-          />
-        )}
+
+        <DocumentForm
+          document={this.state.document}
+          open={this.state.open1}
+          onCreate={this.onCreate}
+          onCancel={() => {
+            this.setState({ ...this.state, document: {}, open1: false });
+          }}
+        />
       </>
     );
   }
@@ -227,6 +223,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   getDocumentUploadByCategory,
+  updateDocument,
 };
 
 export default withRouter(
