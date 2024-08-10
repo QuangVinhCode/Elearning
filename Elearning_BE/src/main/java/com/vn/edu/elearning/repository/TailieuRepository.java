@@ -46,7 +46,7 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
     List<TailieudangtaiDto> findTailieudangtaiDtosByMataikhoan(@Param("mataikhoan") Long mataikhoan);
 
     @Query("SELECT new com.vn.edu.elearning.dto.TailieuthanhtoanDto(" +
-            "t.matailieu, t.tentailieu, t.giaban, t.danhmuc.tendanhmuc, tt.thoigianthanhtoan, tt.trangthai) " +
+            "t.matailieu, t.tentailieu, t.giaban, t.danhmuc.tendanhmuc,t.trangthai, tt.thoigianthanhtoan, tt.trangthai) " +
             "FROM Tailieu t " +
             "JOIN Thanhtoan tt ON t.matailieu = tt.tailieu.matailieu " +
             "WHERE tt.taikhoan.mataikhoan = :mataikhoan")
@@ -66,4 +66,17 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "GROUP BY t.matailieu, t.tentailieu")
     List<ThunhaptailieuDto> findThunhaptailieuByMataikhoan(@Param("mataikhoan") Long mataikhoan);
 
+    @Query("SELECT new com.vn.edu.elearning.dto.ThunhaptailieuDto(" +
+            "t.matailieu, " +
+            "t.tentailieu, " +
+            "t.giaban, " +
+            "COUNT(tt.mathanhtoan), " +
+            "SUM((t.giaban * t.tylethunhaptacgia) / 10), " +
+            "SUM((t.giaban * t.tylephiquantri) / 10)) " +
+            "FROM Tailieu t " +
+            "JOIN t.dsthanhtoan tt " +
+            "JOIN t.dsdangtai dt " +
+            "WHERE dt.taikhoan.mataikhoan = :mataikhoan " +
+            "GROUP BY t.matailieu, t.tentailieu")
+    List<ThunhaptailieuDto> findThunhaptailieu();
 }

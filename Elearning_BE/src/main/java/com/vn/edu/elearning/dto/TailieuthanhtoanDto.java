@@ -13,6 +13,7 @@ public class TailieuthanhtoanDto implements Serializable {
     String tentailieu;
     Long giaban;
     String tendanhmuc;
+    String trangthaitailieu;
     String thoigianthanhtoan;
     String trangthai;
 }

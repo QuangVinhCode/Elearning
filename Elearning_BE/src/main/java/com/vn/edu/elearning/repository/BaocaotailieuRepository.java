@@ -16,7 +16,11 @@ public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Ma
     List<Baocaotailieu> findByTaikhoan_Mataikhoan(Long mataikhoan);
 
     @Query("SELECT new com.vn.edu.elearning.dto.ThongtinbaocaotailieuDto(" +
-            "COUNT(b), t.tentailieu, tk.taikhoan.tendangnhap) " +
+            "COUNT(b), " +
+            "t.tentailieu, " +
+            "tk.taikhoan.tendangnhap, " +
+            "SUM(CASE WHEN b.trangthai = 'Chờ xem xét' THEN 1 ELSE 0 END), " +
+            "SUM(CASE WHEN b.trangthai = 'Đã xem xét' THEN 1 ELSE 0 END)) " +
             "FROM Baocaotailieu b " +
             "JOIN b.tailieu t " +
             "JOIN t.dsdangtai tk " +

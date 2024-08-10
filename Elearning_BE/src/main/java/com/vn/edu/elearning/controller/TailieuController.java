@@ -149,6 +149,11 @@ public class TailieuController {
         return new ResponseEntity<>(tailieuService.findAllPayByAccount(id),HttpStatus.OK);
     }
 
+    @GetMapping("/all-pay")
+    public ResponseEntity<?> getDocumentAllPay(){
+        return new ResponseEntity<>(tailieuService.findAllPay(),HttpStatus.OK);
+    }
+
     @GetMapping("/collection-account/{id}")
     public ResponseEntity<?> getDocumentCollectionByAccount(@PathVariable("id") Long id){
         return new ResponseEntity<>(tailieuService.findAllDocumentCollectionByAccount(id),HttpStatus.OK);
