@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -44,5 +45,9 @@ public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Ma
     @Query("UPDATE Baocaotailieu b SET b.trangthai = :trangthai WHERE b.tailieu.matailieu = :matailieu")
     void updateTrangthaiByMatailieu(String trangthai, Long matailieu);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE Baocaotailieu b SET b.lydo = CONCAT(b.lydo, ' | ', :newLydo),b.trangthai='Chờ xem xét' WHERE b.mabaocaotailieu.mataikhoan = :mataikhoan")
+    int updateLydo(@Param("mataikhoan") Long mataikhoan, @Param("newLydo") String newLydo);
 
 }

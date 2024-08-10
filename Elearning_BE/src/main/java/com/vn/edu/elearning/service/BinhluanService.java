@@ -5,6 +5,7 @@ import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.domain.Tailieu;
 import com.vn.edu.elearning.dto.BinhluanDto;
 import com.vn.edu.elearning.dto.BinhluanTheoTailieuDto;
+import com.vn.edu.elearning.dto.ThongtinbinhluanDto;
 import com.vn.edu.elearning.exeception.DanhmucException;
 import com.vn.edu.elearning.repository.BinhluanRepository;
 import org.springframework.beans.BeanUtils;
@@ -56,6 +57,10 @@ public class BinhluanService {
         return binhluanRepository.findBinhluansByMatailieu(matl);
     }
 
+    public List<ThongtinbinhluanDto> findBinhluans() {
+        return binhluanRepository.findBinhluans();
+    }
+
     public Binhluan findById(Long id) {
         Optional<Binhluan> found = binhluanRepository.findById(id);
 
@@ -65,6 +70,8 @@ public class BinhluanService {
         }
         return found.get();
     }
+
+
 
     public void  deleteById(Long id){
 
