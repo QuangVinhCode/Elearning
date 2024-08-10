@@ -16,11 +16,11 @@ public interface GiaodichRepository extends JpaRepository<Giaodich, Long> {
             "SUM(CASE WHEN g.lydo LIKE 'Nạp tiền%' THEN g.sotien ELSE 0 END), " +
             "SUM(CASE WHEN g.lydo LIKE 'Thanh toán%' THEN g.sotien ELSE 0 END), " +
             "SUM(CASE WHEN g.lydo LIKE 'Thu nhập%' THEN g.sotien ELSE 0 END), " +
-            "SUBSTRING(g.thoigiangiaodich, 6, 11) " + // Lấy phần tháng năm từ chuỗi
+            "SUBSTRING(g.thoigiangiaodich, 7, 11) " + // Lấy phần tháng năm từ chuỗi
             ") " +
             "FROM Giaodich g " +
             "WHERE g.taikhoan.mataikhoan = :mataikhoan AND g.trangthai='Thành công'" +
-            "GROUP BY SUBSTRING(g.thoigiangiaodich, 6, 11)")
+            "GROUP BY SUBSTRING(g.thoigiangiaodich, 7, 11)")
     List<LichsuthuchiDto> findLichsuthuchiByTaikhoan(@Param("mataikhoan") Long mataikhoan);
 
 }

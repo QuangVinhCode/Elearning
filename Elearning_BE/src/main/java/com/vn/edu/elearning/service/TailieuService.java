@@ -102,6 +102,10 @@ public class TailieuService {
         return tailieuRepository.findThunhaptailieu() ;
     }
 
+    public List<?> findAllTransactionAdmin() {
+        return tailieuRepository.findLichsuthuchiAdmin() ;
+    }
+
     public List<?> findAllDocumentCollectionByAccount(Long mtk) {
         return tailieuRepository.findThunhaptailieuByMataikhoan(mtk) ;
     }

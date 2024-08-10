@@ -1,10 +1,7 @@
 package com.vn.edu.elearning.repository;
 
 import com.vn.edu.elearning.domain.Tailieu;
-import com.vn.edu.elearning.dto.KiemduyettailieuDto;
-import com.vn.edu.elearning.dto.TailieudangtaiDto;
-import com.vn.edu.elearning.dto.TailieuthanhtoanDto;
-import com.vn.edu.elearning.dto.ThunhaptailieuDto;
+import com.vn.edu.elearning.dto.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -66,6 +63,16 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "GROUP BY t.matailieu, t.tentailieu")
     List<ThunhaptailieuDto> findThunhaptailieuByMataikhoan(@Param("mataikhoan") Long mataikhoan);
 
+    @Query("SELECT new com.vn.edu.elearning.dto.LichsuthuchiAdminDto(" +
+            "SUM(CASE WHEN dt.taikhoan.quyenhan = 'Quản trị viên' THEN (t.giaban * t.tylethunhaptacgia) / 10 ELSE 0 END), " +
+            "SUM(CASE WHEN dt.taikhoan.quyenhan <> 'Quản trị viên' THEN (t.giaban * t.tylephiquantri) / 10 ELSE 0 END), " +
+            "SUBSTRING(tt.thoigianthanhtoan, 7, 11) " +
+            ") " +
+            "FROM Thanhtoan tt " +
+            "JOIN tt.tailieu t " +
+            "JOIN t.dsdangtai dt " +
+            "GROUP BY SUBSTRING(tt.thoigianthanhtoan, 7, 11)")
+    List<LichsuthuchiAdminDto> findLichsuthuchiAdmin();
     @Query("SELECT new com.vn.edu.elearning.dto.ThunhaptailieuDto(" +
             "t.matailieu, " +
             "t.tentailieu, " +
