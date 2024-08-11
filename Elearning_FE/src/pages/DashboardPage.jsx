@@ -13,7 +13,13 @@ import {
   MdLogout,
   MdOutlineHome,
   MdOutlinePlayLesson,
+  MdReportProblem,
 } from "react-icons/md";
+import { FcStatistics } from "react-icons/fc";
+import { AiOutlineTransaction, AiOutlineMonitor } from "react-icons/ai";
+import { IoEyeSharp } from "react-icons/io5";
+import { HiMiniUserGroup } from "react-icons/hi2";
+import { FaComments } from "react-icons/fa";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "../components/home/Home";
 import AddOrEditCategory from "../components/category/AddOrEditCategory";
@@ -30,6 +36,7 @@ import TradingHistoryAdmin from "../components/document/TradingHistoryAdmin";
 import DocumentReportNumber from "../components/account/admin/DocumentReportNumber";
 import CommentReportNumber from "../components/account/admin/CommentReportNumber";
 import StatisticsAdmin from "../components/document/StatisticsAdmin";
+import CommentHistory from "../components/document/CommentHistory";
 const { Header, Sider, Content } = Layout;
 
 function DashboardPage() {
@@ -122,64 +129,72 @@ function DashboardPage() {
             },
             {
               key: "5",
-              icon: <MdFormatListBulleted />,
+              icon: <AiOutlineMonitor />,
               label: "Kiểm duyệt",
               onClick: () => navigate("/dashboard/document/censoring"),
             },
             {
               key: "6",
-              icon: <MdOutlinePlayLesson />,
+              icon: <HiMiniUserGroup />,
               label: "Quản lý tài khoản",
               onClick: () => navigate("/dashboard/account/usermanage"),
             },
             {
               key: "7",
-              icon: <MdOutlinePlayLesson />,
+              icon: <FaComments />,
+              label: "Bình luận",
+              onClick: () => navigate("/dashboard/document/commenthistory"),
+            },
+            {
+              key: "8",
+              icon: <MdReportProblem />,
               label: "Quản lý báo cáo",
               children: [
                 {
-                  key: "71",
+                  key: "81",
                   icon: <MdFormatListBulleted />,
                   label: "DS báo cáo tài liệu",
-                  onClick: () => navigate("/dashboard/account/documentreport"),
+                  onClick: () => navigate("/dashboard/account/document-report"),
                 },
                 {
-                  key: "72",
-                  icon: <MdAddCircleOutline />,
+                  key: "82",
+                  icon: <IoEyeSharp />,
+                  label: "Theo dõi đăng tải",
+                  onClick: () =>
+                    navigate("/dashboard/account/document-report-number"),
+                },
+                {
+                  key: "83",
+                  icon: <MdFormatListBulleted />,
                   label: "DS báo cáo bình luận",
-                  onClick: () => navigate("/dashboard/account/commentreport"),
+                  onClick: () => navigate("/dashboard/account/comment-report"),
                 },
+
                 {
-                  key: "73",
-                  icon: <MdAddCircleOutline />,
-                  label: "DS số lần báo cáo bình luận",
+                  key: "84",
+                  icon: <IoEyeSharp />,
+                  label: "Theo dõi bình luận",
                   onClick: () =>
-                    navigate("/dashboard/account/commentreportnumber"),
-                },
-                {
-                  key: "74",
-                  icon: <MdAddCircleOutline />,
-                  label: "DS số lần báo cáo tài liệu",
-                  onClick: () =>
-                    navigate("/dashboard/account/documentreportnumber"),
+                    navigate("/dashboard/account/comment-report-number"),
                 },
               ],
             },
             {
-              key: "8",
-              icon: <MdOutlinePlayLesson />,
+              key: "9",
+              icon: <AiOutlineTransaction />,
               label: "Lịch sử giao dịch admin",
               onClick: () =>
-                navigate("/dashboard/document/tradinghistoryadmin"),
+                navigate("/dashboard/document/trading-history-admin"),
             },
-            {
-              key: "9",
-              icon: <MdOutlinePlayLesson />,
-              label: "Thống kê",
-              onClick: () => navigate("/dashboard/document/statisticsadmin"),
-            },
+
             {
               key: "10",
+              icon: <FcStatistics />,
+              label: "Thống kê",
+              onClick: () => navigate("/dashboard/document/statistics-admin"),
+            },
+            {
+              key: "11",
               icon: <MdLogout />,
               label: "Đăng xuất",
               onClick: handleLogout,
@@ -244,7 +259,11 @@ function DashboardPage() {
               <Route path="/document/list" element={<ListDocument />}></Route>
               <Route path="/document/censoring" element={<Censoring />}></Route>
               <Route
-                path="/document/tradinghistoryadmin"
+                path="/document/commenthistory"
+                element={<CommentHistory />}
+              ></Route>
+              <Route
+                path="/document/trading-history-admin"
                 element={<TradingHistoryAdmin />}
               ></Route>
               <Route
@@ -252,23 +271,23 @@ function DashboardPage() {
                 element={<UserManage />}
               ></Route>
               <Route
-                path="/account/documentreport"
+                path="/account/document-report"
                 element={<DocumentReport />}
               ></Route>
               <Route
-                path="/account/commentreport"
+                path="/account/comment-report"
                 element={<CommentReport />}
               ></Route>
               <Route
-                path="/account/documentreportnumber"
+                path="/account/document-report-number"
                 element={<DocumentReportNumber />}
               ></Route>
               <Route
-                path="/account/commentreportnumber"
+                path="/account/comment-report-number"
                 element={<CommentReportNumber />}
               ></Route>
               <Route
-                path="/document/statisticsadmin"
+                path="/document/statistics-admin"
                 element={<StatisticsAdmin />}
               ></Route>
             </Routes>

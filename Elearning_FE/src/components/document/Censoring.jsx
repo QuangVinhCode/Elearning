@@ -3,7 +3,7 @@ import ContentHeader from "../common/ContentHeader";
 import ListOfDocumentsBeingCensored from "./ListOfDocumentsBeingCensored";
 import DocumentNotes from "./DocumentNotes";
 import withRouter from "../../helpers/withRouter";
-import { Button, Col, Modal, Row } from "antd";
+import { Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import {
@@ -29,7 +29,7 @@ class Censoring extends Component {
     };
   }
   componentDidMount = () => {
-    this.props.getDocumentByCensorship("Chưa kiểm duyệt");
+    this.props.getDocumentByCensorship();
     console.log("object in did mount");
   };
 

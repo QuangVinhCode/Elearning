@@ -6,6 +6,7 @@ import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
 import { Select, Button, message, Skeleton, Table, Space, Tooltip } from "antd";
 import Column from "antd/lib/table/Column";
+import { IoEyeSharp } from "react-icons/io5";
 
 class DocumentReport extends Component {
   constructor() {
@@ -18,6 +19,10 @@ class DocumentReport extends Component {
 
   componentDidMount() {
     this.props.getReportComments();
+  }
+
+  openReportDetails() {
+    
   }
 
   render() {
@@ -66,6 +71,11 @@ class DocumentReport extends Component {
             dataIndex="lydo"
             width={40}
             align="center"
+            render={(lydo) => (
+              <Tooltip placement="topLeft" title={lydo}>
+                {lydo}
+              </Tooltip>
+            )}
           />
           <Column
             title="Thời gian báo cáo"
@@ -89,6 +99,26 @@ class DocumentReport extends Component {
               </Tooltip>
             )}
           />
+          <Column
+            title="Tác vụ"
+            key="action"
+            dataIndex="action"
+            width={40}
+            align="center"
+            render={(_, record) => (
+              <Space size="middle">
+                <Button
+                  key={record.key}
+                  type="primary"
+                  size="small"
+                  onClick={() => this.openReportDetails(record)}
+                >
+                  <IoEyeSharp style={{ marginRight: 8 }} />
+                  Xem
+                </Button>
+              </Space>
+            )}
+          ></Column>
         </Table>
       </>
     );

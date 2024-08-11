@@ -44,7 +44,7 @@ class TradingHistoryAdmin extends Component {
           title="Lịch sử giao dịch"
           className="site-page-header"
         />
-        <Table dataSource={transactions} size="small">
+        <Table dataSource={transactions} size="small" rowKey="mataikhoan">
           <Column
             title="Mã giao dịch"
             key="magiaodich"
@@ -60,7 +60,8 @@ class TradingHistoryAdmin extends Component {
             align="center"
             render={(text, record) => (
               <div>
-                {record.lydo === "Nạp tiền vào tài khoản" ||
+                {(record.lydo &&
+                  record.lydo.startsWith("Thu nhập từ thu phí quản trị")) ||
                 (record.lydo &&
                   record.lydo.startsWith("Thu nhập từ bán tài liệu")) ? (
                   <span style={{ color: "green" }}>+ {text}</span>

@@ -34,7 +34,4 @@ public class Baocaobinhluan {
     @Column(length = 250, nullable = false)
     private String lydo;
 
-    @Column(name = "trangthai",length = 20, nullable = false)
-    private String trangthai;
-
 }

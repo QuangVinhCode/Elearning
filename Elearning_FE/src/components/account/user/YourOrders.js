@@ -4,7 +4,7 @@ import { getDocumentPayByCategory } from "../../../redux/actions/documentAction"
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
-import { Select, Button, Tooltip, Skeleton, Table, Space } from "antd";
+import { Select, Button, Tooltip, Skeleton, Table, Space, message } from "antd";
 import Column from "antd/lib/table/Column";
 import {
   EyeOutlined,
@@ -15,7 +15,8 @@ class YourOrders extends Component {
   constructor() {
     super();
     this.state = {
-      documents: {}, // Object to store selected dates for each account
+      documents: {},
+      object: null, // Object to store selected dates for each account
     };
   }
 
@@ -26,9 +27,16 @@ class YourOrders extends Component {
     const { id } = this.props.router.params;
     this.props.getDocumentPayByCategory(id);
   }
-  onDocument = (id) => {
+  onDocument = (object) => {
     const { navigate } = this.props.router;
-    navigate("/users/detail/" + id);
+    if (object.trangthaitailieu === "Chặn") {
+      message.warning({
+        content: "Tài liệu đã vi phạm nội quy hệ thống nên không thể xem",
+        style: { marginTop: "10vh" },
+      });
+    } else {
+      navigate("/users/detail/" + object.matailieu);
+    }
   };
 
   render() {
@@ -115,7 +123,7 @@ class YourOrders extends Component {
                   key={record.key}
                   type="primary"
                   size="small"
-                  onClick={() => this.onDocument(record.matailieu)}
+                  onClick={() => this.onDocument(record)}
                 >
                   <EyeOutlined style={{ marginRight: 8 }} />
                   Xem

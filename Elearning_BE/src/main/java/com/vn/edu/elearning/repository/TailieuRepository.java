@@ -17,7 +17,6 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
     @Query(value = "SELECT tl.* FROM tailieu tl JOIN thanhtoan tt ON tl.matailieu = tt.matailieu GROUP BY tl.matailieu ORDER BY COUNT(tl.matailieu) DESC LIMIT 5", nativeQuery = true)
     List<Tailieu> findTop5TailieuByThanhtoanNhieuNhat();
 
-
     List<Tailieu> findByTentailieuContains(String tentailieu);
 
     @Transactional
@@ -28,7 +27,7 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
     List<Tailieu> findByDanhmuc_MadanhmucAndTrangthai(Long madanhmuc, String trangthai);
 
     @Query("SELECT new com.vn.edu.elearning.dto.KiemduyettailieuDto(t.matailieu, t.tentailieu, tk.mataikhoan, tk.tendangnhap,t.trangthai,dt.thoigiantailen)" +
-            "FROM Tailieu t JOIN t.dsdangtai dt JOIN dt.taikhoan tk")
+            "FROM Tailieu t JOIN t.dsdangtai dt JOIN dt.taikhoan tk ORDER BY dt.thoigiantailen DESC")
     List<KiemduyettailieuDto> findDSTailieukiemduyet();
 
     @Query("SELECT new com.vn.edu.elearning.dto.TailieudangtaiDto(" +
@@ -86,4 +85,7 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "WHERE dt.taikhoan.mataikhoan = :mataikhoan " +
             "GROUP BY t.matailieu, t.tentailieu")
     List<ThunhaptailieuDto> findThunhaptailieu();
+
+    @Query("select t from Tailieu t JOIN t.dsdangtai dt WHERE dt.taikhoan.quyenhan = 'Quản trị viên' ORDER BY dt.thoigiantailen DESC")
+    List<Tailieu> findAllDocumentAdmin();
 }

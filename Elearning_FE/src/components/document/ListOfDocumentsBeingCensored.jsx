@@ -8,6 +8,8 @@ const ListOfDocumentsBeingCensored = ({
   onConfirm,
   onDetails,
   onNote,
+  onRecensorship,
+  onBan,
 }) => {
   const [searchText, setSearchText] = useState("");
   const [categoryFilter, setCategoryFilter] = useState(null);
@@ -39,6 +41,7 @@ const ListOfDocumentsBeingCensored = ({
           <Option value="Chờ kiểm duyệt"></Option>
           <Option value="Cần chỉnh sửa"></Option>
           <Option value="Đã kiểm duyệt"></Option>
+          <Option value="Chặn"></Option>
         </Select>
       </Space>
       <Table dataSource={filteredData} size="small" rowKey="matailieu">
@@ -133,7 +136,7 @@ const ListOfDocumentsBeingCensored = ({
                 size="small"
                 onClick={() => onDetails(record)}
               >
-                <EyeOutlined style={{ marginRight: 4}} />
+                <EyeOutlined style={{ marginRight: 4 }} />
                 Xem
               </Button>
               {record.trangthai === "Chờ kiểm duyệt" && (
@@ -153,6 +156,26 @@ const ListOfDocumentsBeingCensored = ({
                   >
                     <GiConfirmed style={{ marginRight: 4 }} />
                     Lỗi
+                  </Button>
+                </>
+              )}
+              {record.trangthai === "Đã kiểm duyệt" && (
+                <>
+                  <Button
+                    type="default"
+                    size="small"
+                    onClick={() => onRecensorship(record)}
+                  >
+                    <GiConfirmed style={{ marginRight: 4 }} />
+                    Kiểm duyệt lại
+                  </Button>
+                  <Button
+                    type="link"
+                    size="small"
+                    onClick={() => onBan(record)}
+                  >
+                    <GiConfirmed style={{ marginRight: 4 }} />
+                    Cấm
                   </Button>
                 </>
               )}

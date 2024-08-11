@@ -81,6 +81,10 @@ public class TailieuService {
         return tailieuRepository.findAll();
     }
 
+    public List<?> findAllDocumentAdmin() {
+        return tailieuRepository.findAllDocumentAdmin();
+    }
+
     public List<?> findAllDocumentCensorship() {
         return tailieuRepository.findDSTailieukiemduyet();
     }

@@ -11,7 +11,7 @@ import OtpVerification from "./OtpVerification";
 import ForgotPassword from "./ForgotPassword";
 import OtpForgotPassword from "./OtpForgotPassword";
 import ResetPassword from "./ResetPassword";
-import DocumentForm from "../components/document/DocumentForm";
+import DocumentFormUser from "../components/document/DocumentFormUser";
 import UserDocumentDetails from "../components/document/UserDocumentDetails";
 import SearchDocument from "../components/document/SearchDocument";
 import {
@@ -105,7 +105,7 @@ function Users({ insertDocumentUser, updateDocument }) {
       <Footer />
 
       {showDocumentForm && (
-        <DocumentForm
+        <DocumentFormUser
           open={showDocumentForm}
           onCreate={onCreate}
           onCancel={handleDocumentFormClose}

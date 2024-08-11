@@ -16,6 +16,27 @@ html {
   justify-content: center;
 }
 
+.list_document {
+  margin-top: 10rem;
+  display: grid;
+  grid-template-columns: repeat(6, 200px); /* Sử dụng repeat để dễ bảo trì */
+  justify-content: center;
+  gap: 2rem; /* Thêm khoảng cách giữa các sản phẩm */
+  justify-items: center;
+  margin-bottom: 5rem; /* Thêm khoảng trống phía dưới để tránh nút phân trang đè lên sản phẩm */
+  position: relative;
+}
+.document-home {
+  padding-bottom: 5rem; /* Khoảng trống phía dưới để đảm bảo pagination không đè lên sản phẩm */
+}
+.pagination-container {
+  width: 100%;
+  display: flex;
+
+  justify-content: flex-end;
+  margin-top: 2rem; /* Hoặc để mặc định là static nếu không cần thiết */
+}
+
 .productList {
   display: flex;
   margin-left: -10px;
@@ -39,14 +60,6 @@ html {
 .productCard:hover {
   transform: translateY(-0.5rem);
   box-shadow: 0.5rem 0.75rem 1.5rem #bbbbbb;
-}
-.list_document {
-  margin-top: 10rem;
-  display: grid;
-  grid-template-columns: 200px 200px 200px 200px 200px 200px;
-  justify-content: center;
-  margin-bottom: 10vh;
-  justify-items: center;
 }
 
 .productName {
@@ -113,7 +126,6 @@ html {
   height: auto;
   /* Điều chỉnh chiều cao tự động theo chiều rộng */
   display: flex;
-
   justify-content: center;
 }
 .productPdf > div,

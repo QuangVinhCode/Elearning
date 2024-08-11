@@ -27,28 +27,38 @@ public class BaocaotailieuService {
     @Autowired
     private TailieuService tailieuService;
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+
     public Baocaotailieu save(BaocaotailieuDto dto) {
         Baocaotailieu entity = new Baocaotailieu();
-        Baocaotailieu baocaotailieu = baocaotailieuRepository.findByTaikhoan_MataikhoanAndTailieu_Matailieu(dto.getMataikhoan(), dto.getMatailieu());
-        if (baocaotailieu!=null)
-        {
-            throw new BaocaoException("Báo cáo của bạn đã được ghi nhận!");
-        }
         BeanUtils.copyProperties(dto,entity);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
-        Mabaocaotailieu mabaocaotailieu = new Mabaocaotailieu(dto.getMataikhoan(), dto.getMatailieu());
+        if (taikhoan!=null)
+        {
+            throw  new BaocaoException("Tài khoản không tồn tại");
+        }
+        if (tailieu!=null)
+        {
+            throw  new BaocaoException("Tài liệu không tồn tại");
+        }
+        boolean check = isReportAllowed(taikhoan,tailieu);
+        if (!check)
+        {
+            throw  new BaocaoException("Báo cáo tài liệu này chỉ được phép thực hiện nếu cách báo cáo gần nhất ít nhất 1 giờ.");
+        }
         entity.setTaikhoan(taikhoan);
         entity.setTailieu(tailieu);
-        entity.setMabaocaotailieu(mabaocaotailieu);
-        entity.setTrangthai("Chờ xem xét");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
-        entity.setThoigianbaocao(LocalDateTime.now().format(formatter));
+        entity.setThoigianbaocao(LocalDateTime.now().format(FORMATTER));
         return baocaotailieuRepository.save(entity);
     }
 
     public List<Baocaotailieu> findAll() {
         return baocaotailieuRepository.findAll();
+    }
+
+    public List<Baocaotailieu> findReportsByDocument(Long id) {
+        return baocaotailieuRepository.findByTailieu_Matailieu(id);
     }
 
     public List<ThongtinbaocaotailieuDto> findReportedDocumentInfo() {
@@ -62,7 +72,17 @@ public class BaocaotailieuService {
         return baocaotailieuRepository.findByTaikhoan_Mataikhoan(matl);
     }
 
-    public void updateTrangthaiByMatailieu(Long matl,String trangthai) {
-        baocaotailieuRepository.updateTrangthaiByMatailieu(trangthai,matl);
+    public boolean isReportAllowed(Taikhoan taikhoan, Tailieu tailieu) {
+        Optional<Baocaotailieu> latestReportOpt = baocaotailieuRepository.findLatestReportForDocument(taikhoan, tailieu);
+
+        if (latestReportOpt.isPresent()) {
+            Baocaotailieu latestReport = latestReportOpt.get();
+            LocalDateTime latestReportTime = LocalDateTime.parse(latestReport.getThoigianbaocao(), FORMATTER);
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            // Kiểm tra xem báo cáo hiện tại có cách báo cáo gần nhất ít nhất 1 giờ
+            return currentDateTime.isAfter(latestReportTime.plusHours(1));
+        }
+        // Nếu không có báo cáo nào, có thể cho phép báo cáo mới
+        return true;
     }
 }

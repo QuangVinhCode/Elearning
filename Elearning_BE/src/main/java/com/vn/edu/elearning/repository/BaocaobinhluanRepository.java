@@ -16,7 +16,7 @@ public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, 
 
     List<Baocaobinhluan> findByTaikhoan_Mataikhoan(Long mataikhoan);
 
-    @Query("SELECT new com.vn.edu.elearning.dto.ThongtinbaocaobinhluanDto(COUNT(b), bl.noidung, tk.tendangnhap) " +
+    @Query("SELECT new com.vn.edu.elearning.dto.ThongtinbaocaobinhluanDto(COUNT(b), bl.noidung, tk.tendangnhap,bl.mabinhluan) " +
             "FROM Baocaobinhluan b " +
             "JOIN b.binhluan bl " +
             "JOIN bl.taikhoan tk " +
@@ -34,8 +34,6 @@ public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, 
 
     Baocaobinhluan findByTaikhoan_MataikhoanAndBinhluan_Mabinhluan(Long mataikhoan, Long mabinhluan);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Baocaobinhluan b SET b.trangthai = :trangthai WHERE b.binhluan.mabinhluan = :mabinhluan")
-    void updateTrangthaiByMabinhluan(String trangthai, Long mabinhluan);
+    List<Baocaobinhluan> findByBinhluan_Mabinhluan(Long mabinhluan);
+
 }

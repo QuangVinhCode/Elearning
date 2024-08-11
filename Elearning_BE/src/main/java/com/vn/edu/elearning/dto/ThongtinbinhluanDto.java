@@ -16,4 +16,5 @@ public class ThongtinbinhluanDto implements Serializable {
     String trangthai;
     Long matbinhluandatraloi;
     String thoigianbinhluan;
+    String tentailieu;
 }

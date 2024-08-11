@@ -12,7 +12,9 @@ export default class CommentService {
   getCommentsByDocument = async (id) => {
     return await axios.get(API_COMMENT + "/document/" + id);
   };
-
+  getCommentsAdmin = async () => {
+    return await axios.get(API_COMMENT + "/admin");
+  };
   deleteComment = async (matk, matl, mabl) => {
     return await axios.delete(
       API_COMMENT + "/" + matk + "/" + matl + "/" + mabl
@@ -23,5 +25,8 @@ export default class CommentService {
   };
   getCommentsByAccount = async (id) => {
     return await axios.get(API_COMMENT + "/account/" + id);
+  };
+  blockCommentAndReplies = async (mabinhluan) => {
+    return await axios.patch(API_COMMENT + "/block/" + mabinhluan);
   };
 }

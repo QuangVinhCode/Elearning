@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getRevenues } from "../../redux/actions/transactionAction";
+import { getDocumentAllPayAmin } from "../../redux/actions/documentAction";
 import ContentHeader from "../common/ContentHeader";
 import withRouter from "../../helpers/withRouter";
 
@@ -7,23 +7,21 @@ import { connect } from "react-redux";
 import { Select, Button, message, Skeleton, Table, Space } from "antd";
 import Column from "antd/lib/table/Column";
 
-class Statistics extends Component {
+class Home extends Component {
   constructor() {
     super();
     this.state = {
-      transactions: {}, // Object to store selected dates for each account
+      documents: {}, // Object to store selected dates for each account
     };
   }
 
   componentDidMount() {
-    const storedUserSession = sessionStorage.getItem("userSession");
-    const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
-    this.props.getRevenues(UserSesion.mataikhoan);
+    this.props.getDocumentAllPayAmin();
   }
 
   render() {
     const { navigate } = this.props.router;
-    const { transactions, isLoading } = this.props;
+    const { documents, isLoading } = this.props;
 
     if (isLoading) {
       return (
@@ -45,29 +43,25 @@ class Statistics extends Component {
           title="Doanh thu"
           className="site-page-header"
         />
-        <Table dataSource={transactions} size="small" rowKey="mataikhoan">
-          <Column
-            title="Thu nhập"
-            key="phiquangtri"
-            dataIndex="phiquangtri"
-            width={80}
-            align="center"
-            render={(text) => (
-              <div>
-                {text === "Nạp tiền" || "Thu nhập" ? (
-                  <span style={{ color: "green" }}>+ {text}</span>
-                ) : (
-                  <span style={{ color: "red" }}>- {text}</span>
-                )}
-              </div>
-            )}
-          />
+        <Table dataSource={documents} size="small" rowKey="mataikhoan">
           <Column
             title="Thời gian"
             key="thangnam"
             dataIndex="thangnam"
             width={80}
             align="center"
+          />
+          <Column
+            title="Thu nhập phí quản trị"
+            key="thunhapquantri"
+            dataIndex="thunhapquantri"
+            width={80}
+            align="center"
+            render={(text) => (
+              <div>
+                <span style={{ color: "green" }}>+ {text}</span>
+              </div>
+            )}
           />
         </Table>
       </>
@@ -76,14 +70,12 @@ class Statistics extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  transactions: state.transactionReducer.transactions,
+  documents: state.documentReducer.documents,
   isLoading: state.commonReducer.isLoading,
 });
 
 const mapDispatchToProps = {
-  getRevenues,
+  getDocumentAllPayAmin,
 };
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Statistics)
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));

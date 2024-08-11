@@ -12,4 +12,5 @@ public class ThongtinbaocaobinhluanDto implements Serializable {
     Long solanbaocao;
     String noidungbinhluan;
     String tentaikhoanbitocao;
+    Long mabinhluan;
 }

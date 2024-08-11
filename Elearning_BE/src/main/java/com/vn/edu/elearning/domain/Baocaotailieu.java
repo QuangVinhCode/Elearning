@@ -15,17 +15,18 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "baocaotailieu")
 public class Baocaotailieu {
-    @EmbeddedId
-    private Mabaocaotailieu mabaocaotailieu;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mabaocaotailieu", nullable = false)
+    private Long mabaocaotailieu;
 
     @ManyToOne
-    @MapsId("mataikhoan")
-    @JoinColumn(name = "mataikhoan")
+    @JoinColumn(name = "mataikhoan", nullable = false)
     private Taikhoan taikhoan;
 
     @ManyToOne
-    @MapsId("matailieu")
-    @JoinColumn(name = "matailieu")
+    @JoinColumn(name = "matailieu", nullable = false)
     private Tailieu tailieu;
 
     @Column(name = "thoigianbaocao",length = 50,nullable = false)
@@ -33,7 +34,5 @@ public class Baocaotailieu {
 
     @Column(length = 250, nullable = false)
     private String lydo;
-
-    @Column(name = "trangthai",length = 20, nullable = false)
-    private String trangthai;
+    
 }

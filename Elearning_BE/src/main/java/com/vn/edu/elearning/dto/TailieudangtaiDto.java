@@ -22,7 +22,7 @@ public class TailieudangtaiDto implements Serializable {
     Long tylephiquantri;
     Long tylethunhaptacgia;
     String trangthai;
-    Danhmuc madanhmuc;
+    Danhmuc danhmuc;
     Long mataikhoan;
     String thoigiantailen;
     String thoigianduocduyet;

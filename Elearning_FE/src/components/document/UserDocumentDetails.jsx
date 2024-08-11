@@ -7,6 +7,9 @@ import {
   payDocument,
   clearDocumentState,
 } from "../../redux/actions/documentAction";
+import { PDFDocument, rgb } from "pdf-lib";
+
+import fontkit from "@pdf-lib/fontkit";
 import { getAccount } from "../../redux/actions/accountAction";
 import {
   getCommentsByDocument,
@@ -74,6 +77,7 @@ class UserDocumentDetails extends Component {
           : null;
         const mataikhoan = userSession ? userSession.mataikhoan : 0;
         const tendangnhap = userSession ? userSession.tendangnhap : "";
+        console.log("mataikhoan in loadDocument" + mataikhoan);
         this.props.getAccount(mataikhoan);
         PayService.checkDocumentView(mataikhoan, id).then((status) => {
           console.log(status);
@@ -106,20 +110,70 @@ class UserDocumentDetails extends Component {
   }
 
   // Xử lý sự kiện khi nhấn vào nút Tải
-  handleDownload = () => {
-    const { canDownload } = this.state;
-    console.log("isPaid: " + canDownload);
-    // Nếu đã thanh toán, cho phép tải xuống
+  handleDownload = async () => {
+    const { canDownload, tendangnhap } = this.state;
+
     if (canDownload) {
-      // Thực hiện tải xuống
       const { document } = this.props;
       const pdfUrl = DocumentService.getDocumentPDFUrl(document.diachiluutru);
-      const link = window.document.createElement("a");
-      link.href = pdfUrl;
-      link.setAttribute("download", document.tentailieu || "document.pdf");
-      window.document.body.appendChild(link);
-      link.click();
-      window.document.body.removeChild(link);
+
+      try {
+        // Fetch the existing PDF file
+        const existingPdfBytes = await fetch(pdfUrl).then((res) =>
+          res.arrayBuffer()
+        );
+
+        // Load a PDFDocument from the existing PDF bytes
+        const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+        // Register `fontkit` to enable custom fonts
+        pdfDoc.registerFontkit(fontkit);
+
+        // Embed the custom font
+        const fontBytes = await fetch("/assets/Roboto-Black.ttf").then((res) =>
+          res.arrayBuffer()
+        );
+
+        // Embed the custom font
+        const customFont = await pdfDoc.embedFont(fontBytes);
+
+        const pages = pdfDoc.getPages();
+        const firstPage = pages[0];
+
+        const { width, height } = firstPage.getSize();
+
+        // Add watermark to each page with the custom font
+        pages.forEach((page) => {
+          page.drawText(`${tendangnhap} đã tải về!`, {
+            x: 50,
+            y: height - 50,
+            size: 15,
+            font: customFont, // Use the custom font
+            color: rgb(0.95, 0.1, 0.1),
+            opacity: 0.5,
+          });
+        });
+
+        // Serialize the PDFDocument to bytes (a Uint8Array)
+        const pdfBytes = await pdfDoc.save();
+
+        // Create a blob from the pdfBytes
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+
+        // Create a download link
+        const link = window.document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.setAttribute("download", document.tentailieu || "document.pdf");
+
+        // Append the link to the document and trigger the download
+        window.document.body.appendChild(link);
+        link.click();
+
+        // Remove the link from the document
+        window.document.body.removeChild(link);
+      } catch (error) {
+        console.error("Error downloading the PDF:", error);
+      }
     } else {
       message.warning({
         content: "Vui lòng thanh toán để tải về!",
@@ -209,15 +263,8 @@ class UserDocumentDetails extends Component {
   };
 
   handleConfirmReport = () => {
-    const { selectedError, additionalContent } = this.state;
+    const { selectedError, additionalContent,mataikhoan } = this.state;
     const { document } = this.props;
-    const currentDateTime = new Date();
-    const day = String(currentDateTime.getDate()).padStart(2, "0");
-    const month = String(currentDateTime.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
-    const year = currentDateTime.getFullYear();
-    const hours = String(currentDateTime.getHours()).padStart(2, "0");
-    const minutes = String(currentDateTime.getMinutes()).padStart(2, "0");
-    const formattedDateTime = `${hours}:${minutes} ${day}/${month}/${year}`;
     if (!selectedError) {
       message.error("Vui lòng chọn lỗi tài liệu.");
       return;
@@ -229,13 +276,13 @@ class UserDocumentDetails extends Component {
     const report = {
       lydo: content,
       matailieu: document.matailieu,
-      mataikhoan: this.state.mataikhoan,
-      thoigianbaocao: formattedDateTime,
+      mataikhoan: mataikhoan,
     };
-    console.log("Tên tài liệu lỗi " + document.tentailieu);
-    console.log("Tên tài liệu lỗi " + content);
+    console.log("mataikhoan " + mataikhoan);
+    console.log("matailieu " + document.matailieu);
+    console.log("content " + content);
     this.props.insertReportDocument(report);
-    this.setState({ selectedError: null, additionalContent: "" });
+    this.setState({ selectedError: null, additionalContent: "", open: false });
   };
 
   handleGoToPage = () => {
@@ -334,6 +381,9 @@ class UserDocumentDetails extends Component {
     }
     const jwtToken = sessionStorage.getItem("jwtToken");
     const sessionToken = jwtToken ? JSON.parse(jwtToken) : null;
+    if (!sessionToken) {
+      return <Navigate to="/users/login" />;
+    }
     // Format giá tiền thành tiền Việt Nam
     const formattedPrice = new Intl.NumberFormat("vi-VN", {
       style: "currency",

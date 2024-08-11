@@ -88,11 +88,6 @@ export const insertDocumentUser = (object) => async (dispatch) => {
       });
 
       dispatch({
-        type: DOCUMENT_APPEND,
-        payload: response.data,
-      });
-
-      dispatch({
         type: COMMON_MESSAGE_SET,
         payload: "tài liệu đã được thêm",
       });
@@ -235,6 +230,78 @@ export const getDocumentsByCategory = (id) => async (dispatch) => {
       payload: true,
     });
     const response = await service.getDocumentsByCategory(id);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: DOCUMENTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const getDocumentCollectionByAccount = (id) => async (dispatch) => {
+  const service = new DocumentService();
+
+  try {
+    console.log("Danh sách doanh thu tài liệu");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getDocumentCollectionByAccount(id);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: DOCUMENTS_SET,
+        payload: response.data,
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const getDocumentAllPayAmin = () => async (dispatch) => {
+  const service = new DocumentService();
+
+  try {
+    console.log("Danh sách doanh thu quản trị viên");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getDocumentAllPayAmin();
     console.log(response);
     if (response.status === 200) {
       dispatch({

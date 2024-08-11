@@ -3,7 +3,7 @@ import {
   getDocumentUploadByCategory,
   updateDocument,
 } from "../../../redux/actions/documentAction";
-import DocumentForm from "../../document/DocumentForm";
+import DocumentFormUser from "../../document/DocumentFormUser";
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
@@ -16,6 +16,7 @@ import {
   EyeOutlined,
 } from "@ant-design/icons";
 import CensorshipHistory from "../../document/CensorshipHistory";
+import DocumentDetails from "../../document/DocumentDetails";
 class DocumentsSold extends Component {
   constructor() {
     super();
@@ -25,12 +26,16 @@ class DocumentsSold extends Component {
       document: {
         matailieu: "",
         tentailieu: "",
+        tacgia: "",
         mota: "",
         giaban: "",
         diachiluutru: "",
         mataikhoan: "",
+        tylephiquantri: "",
+        tylethunhaptacgia: "",
         danhmuc: { madanhmuc: "" },
       }, // Object to store selected dates for each account
+      details: false,
     };
   }
 
@@ -41,6 +46,7 @@ class DocumentsSold extends Component {
   }
 
   onEdit = (value) => {
+    console.log(value);
     this.setState({ ...this.state, document: value, open1: true });
   };
   onCreate = (values) => {
@@ -77,6 +83,7 @@ class DocumentsSold extends Component {
   };
 
   onDetails = (value) => {
+    console.log("objetc" + value.matailieu);
     this.setState({ ...this.state, document: value, details: true });
   };
 
@@ -202,8 +209,17 @@ class DocumentsSold extends Component {
             }}
           />
         )}
+        {this.state.details && (
+          <DocumentDetails
+            document={this.state.document.matailieu}
+            open={this.state.details}
+            onCancel={() => {
+              this.setState({ ...this.state, document: {}, details: false });
+            }}
+          />
+        )}
 
-        <DocumentForm
+        <DocumentFormUser
           document={this.state.document}
           open={this.state.open1}
           onCreate={this.onCreate}

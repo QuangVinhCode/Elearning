@@ -28,7 +28,7 @@ public class BaocaoController {
     BaocaobinhluanService baocaobinhluanService;
     @Autowired
     MapValidationErrorService mapValidationErrorService;
-    @PostMapping("/tailieu")
+    @PostMapping("/document")
     public ResponseEntity<?> createReportDocument(@Validated @RequestBody BaocaotailieuDto dto, BindingResult result){
 
        ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(result);
@@ -42,7 +42,7 @@ public class BaocaoController {
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
 
-    @PostMapping("/binhluan")
+    @PostMapping("/comment")
     public ResponseEntity<?> createReportComment(@Validated @RequestBody BaocaobinhluanDto dto, BindingResult result){
 
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(result);
@@ -57,44 +57,42 @@ public class BaocaoController {
     }
 
 
-    @GetMapping("/tailieu")
+    @GetMapping("/document")
     public ResponseEntity<?> getReportDocuments(){
         return new ResponseEntity<>(baocaotailieuService.findAll(),HttpStatus.OK);
     }
 
-    @GetMapping("/binhluan")
+    @GetMapping("/comment")
     public ResponseEntity<?> getReportComments(){
         return new ResponseEntity<>(baocaobinhluanService.findAll(),HttpStatus.OK);
     }
 
-    @GetMapping("/thongtintailieu")
+    @GetMapping("/document-info")
     public ResponseEntity<?> getReportedDocumentInfo(){
         return new ResponseEntity<>(baocaotailieuService.findReportedDocumentInfo(),HttpStatus.OK);
     }
 
-    @GetMapping("/thongtinbinhluan")
+    @GetMapping("/comment-info")
     public ResponseEntity<?> getReportedCommentsInfo(){
         return new ResponseEntity<>(baocaobinhluanService.findReportedCommentsInfo(),HttpStatus.OK);
     }
-    @GetMapping("/theodoitailieu")
+    @GetMapping("/document-monitor")
     public ResponseEntity<?> getReportDocumentMonitor(){
         return new ResponseEntity<>(baocaotailieuService.findReportMonitor(),HttpStatus.OK);
     }
 
-    @GetMapping("/theodoibinhluan")
+    @GetMapping("/comment-monitor")
     public ResponseEntity<?> getReportCommentMonitor(){
         return new ResponseEntity<>(baocaobinhluanService.findReportMonitor(),HttpStatus.OK);
     }
 
-    @PatchMapping("/trangthai-tailieu/{id}")
-    public ResponseEntity<?> updateDocumentReportStatus(@PathVariable("id") Long id){
-        baocaotailieuService.updateTrangthaiByMatailieu(id,"Đã xem xét");
-        return new ResponseEntity<>("Xác nhận",HttpStatus.OK);
+    @GetMapping("/document-details/{id}")
+    public ResponseEntity<?> getReportsByDocument(@PathVariable("id") Long id){
+        return new ResponseEntity<>(baocaotailieuService.findReportsByDocument(id),HttpStatus.OK);
     }
 
-    @PatchMapping("/trangthai-binhluan/{id}")
-    public ResponseEntity<?> updateCommentReportStatus(@PathVariable("id") Long id){
-        baocaobinhluanService.updateTrangthaiByMabinhluan(id,"Đã xem xét");
-        return new ResponseEntity<>("Xác nhận",HttpStatus.OK);
+    @GetMapping("/comment-details/{id}")
+    public ResponseEntity<?> getReportsByComment(@PathVariable("id") Long id){
+        return new ResponseEntity<>(baocaobinhluanService.findReportsByComment(id),HttpStatus.OK);
     }
 }

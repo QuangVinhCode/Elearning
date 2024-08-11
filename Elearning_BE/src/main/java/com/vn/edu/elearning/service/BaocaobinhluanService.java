@@ -38,7 +38,6 @@ public class BaocaobinhluanService {
         entity.setTaikhoan(taikhoan);
         entity.setBinhluan(binhluan);
         entity.setMabaocaobinhluan(mabaocaobinhluan);
-        entity.setTrangthai("Chờ xem xét");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
         entity.setThoigianbaocao(LocalDateTime.now().format(formatter));
         return baocaobinhluanRepository.save(entity);
@@ -48,6 +47,9 @@ public class BaocaobinhluanService {
         return baocaobinhluanRepository.findAll();
     }
 
+    public List<Baocaobinhluan> findReportsByComment(Long id) {
+        return baocaobinhluanRepository.findByBinhluan_Mabinhluan(id);
+    }
     public List<ThongtinbaocaobinhluanDto> findReportedCommentsInfo() {
         return baocaobinhluanRepository.findReportedCommentsInfo();
     }
@@ -59,7 +61,4 @@ public class BaocaobinhluanService {
         return baocaobinhluanRepository.findByTaikhoan_Mataikhoan(matl);
     }
 
-    public void updateTrangthaiByMabinhluan(Long mabl,String trangthai) {
-        baocaobinhluanRepository.updateTrangthaiByMabinhluan(trangthai,mabl);
-    }
 }

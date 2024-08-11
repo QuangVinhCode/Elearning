@@ -35,8 +35,14 @@ export default class DocumentService {
   getDocumentsByCategory = async (id) => {
     return await axios.get(API_DOCUMENT + "/category/" + id);
   };
+  getDocumentCollectionByAccount = async (id) => {
+    return await axios.get(API_DOCUMENT + "/collection-account/" + id);
+  };
   getDocumentByCensorship = async () => {
     return await axios.get(API_DOCUMENT + "/censorship");
+  };
+  getDocumentAllPayAmin = async () => {
+    return await axios.get(API_DOCUMENT + "/admin");
   };
   getDocumentsByAccountSale = async (id) => {
     return await axios.get(API_DOCUMENT + "/sale/" + id);
@@ -74,6 +80,7 @@ export default class DocumentService {
 
     formData.append("tentailieu", object.tentailieu);
     formData.append("madanhmuc", object.madanhmuc);
+    formData.append("tacgia", object.tacgia);
     formData.append("mota", object.mota);
     formData.append("giaban", object.giaban);
     formData.append("mataikhoan", object.mataikhoan);

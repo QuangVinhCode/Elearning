@@ -1,7 +1,8 @@
 package com.vn.edu.elearning.repository;
 
 import com.vn.edu.elearning.domain.Baocaotailieu;
-import com.vn.edu.elearning.domain.Mabaocaotailieu;
+import com.vn.edu.elearning.domain.Taikhoan;
+import com.vn.edu.elearning.domain.Tailieu;
 import com.vn.edu.elearning.dto.TheodoibaocaoDto;
 import com.vn.edu.elearning.dto.ThongtinbaocaotailieuDto;
 import jakarta.transaction.Transactional;
@@ -11,8 +12,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Mabaocaotailieu> {
+public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Long> {
 
     List<Baocaotailieu> findByTaikhoan_Mataikhoan(Long mataikhoan);
 
@@ -20,8 +22,7 @@ public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Ma
             "COUNT(b), " +
             "t.tentailieu, " +
             "tk.taikhoan.tendangnhap, " +
-            "SUM(CASE WHEN b.trangthai = 'Chờ xem xét' THEN 1 ELSE 0 END), " +
-            "SUM(CASE WHEN b.trangthai = 'Đã xem xét' THEN 1 ELSE 0 END)) " +
+            "t.matailieu ) " +
             "FROM Baocaotailieu b " +
             "JOIN b.tailieu t " +
             "JOIN t.dsdangtai tk " +
@@ -38,16 +39,11 @@ public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Ma
             "ORDER BY COUNT(b) DESC")
     List<TheodoibaocaoDto> findReportMonitor();
 
-    Baocaotailieu findByTaikhoan_MataikhoanAndTailieu_Matailieu(Long mataikhoan, Long matailieu);
+    @Query("SELECT b FROM Baocaotailieu b WHERE b.taikhoan = :taikhoan AND b.tailieu = :tailieu " +
+            "ORDER BY b.thoigianbaocao DESC")
+    Optional<Baocaotailieu> findLatestReportForDocument(@Param("taikhoan") Taikhoan taikhoan,
+                                                        @Param("tailieu") Tailieu tailieu);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Baocaotailieu b SET b.trangthai = :trangthai WHERE b.tailieu.matailieu = :matailieu")
-    void updateTrangthaiByMatailieu(String trangthai, Long matailieu);
-
-    @Transactional
-    @Modifying
-    @Query("UPDATE Baocaotailieu b SET b.lydo = CONCAT(b.lydo, ' | ', :newLydo),b.trangthai='Chờ xem xét' WHERE b.mabaocaotailieu.mataikhoan = :mataikhoan")
-    int updateLydo(@Param("mataikhoan") Long mataikhoan, @Param("newLydo") String newLydo);
+    List<Baocaotailieu> findByTailieu_Matailieu(Long matailieu);
 
 }
