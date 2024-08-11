@@ -31,7 +31,7 @@ public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Lo
     List<ThongtinbaocaotailieuDto> findReportedDocumentInfo();
 
     @Query("SELECT new com.vn.edu.elearning.dto.TheodoibaocaoDto(" +
-            "COUNT(b), tk.taikhoan.tendangnhap) " +
+            "COUNT(b), tk.taikhoan.tendangnhap,tk.taikhoan.mataikhoan) " +
             "FROM Baocaotailieu b " +
             "JOIN b.tailieu t " +
             "JOIN t.dsdangtai tk " +

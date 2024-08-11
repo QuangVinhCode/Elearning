@@ -24,7 +24,7 @@ public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, 
             "ORDER BY COUNT(b) DESC")
     List<ThongtinbaocaobinhluanDto> findReportedCommentsInfo();
 
-    @Query("SELECT new com.vn.edu.elearning.dto.TheodoibaocaoDto(COUNT(b), tk.tendangnhap) " +
+    @Query("SELECT new com.vn.edu.elearning.dto.TheodoibaocaoDto(COUNT(b), tk.tendangnhap,tk.mataikhoan) " +
             "FROM Baocaobinhluan b " +
             "JOIN b.binhluan bl " +
             "JOIN bl.taikhoan tk " +
@@ -35,5 +35,6 @@ public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, 
     Baocaobinhluan findByTaikhoan_MataikhoanAndBinhluan_Mabinhluan(Long mataikhoan, Long mabinhluan);
 
     List<Baocaobinhluan> findByBinhluan_Mabinhluan(Long mabinhluan);
+
 
 }

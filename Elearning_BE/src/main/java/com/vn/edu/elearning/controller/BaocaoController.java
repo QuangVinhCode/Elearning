@@ -95,4 +95,14 @@ public class BaocaoController {
     public ResponseEntity<?> getReportsByComment(@PathVariable("id") Long id){
         return new ResponseEntity<>(baocaobinhluanService.findReportsByComment(id),HttpStatus.OK);
     }
+
+    @GetMapping("/account-document-details/{id}")
+    public ResponseEntity<?> getReportDocumentByAccount(@PathVariable("id") Long id){
+        return new ResponseEntity<>(baocaotailieuService.findReportsByAccount(id),HttpStatus.OK);
+    }
+
+    @GetMapping("/account-comment-details/{id}")
+    public ResponseEntity<?> getReportCommentByAccount(@PathVariable("id") Long id){
+        return new ResponseEntity<>(baocaobinhluanService.findReportsByAccount(id),HttpStatus.OK);
+    }
 }
