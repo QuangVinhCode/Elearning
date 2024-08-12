@@ -26,7 +26,7 @@ public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Lo
             "FROM Baocaotailieu b " +
             "JOIN b.tailieu t " +
             "JOIN t.dsdangtai tk " +
-            "GROUP BY t.tentailieu, tk.taikhoan.tendangnhap " +
+            "GROUP BY t.tentailieu, tk.taikhoan.tendangnhap,t.matailieu " +
             "ORDER BY COUNT(b) DESC")
     List<ThongtinbaocaotailieuDto> findReportedDocumentInfo();
 
@@ -35,7 +35,7 @@ public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Lo
             "FROM Baocaotailieu b " +
             "JOIN b.tailieu t " +
             "JOIN t.dsdangtai tk " +
-            "GROUP BY tk.taikhoan.tendangnhap " +
+            "GROUP BY tk.taikhoan.tendangnhap,tk.taikhoan.mataikhoan " +
             "ORDER BY COUNT(b) DESC")
     List<TheodoibaocaoDto> findReportMonitor();
 
@@ -45,5 +45,7 @@ public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Lo
                                                         @Param("tailieu") Tailieu tailieu);
 
     List<Baocaotailieu> findByTailieu_Matailieu(Long matailieu);
+
+    List<Baocaotailieu> findByTailieu_Dsdangtai_Taikhoan(Taikhoan taikhoan);
 
 }

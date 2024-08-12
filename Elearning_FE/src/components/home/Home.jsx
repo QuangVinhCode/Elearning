@@ -52,6 +52,18 @@ class Home extends Component {
             align="center"
           />
           <Column
+            title="Thu nhập tác giả"
+            key="thunhaptacgia"
+            dataIndex="thunhaptacgia"
+            width={80}
+            align="center"
+            render={(text) => (
+              <div>
+                <span style={{ color: "green" }}>+ {text}</span>
+              </div>
+            )}
+          />
+          <Column
             title="Thu nhập phí quản trị"
             key="thunhapquantri"
             dataIndex="thunhapquantri"

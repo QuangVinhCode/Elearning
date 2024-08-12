@@ -16,11 +16,12 @@ public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, 
 
     List<Baocaobinhluan> findByTaikhoan_Mataikhoan(Long mataikhoan);
 
+
     @Query("SELECT new com.vn.edu.elearning.dto.ThongtinbaocaobinhluanDto(COUNT(b), bl.noidung, tk.tendangnhap,bl.mabinhluan) " +
             "FROM Baocaobinhluan b " +
             "JOIN b.binhluan bl " +
             "JOIN bl.taikhoan tk " +
-            "GROUP BY bl.noidung, tk.tendangnhap " +
+            "GROUP BY bl.noidung, tk.tendangnhap,bl.mabinhluan " +
             "ORDER BY COUNT(b) DESC")
     List<ThongtinbaocaobinhluanDto> findReportedCommentsInfo();
 
@@ -28,7 +29,7 @@ public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, 
             "FROM Baocaobinhluan b " +
             "JOIN b.binhluan bl " +
             "JOIN bl.taikhoan tk " +
-            "GROUP BY bl.noidung, tk.tendangnhap " +
+            "GROUP BY tk.tendangnhap,tk.mataikhoan " +
             "ORDER BY COUNT(b) DESC")
     List<TheodoibaocaoDto> findReportMonitor();
 
@@ -36,5 +37,6 @@ public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, 
 
     List<Baocaobinhluan> findByBinhluan_Mabinhluan(Long mabinhluan);
 
+    List<Baocaobinhluan> findByBinhluan_Taikhoan_Mataikhoan(Long mataikhoan);
 
 }

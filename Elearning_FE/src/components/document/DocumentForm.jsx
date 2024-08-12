@@ -200,7 +200,10 @@ class DocumentForm extends Component {
             label="Tên tài liệu"
             name="tentailieu"
             initialValue={document.tentailieu}
-            rules={[{ required: true, message: "Yêu cầu nhập tên tài liệu" }]}
+            rules={[
+              { required: true, message: "Yêu cầu nhập tên tài liệu" },
+              { max: 100, message: "Mô tả không được vượt quá 100 ký tự" },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -208,7 +211,10 @@ class DocumentForm extends Component {
             label="Tác giả"
             name="tacgia"
             initialValue={document.tacgia}
-            rules={[{ required: true, message: "Yêu cầu nhập tên tác giả" }]}
+            rules={[
+              { required: true, message: "Yêu cầu nhập tên tác giả" },
+              { max: 50, message: "Mô tả không được vượt quá 50 ký tự" },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -218,7 +224,7 @@ class DocumentForm extends Component {
             initialValue={document.mota}
             rules={[
               { required: true, message: "Yêu cầu nhập mô tả" },
-              { max: 255, message: "Mô tả không được vượt quá 255 ký tự" },
+              { max: 250, message: "Mô tả không được vượt quá 250 ký tự" },
             ]}
           >
             <Input />

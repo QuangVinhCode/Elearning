@@ -71,7 +71,7 @@ class ListComment extends Component {
       : null;
 
     if (!selectedError) {
-      message.error("Vui lòng chọn lỗi tài liệu.");
+      message.error("Vui lòng chọn lỗi bình luận.");
       return;
     }
 
@@ -223,9 +223,9 @@ class ListComment extends Component {
             }}
             layout="horizontal"
           >
-            <Form.Item label="Lỗi tài liệu">
+            <Form.Item label="Lỗi bình luận">
               <Select
-                placeholder="Chọn lỗi tài liệu"
+                placeholder="Chọn lỗi bình luận"
                 value={selectedError}
                 onChange={this.handleErrorChange}
               >

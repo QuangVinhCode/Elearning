@@ -34,11 +34,11 @@ public class BaocaotailieuService {
         BeanUtils.copyProperties(dto,entity);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
-        if (taikhoan!=null)
+        if (taikhoan==null)
         {
             throw  new BaocaoException("Tài khoản không tồn tại");
         }
-        if (tailieu!=null)
+        if (tailieu==null)
         {
             throw  new BaocaoException("Tài liệu không tồn tại");
         }
@@ -68,8 +68,9 @@ public class BaocaotailieuService {
     public List<TheodoibaocaoDto> findReportMonitor() {
         return baocaotailieuRepository.findReportMonitor();
     }
-    public List<Baocaotailieu> findReportsByAccount(Long matl) {
-        return baocaotailieuRepository.findByTaikhoan_Mataikhoan(matl);
+    public List<Baocaotailieu> findReportsByAccount(Long matk) {
+        Taikhoan taikhoan = taikhoanService.findById(matk);
+        return baocaotailieuRepository.findByTailieu_Dsdangtai_Taikhoan(taikhoan);
     }
 
     public boolean isReportAllowed(Taikhoan taikhoan, Tailieu tailieu) {

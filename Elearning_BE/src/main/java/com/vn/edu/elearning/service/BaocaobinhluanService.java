@@ -57,8 +57,8 @@ public class BaocaobinhluanService {
     public List<TheodoibaocaoDto> findReportMonitor() {
         return baocaobinhluanRepository.findReportMonitor();
     }
-    public List<Baocaobinhluan> findReportsByAccount(Long matl) {
-        return baocaobinhluanRepository.findByTaikhoan_Mataikhoan(matl);
+    public List<Baocaobinhluan> findReportsByAccount(Long matk) {
+        return baocaobinhluanRepository.findByBinhluan_Taikhoan_Mataikhoan(matk);
     }
 
 }

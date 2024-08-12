@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Value
 public class ThongtinbaocaotailieuDto implements Serializable {
     Long solanbaocao;
-    String tendtailieu;
+    String tentailieu;
     String tentaikhoanbitocao;
     Long matailieu;
 }

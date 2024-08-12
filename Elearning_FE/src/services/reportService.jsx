@@ -22,11 +22,28 @@ export default class ReportService {
   getReportCommentMonitor = async () => {
     return await axios.get(API_REPORT + "/comment-monitor");
   };
+
+  getReportsByDocument = async (id) => {
+    return await axios.get(API_REPORT + "/document-details/" + id);
+  };
+
+  getReportsByComment = async (id) => {
+    return await axios.get(API_REPORT + "/comment-details/" + id);
+  };
+
   insertReportDocument = async (object) => {
     return await axios.post(API_REPORT + "/document", object);
   };
 
   insertReportComment = async (object) => {
     return await axios.post(API_REPORT + "/comment", object);
+  };
+
+  getReportDocumentByAccount = async (id) => {
+    return await axios.get(API_REPORT + "/account-document-details/" + id);
+  };
+
+  getReportCommentByAccount = async (id) => {
+    return await axios.get(API_REPORT + "/account-comment-details/" + id);
   };
 }

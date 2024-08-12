@@ -6,20 +6,24 @@ import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
 import { Select, Button, message, Skeleton, Table, Space, Tooltip } from "antd";
 import Column from "antd/lib/table/Column";
-
+import { IoEyeSharp } from "react-icons/io5";
+import DocumentNumberHistory from "./DocumentNumberHistory";
 class DocumentReportNumber extends Component {
   constructor() {
     super();
     this.state = {
       selectedDates: {},
-      reports: {}, // Object to store selected dates for each account
+      reports: {},
+      open: false, // Object to store selected dates for each account
     };
   }
 
   componentDidMount() {
     this.props.getReportDocumentMonitor();
   }
-
+  openReportDetails = (object) => {
+    this.setState({ ...this.state, report: object, open: true });
+  };
   render() {
     const { navigate } = this.props.router;
     const { reports, isLoading } = this.props;
@@ -59,7 +63,36 @@ class DocumentReportNumber extends Component {
             width={40}
             align="center"
           />
+          <Column
+            title="Tác vụ"
+            key="action"
+            dataIndex="action"
+            width={40}
+            align="center"
+            render={(_, record) => (
+              <Space size="middle">
+                <Button
+                  key={record.key}
+                  type="primary"
+                  size="small"
+                  onClick={() => this.openReportDetails(record)}
+                >
+                  <IoEyeSharp style={{ marginRight: 8 }} />
+                  Xem
+                </Button>
+              </Space>
+            )}
+          ></Column>
         </Table>
+        {this.state.open && (
+          <DocumentNumberHistory
+            mataikhoan={this.state.report.mataikhoan}
+            open={this.state.open}
+            onCancel={() => {
+              this.setState({ ...this.state, report: {}, open: false });
+            }}
+          />
+        )}
       </>
     );
   }

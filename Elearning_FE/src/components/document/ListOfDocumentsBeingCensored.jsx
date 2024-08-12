@@ -14,14 +14,21 @@ const ListOfDocumentsBeingCensored = ({
   const [searchText, setSearchText] = useState("");
   const [categoryFilter, setCategoryFilter] = useState(null);
   const filteredData = dataSource.filter((doc) => {
+    const searchTextLower = searchText.toLowerCase();
+
     const matchesSearch = doc.tentailieu
-      .toLowerCase()
-      .includes(searchText.toLowerCase());
+      ? doc.tentailieu.toLowerCase().includes(searchTextLower) ||
+        (doc.tendangnhap &&
+          doc.tendangnhap.toLowerCase().includes(searchTextLower))
+      : false;
+
     const matchesCategory = categoryFilter
       ? doc.trangthai === categoryFilter
       : true;
+
     return matchesSearch && matchesCategory;
   });
+
   return (
     <>
       <Space style={{ marginBottom: 16, marginTop: 10 }}>

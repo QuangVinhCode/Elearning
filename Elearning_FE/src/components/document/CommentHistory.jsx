@@ -7,8 +7,7 @@ import {
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { FaBan } from "react-icons/fa";
-import { Modal, Button } from "antd";
-import { Tooltip, Skeleton, Table, Space } from "antd";
+import { Modal, Button, Input, Space, Table, Skeleton } from "antd";
 import Column from "antd/lib/table/Column";
 import ContentHeader from "../common/ContentHeader";
 
@@ -16,8 +15,8 @@ class CommentHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      comments: {},
-      object: null, // Initialize the object state
+      searchText: "",
+      object: null,
     };
   }
 
@@ -35,8 +34,7 @@ class CommentHistory extends Component {
 
   onBanConfirm = (record) => {
     this.setState({ object: record });
-    console.log(record);
-    const message = "Bạn có chắc chắn muốn cấm bình luận: " + record.noidung;
+    const message = "Bạn có chắc chắn muốn cấm bình luận: " + (record.noidung || "N/A");
 
     Modal.confirm({
       title: "Xác nhận",
@@ -48,9 +46,21 @@ class CommentHistory extends Component {
     });
   };
 
+  handleSearch = (e) => {
+    this.setState({ searchText: e.target.value });
+  };
+
   render() {
     const { navigate } = this.props.router;
     const { comments, isLoading } = this.props;
+    const { searchText } = this.state;
+
+    // Filter comments based on search text
+    const filteredComments = comments.filter(
+      (comment) =>
+        (comment.tendangnhap && comment.tendangnhap.toLowerCase().includes(searchText.toLowerCase())) ||
+        (comment.tentailieu && comment.tentailieu.toLowerCase().includes(searchText.toLowerCase()))
+    );
 
     if (isLoading) {
       return (
@@ -72,13 +82,22 @@ class CommentHistory extends Component {
           title="Lịch sử bình luận"
           className="site-page-header"
         />
-        <Table dataSource={comments} size="small" rowKey="mabinhluan">
+        <Space style={{ marginBottom: 16, marginTop: 10 }}>
+          <Input
+            placeholder="Tìm kiếm theo tên tài khoản hoặc tên tài liệu"
+            value={searchText}
+            onChange={this.handleSearch}
+            style={{ width: 300 }}
+          />
+        </Space>
+        <Table dataSource={filteredComments} size="small" rowKey="mabinhluan">
           <Column
             title="Tên tài khoản"
             key="tendangnhap"
             dataIndex="tendangnhap"
             width={20}
             align="center"
+            render={(text) => text || "N/A"} // Render default value if undefined
           />
           <Column
             title="Nội dung"
@@ -93,6 +112,7 @@ class CommentHistory extends Component {
             dataIndex="tentailieu"
             width={40}
             align="center"
+            render={(text) => text || "N/A"} // Render default value if undefined
           />
           <Column
             title="Thời gian bình luận"
@@ -146,7 +166,7 @@ class CommentHistory extends Component {
 
 const mapStateToProps = (state) => ({
   comments: state.commentReducer.comments,
-  isLoading: state.commentReducer.isLoading, // Make sure to include isLoading in your reducer
+  isLoading: state.commentReducer.isLoading,
 });
 
 const mapDispatchToProps = {

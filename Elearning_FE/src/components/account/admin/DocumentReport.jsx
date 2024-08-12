@@ -1,25 +1,29 @@
 import React, { Component } from "react";
-import { getReportDocuments } from "../../../redux/actions/reportAction";
+import { getReportedDocumentInfo } from "../../../redux/actions/reportAction";
 import "./UserManage.css";
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
 import { Select, Button, message, Skeleton, Table, Space, Tooltip } from "antd";
 import Column from "antd/lib/table/Column";
-
+import { IoEyeSharp } from "react-icons/io5";
+import DocumentReportHistory from "./DocumentReportHistory";
 class DocumentReport extends Component {
   constructor() {
     super();
     this.state = {
       selectedDates: {},
-      reports: {}, // Object to store selected dates for each account
+      reports: {},
+      open: false, // Object to store selected dates for each account
     };
   }
 
   componentDidMount() {
-    this.props.getReportDocuments();
+    this.props.getReportedDocumentInfo();
   }
-
+  openReportDocumentDetails = (object) => {
+    this.setState({ ...this.state, report: object, open: true });
+  };
   render() {
     const { navigate } = this.props.router;
     const { reports, isLoading } = this.props;
@@ -44,52 +48,69 @@ class DocumentReport extends Component {
           title="DS tố cáo tài liệu"
           className="site-page-header"
         />
-        <Table dataSource={reports} size="small" rowKey="mabaocaotailieu">
+        <Table dataSource={reports} size="small" rowKey="mataikhoan">
           <Column
             title="Tên tài liệu"
-            key="tailieu"
-            dataIndex="tailieu"
+            key="tentailieu"
+            dataIndex="tentailieu"
             width={40}
             align="center"
-            render={(tailieu) => (
-              <Tooltip
-                placement="topLeft"
-                title={tailieu ? tailieu.tentailieu : "N/A"}
-              >
-                {tailieu ? tailieu.tentailieu : "N/A"}
+            render={(tentailieu) => (
+              <Tooltip placement="topLeft" title={tentailieu}>
+                {tentailieu}
+              </Tooltip>
+            )}
+          />
+
+          <Column
+            title="Tên tài khoản bị báo cáo"
+            key="tentaikhoanbitocao"
+            dataIndex="tentaikhoanbitocao"
+            width={40}
+            align="center"
+            render={(tentaikhoanbitocao) => (
+              <Tooltip placement="topLeft" title={tentaikhoanbitocao}>
+                {tentaikhoanbitocao}
               </Tooltip>
             )}
           />
           <Column
-            title="Lý do"
-            key="lydo"
-            dataIndex="lydo"
+            title="Số lần báo cáo"
+            key="solanbaocao"
+            dataIndex="solanbaocao"
             width={40}
             align="center"
           />
           <Column
-            title="Thời gian báo cáo"
-            key="thoigianbaocao"
-            dataIndex="thoigianbaocao"
+            title="Tác vụ"
+            key="action"
+            dataIndex="action"
             width={40}
             align="center"
-          />
-          <Column
-            title="Tên tài khoản báo cáo"
-            key="taikhoan"
-            dataIndex="taikhoan"
-            width={40}
-            align="center"
-            render={(taikhoan) => (
-              <Tooltip
-                placement="topLeft"
-                title={taikhoan ? taikhoan.tendangnhap : "N/A"}
-              >
-                {taikhoan ? taikhoan.tendangnhap : "N/A"}
-              </Tooltip>
+            render={(_, record) => (
+              <Space size="middle">
+                <Button
+                  key={record.key}
+                  type="primary"
+                  size="small"
+                  onClick={() => this.openReportDocumentDetails(record)}
+                >
+                  <IoEyeSharp style={{ marginRight: 8 }} />
+                  Xem
+                </Button>
+              </Space>
             )}
-          />
+          ></Column>
         </Table>
+        {this.state.open && (
+          <DocumentReportHistory
+            matailieu={this.state.report.matailieu}
+            open={this.state.open}
+            onCancel={() => {
+              this.setState({ ...this.state, report: {}, open: false });
+            }}
+          />
+        )}
       </>
     );
   }
@@ -101,7 +122,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  getReportDocuments,
+  getReportedDocumentInfo,
 };
 
 export default withRouter(

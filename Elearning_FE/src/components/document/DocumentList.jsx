@@ -24,8 +24,8 @@ const DocumentList = ({
   // Filter the data based on search text and category filter
   const filteredData = dataSource.filter((doc) => {
     const matchesSearch = doc.tentailieu
-      .toLowerCase()
-      .includes(searchText.toLowerCase());
+      ? doc.tentailieu.toLowerCase().includes(searchText.toLowerCase())
+      : false;
     const matchesCategory = categoryFilter
       ? doc.danhmuc?.tendanhmuc === categoryFilter
       : true;

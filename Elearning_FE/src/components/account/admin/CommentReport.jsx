@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getReportComments } from "../../../redux/actions/reportAction";
+import { getReportedCommentsInfo } from "../../../redux/actions/reportAction";
 import "./UserManage.css";
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
@@ -7,23 +7,24 @@ import { connect } from "react-redux";
 import { Select, Button, message, Skeleton, Table, Space, Tooltip } from "antd";
 import Column from "antd/lib/table/Column";
 import { IoEyeSharp } from "react-icons/io5";
+import CommentReportHistory from "./CommentReportHistory";
 
 class DocumentReport extends Component {
   constructor() {
     super();
     this.state = {
       selectedDates: {},
-      reports: {}, // Object to store selected dates for each account
+      reports: {},
+      open: false, // Object to store selected dates for each account
     };
   }
 
   componentDidMount() {
-    this.props.getReportComments();
+    this.props.getReportedCommentsInfo();
   }
-
-  openReportDetails() {
-    
-  }
+  openReportDetails = (object) => {
+    this.setState({ ...this.state, report: object, open: true });
+  };
 
   render() {
     const { navigate } = this.props.router;
@@ -51,54 +52,38 @@ class DocumentReport extends Component {
         />
         <Table dataSource={reports} size="small" rowKey="mataikhoan">
           <Column
+            title="Tên tài khoản bị báo cáo"
+            key="tentaikhoanbitocao"
+            dataIndex="tentaikhoanbitocao"
+            width={40}
+            align="center"
+            render={(tentaikhoanbitocao) => (
+              <Tooltip placement="topLeft" title={tentaikhoanbitocao}>
+                {tentaikhoanbitocao}
+              </Tooltip>
+            )}
+          />
+          <Column
             title="Nội dung binh luận"
-            key="binhluan"
-            dataIndex="binhluan"
+            key="noidungbinhluan"
+            dataIndex="noidungbinhluan"
             width={40}
             align="center"
-            render={(binhluan) => (
-              <Tooltip
-                placement="topLeft"
-                title={binhluan ? binhluan.noidung : "N/A"}
-              >
-                {binhluan ? binhluan.noidung : "N/A"}
+            render={(noidungbinhluan) => (
+              <Tooltip placement="topLeft" title={noidungbinhluan}>
+                {noidungbinhluan}
               </Tooltip>
             )}
           />
+
           <Column
-            title="Lý do"
-            key="lydo"
-            dataIndex="lydo"
-            width={40}
-            align="center"
-            render={(lydo) => (
-              <Tooltip placement="topLeft" title={lydo}>
-                {lydo}
-              </Tooltip>
-            )}
-          />
-          <Column
-            title="Thời gian báo cáo"
-            key="thoigianbaocao"
-            dataIndex="thoigianbaocao"
+            title="Số lần báo cáo"
+            key="solanbaocao"
+            dataIndex="solanbaocao"
             width={40}
             align="center"
           />
-          <Column
-            title="Tên tài khoản báo cáo"
-            key="taikhoan"
-            dataIndex="taikhoan"
-            width={40}
-            align="center"
-            render={(taikhoan) => (
-              <Tooltip
-                placement="topLeft"
-                title={taikhoan ? taikhoan.tendangnhap : "N/A"}
-              >
-                {taikhoan ? taikhoan.tendangnhap : "N/A"}
-              </Tooltip>
-            )}
-          />
+
           <Column
             title="Tác vụ"
             key="action"
@@ -120,6 +105,15 @@ class DocumentReport extends Component {
             )}
           ></Column>
         </Table>
+        {this.state.open && (
+          <CommentReportHistory
+            mabinhluan={this.state.report.mabinhluan}
+            open={this.state.open}
+            onCancel={() => {
+              this.setState({ ...this.state, report: {}, open: false });
+            }}
+          />
+        )}
       </>
     );
   }
@@ -131,7 +125,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  getReportComments,
+  getReportedCommentsInfo,
 };
 
 export default withRouter(

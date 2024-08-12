@@ -29,6 +29,14 @@ button {
   box-sizing: border-box;
 }
 
+.pdf-viewer-container canvas {
+  width: 100% !important; /* Make sure the PDF scales to the container width */
+  height: auto !important; /* Maintain aspect ratio */
+  max-width: 100%; /* Ensure the canvas does not exceed the container width */
+  max-height: 100%; /* Ensure the canvas does not exceed the container height */
+}
+
+
 .next-button {
   background: linear-gradient(45deg, #6a11cb, #2575fc);
   color: white;
