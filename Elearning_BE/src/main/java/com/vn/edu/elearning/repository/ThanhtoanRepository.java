@@ -34,6 +34,7 @@ public interface ThanhtoanRepository extends JpaRepository<Thanhtoan, Long> {
             ") " +
             "FROM Thanhtoan tt " +
             "JOIN tt.tailieu t " +
-            "JOIN t.dsdangtai dt")
+            "JOIN t.dsdangtai dt " +
+            "ORDER BY tt.mathanhtoan DESC ")
     List<ThongkethanhtoanDto> findThongkethanhtoanDto();
 }
