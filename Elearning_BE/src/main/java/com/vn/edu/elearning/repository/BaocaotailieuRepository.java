@@ -48,4 +48,5 @@ public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Lo
 
     List<Baocaotailieu> findByTailieu_Dsdangtai_Taikhoan(Taikhoan taikhoan);
 
+
 }

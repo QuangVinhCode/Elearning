@@ -34,4 +34,9 @@ public class GiaodichService {
 
     }
 
+    public List<?> findGiaodichsAdmin() {
+        return giaodichRepository.findGiaodichsAdmin();
+
+    }
+
 }

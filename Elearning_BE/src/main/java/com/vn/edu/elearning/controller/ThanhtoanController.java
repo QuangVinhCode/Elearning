@@ -109,5 +109,9 @@ public class ThanhtoanController {
                 .build();
     }
 
+    @GetMapping
+    public ResponseEntity<?> getPays(){
+        return new ResponseEntity<>(thanhtoanService.findAllPay(),HttpStatus.OK);
+    }
 
 }

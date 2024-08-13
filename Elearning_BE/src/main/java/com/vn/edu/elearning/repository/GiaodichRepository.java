@@ -2,6 +2,7 @@ package com.vn.edu.elearning.repository;
 
 import com.vn.edu.elearning.domain.Giaodich;
 import com.vn.edu.elearning.dto.LichsuthuchiDto;
+import com.vn.edu.elearning.dto.ThongtingiaodichDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +23,16 @@ public interface GiaodichRepository extends JpaRepository<Giaodich, Long> {
             "WHERE g.taikhoan.mataikhoan = :mataikhoan AND g.trangthai='Thành công'" +
             "GROUP BY SUBSTRING(g.thoigiangiaodich, 7, 11)")
     List<LichsuthuchiDto> findLichsuthuchiByTaikhoan(@Param("mataikhoan") Long mataikhoan);
+
+    @Query("SELECT new com.vn.edu.elearning.dto.ThongtingiaodichDto(" +
+            "g.magiaodich, " +
+            "g.lydo, " +
+            "g.sotien," +
+            "g.trangthai, " +
+            "SUBSTRING(g.thoigiangiaodich, 7, 11), " +
+            "g.taikhoan.tendangnhap" + // Lấy phần tháng năm từ chuỗi
+            ") " +
+            "FROM Giaodich g")
+    List<ThongtingiaodichDto> findGiaodichsAdmin();
 
 }

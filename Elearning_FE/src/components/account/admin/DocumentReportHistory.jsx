@@ -2,7 +2,10 @@ import React, { Component } from "react";
 
 import { Modal, Table, Tooltip } from "antd";
 
-import { getReportsByDocument } from "../../../redux/actions/reportAction";
+import {
+  getReportsByDocument,
+  clearReportDetailsState,
+} from "../../../redux/actions/reportAction";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
 
@@ -18,6 +21,10 @@ class DocumentReportHistory extends Component {
   componentDidMount() {
     this.props.getReportsByDocument(this.props.matailieu);
   }
+
+  componentWillUnmount = () => {
+    this.props.clearReportDetailsState();
+  };
 
   render() {
     const { onCancel, open } = this.props;
@@ -77,6 +84,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   getReportsByDocument,
+  clearReportDetailsState,
 };
 
 export default withRouter(

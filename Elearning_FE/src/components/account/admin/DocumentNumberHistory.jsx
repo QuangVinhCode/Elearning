@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
-import { Modal, Table } from "antd";
+import { Modal, Table, Tooltip } from "antd";
 
-import { getReportDocumentByAccount } from "../../../redux/actions/reportAction";
+import { getReportDocumentByAccount,clearReportDetailsState } from "../../../redux/actions/reportAction";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
 
@@ -18,6 +18,10 @@ class DocumentNumberHistory extends Component {
   componentDidMount() {
     this.props.getReportDocumentByAccount(this.props.mataikhoan);
   }
+
+  componentWillUnmount = () => {
+    this.props.clearReportDetailsState();
+  };
 
   render() {
     const { onCancel, open } = this.props;
@@ -36,10 +40,18 @@ class DocumentNumberHistory extends Component {
         <Table dataSource={reports} size="small" rowKey="mataikhoan">
           <Column
             title="Tên tài khoản báo cáo"
-            key="tentaikhoanbaocao"
-            dataIndex="tentaikhoanbaocao"
+            key="taikhoan"
+            dataIndex="taikhoan"
             width={40}
             align="center"
+            render={(taikhoan) => (
+              <Tooltip
+                placement="topLeft"
+                title={taikhoan ? taikhoan.tendangnhap : "N/A"}
+              >
+                {taikhoan ? taikhoan.tendangnhap : "N/A"}
+              </Tooltip>
+            )}
           />
 
           <Column
@@ -69,6 +81,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   getReportDocumentByAccount,
+  clearReportDetailsState,
 };
 
 export default withRouter(

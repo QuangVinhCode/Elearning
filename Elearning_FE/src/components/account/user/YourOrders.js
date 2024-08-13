@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { getDocumentPayByCategory } from "../../../redux/actions/documentAction";
-
+import { getDocumentPayByAccount } from "../../../redux/actions/documentAction";
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
@@ -23,9 +22,8 @@ class YourOrders extends Component {
   componentDidMount() {
     const storedUserSession = sessionStorage.getItem("userSession");
     const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
-    this.props.getDocumentPayByCategory(UserSesion.mataikhoan);
-    const { id } = this.props.router.params;
-    this.props.getDocumentPayByCategory(id);
+    this.props.getDocumentPayByAccount(UserSesion.mataikhoan);
+
   }
   onDocument = (object) => {
     const { navigate } = this.props.router;
@@ -143,7 +141,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  getDocumentPayByCategory,
+  getDocumentPayByAccount,
 };
 
 export default withRouter(

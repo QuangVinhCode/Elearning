@@ -7,6 +7,7 @@ import {
   COMMON_LOADING_SET,
   COMMON_MESSAGE_SET,
   REPORTS_DETAILS_SET,
+  REPORT_DETAILS_STATE_CLEAR,
 } from "./actionTypes";
 
 export const getReportDocuments = () => async (dispatch) => {
@@ -424,4 +425,12 @@ export const getReportCommentByAccount = (id) => async (dispatch) => {
         : error.message,
     });
   }
+};
+
+export const clearReportState = () => (dispatch) => {
+  dispatch({ type: REPORT_STATE_CLEAR });
+};
+
+export const clearReportDetailsState = () => (dispatch) => {
+  dispatch({ type: REPORT_DETAILS_STATE_CLEAR });
 };

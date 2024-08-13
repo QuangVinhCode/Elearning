@@ -19,6 +19,13 @@ class Home extends Component {
     this.props.getDocumentAllPayAmin();
   }
 
+  formatCurrency = (amount) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  };
+
   render() {
     const { navigate } = this.props.router;
     const { documents, isLoading } = this.props;
@@ -59,7 +66,7 @@ class Home extends Component {
             align="center"
             render={(text) => (
               <div>
-                <span style={{ color: "green" }}>+ {text}</span>
+                <span style={{ color: "green" }}>+ {this.formatCurrency(text)}</span>
               </div>
             )}
           />
@@ -71,7 +78,7 @@ class Home extends Component {
             align="center"
             render={(text) => (
               <div>
-                <span style={{ color: "green" }}>+ {text}</span>
+                <span style={{ color: "green" }}>+ {this.formatCurrency(text)}</span>
               </div>
             )}
           />

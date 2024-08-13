@@ -27,4 +27,9 @@ public class GiaodichController {
     public  ResponseEntity<?> getRevenues(@PathVariable("id") Long id){
         return new ResponseEntity<>(giaodichService.findAllTransactionByAccount(id),HttpStatus.OK);
     }
+
+    @GetMapping("/transaction")
+    public  ResponseEntity<?> getTransactions(){
+        return new ResponseEntity<>(giaodichService.findGiaodichsAdmin(),HttpStatus.OK);
+    }
 }

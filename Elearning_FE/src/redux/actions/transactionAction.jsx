@@ -79,3 +79,7 @@ export const getTransactionsbyAccount = (id) => async (dispatch) => {
     payload: false,
   });
 };
+
+export const clearTransactionState = () => (dispatch) => {
+  dispatch({ type: TRANSACTION_STATE_CLEAR });
+};

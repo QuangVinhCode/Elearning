@@ -13,14 +13,12 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 public class DataLoaderRunner {
-
     @Autowired
     private final TaikhoanRepository taikhoanRepository;
     @Autowired
     public DataLoaderRunner(TaikhoanRepository taikhoanRepository) {
         this.taikhoanRepository = taikhoanRepository;
     }
-
     @PostConstruct
     public void init() {
         if (taikhoanRepository.count() == 0) {
@@ -42,9 +40,7 @@ public class DataLoaderRunner {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String currentDateString = currentDate.format(formatter);
-
         taikhoanRepository.updateTrangthaiDangtaiIfDateMatches(currentDateString);
         taikhoanRepository.updateTrangthaiBinhluanIfDateMatches(currentDateString);
-
     }
 }

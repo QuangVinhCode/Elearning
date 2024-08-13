@@ -53,6 +53,7 @@ public class KiemduyetController {
             kiemduyetService.updateCensorshipTime(thoigian,taikhoan,tailieu);
             tailieuService.updateTrangthai("Đã kiểm duyệt",entity.getTailieu().getMatailieu());
         }else {
+            kiemduyetService.updateCensorshipTime("",taikhoan,tailieu);
             tailieuService.updateTrangthai("Cần chỉnh sửa",entity.getTailieu().getMatailieu());
         }
 
@@ -76,7 +77,6 @@ public class KiemduyetController {
         Lichsukiemduyet entity = kiemduyetService.save(dto);
         Taikhoan taikhoan = taikhoanService.findByPostedDocuments(dto.getMatailieu());
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
-        kiemduyetService.updateCensorshipTime("",taikhoan,tailieu);
         tailieuService.updateTrangthai("Cấm",entity.getTailieu().getMatailieu());
 
         return new ResponseEntity<>(entity, HttpStatus.CREATED);

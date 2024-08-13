@@ -50,11 +50,15 @@ export default class DocumentService {
   getDocumentsByAccountPay = async (id) => {
     return await axios.get(API_DOCUMENT + "/pay/" + id);
   };
-  getDocumentUploadByCategory = async (id) => {
+  getDocumentUploadByAccount = async (id) => {
     return await axios.get(API_DOCUMENT + "/upload-account/" + id);
   };
-  getDocumentPayByCategory = async (id) => {
+  getDocumentPayByAccount = async (id) => {
     return await axios.get(API_DOCUMENT + "/pay-account/" + id);
+  };
+
+  updateStatusBan = async (object) => {
+    return await axios.patch(API_CENSORSHIP + "/ban", object);
   };
 
   deleteDocument = async (id) => {
@@ -74,6 +78,9 @@ export default class DocumentService {
   };
   getDocument = async (id) => {
     return await axios.get(API_DOCUMENT + "/" + id + "/get");
+  };
+  getDocumentInfo = async (id) => {
+    return await axios.get(API_DOCUMENT + "/" + id + "/info");
   };
   updateDocument = async (id, object) => {
     let formData = new FormData();

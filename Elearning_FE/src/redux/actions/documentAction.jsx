@@ -357,7 +357,7 @@ export const getCensorshipByDocument = (id) => async (dispatch) => {
   }
 };
 
-export const getDocumentUploadByCategory = (id) => async (dispatch) => {
+export const getDocumentUploadByAccount = (id) => async (dispatch) => {
   const service = new DocumentService();
 
   try {
@@ -366,7 +366,7 @@ export const getDocumentUploadByCategory = (id) => async (dispatch) => {
       type: COMMON_LOADING_SET,
       payload: true,
     });
-    const response = await service.getDocumentUploadByCategory(id);
+    const response = await service.getDocumentUploadByAccount(id);
     console.log(response);
     if (response.status === 200) {
       dispatch({
@@ -393,7 +393,7 @@ export const getDocumentUploadByCategory = (id) => async (dispatch) => {
   });
 };
 
-export const getDocumentPayByCategory = (id) => async (dispatch) => {
+export const getDocumentPayByAccount = (id) => async (dispatch) => {
   const service = new DocumentService();
 
   try {
@@ -402,7 +402,7 @@ export const getDocumentPayByCategory = (id) => async (dispatch) => {
       type: COMMON_LOADING_SET,
       payload: true,
     });
-    const response = await service.getDocumentPayByCategory(id);
+    const response = await service.getDocumentPayByAccount(id);
     console.log(response);
     if (response.status === 200) {
       dispatch({
@@ -580,6 +580,42 @@ export const getDocument = (id) => async (dispatch) => {
       payload: true,
     });
     const response = await service.getDocument(id);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: DOCUMENT_SET,
+        payload: response.data,
+      });
+      return response;
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const getDocumentInfo = (id) => async (dispatch) => {
+  const service = new DocumentService();
+  try {
+    console.log("Lấy tài liệu");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getDocumentInfo(id);
     console.log(response);
     if (response.status === 200) {
       dispatch({
@@ -785,6 +821,60 @@ export const updateDocument = (object) => async (dispatch) => {
   });
 };
 
+export const updateDocumentUser = (object,id) => async (dispatch) => {
+  const service = new DocumentService();
+
+  try {
+    console.log("Sửa tài liệu");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    console.log("cập nhập object in action: ");
+    console.log(object);
+    const { matailieu } = object;
+    const response = await service.updateDocument(matailieu, object);
+    console.log("response");
+    console.log(response);
+    if (response.status === 201) {
+      dispatch({
+        type: DOCUMENT_SET,
+        payload: response.data,
+      });
+      console.log("cập nhập object in data ");
+      console.log(response.data);
+      dispatch({
+        type: DOCUMENT_UPDATE,
+        payload: response.data,
+      });
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "Tài liệu đã được sửa",
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+    console.log(error);
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+
+  dispatch(getDocumentUploadByAccount(id))
+};
+
 export const payDocument = (matk, matl) => async (dispatch) => {
   const service = new PayService();
   try {
@@ -849,6 +939,41 @@ export const payDocument = (matk, matl) => async (dispatch) => {
     });
   }
 };
+
+export const updateStatusBan = (object) => async (dispatch) => {
+  const service = new DocumentService();
+
+  try {
+    console.log("Cấm tài liệu");
+
+    const response = await service.updateStatusBan(object);
+    console.log(response);
+    if (response.status === 201) {
+      dispatch({
+        type: CENSORSHIP_SET,
+        payload: response.data,
+      });
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "Cấm thành công",
+      });
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch(getDocumentByCensorship());
+};
+
 
 export const clearDocumentState = () => (dispatch) => {
   dispatch({ type: DOCUMENT_STATE_CLEAR });

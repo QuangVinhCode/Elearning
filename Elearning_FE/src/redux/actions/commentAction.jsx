@@ -7,6 +7,7 @@ import {
   COMMON_ERROR_SET,
   COMMON_LOADING_SET,
   COMMON_MESSAGE_SET,
+  COMMENT_STATE_CLEAR,
 } from "./actionTypes";
 
 export const insertComment = (object) => async (dispatch) => {
@@ -336,4 +337,8 @@ export const getComment = (id) => async (dispatch) => {
     type: COMMON_LOADING_SET,
     payload: false,
   });
+};
+
+export const clearCommentState = () => (dispatch) => {
+  dispatch({ type: COMMENT_STATE_CLEAR });
 };

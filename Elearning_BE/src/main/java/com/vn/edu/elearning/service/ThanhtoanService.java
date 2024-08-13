@@ -2,6 +2,7 @@ package com.vn.edu.elearning.service;
 
 import com.vn.edu.elearning.domain.*;
 import com.vn.edu.elearning.dto.ThanhtoanDto;
+import com.vn.edu.elearning.dto.ThongkethanhtoanDto;
 import com.vn.edu.elearning.exeception.TailieuException;
 import com.vn.edu.elearning.repository.DangtaiRepository;
 import com.vn.edu.elearning.repository.GiaodichRepository;
@@ -81,8 +82,8 @@ public class ThanhtoanService {
                 giaodichRepository.save(giaodichThanhtoan);
 
             }else {
-                Long phiquangtri = (tailieu.getGiaban() / 10) * tailieu.getTylephiquantri();
-                Long thunhaptacgia = (tailieu.getGiaban() / 10) * tailieu.getTylethunhaptacgia();
+                Long phiquangtri = (tailieu.getGiaban() / 100) * tailieu.getTylephiquantri();
+                Long thunhaptacgia = (tailieu.getGiaban() / 100) * tailieu.getTylethunhaptacgia();
                 Long soduTK = taikhoan.getSodu() - tailieu.getGiaban();
                 System.out.println("phiquangtri " + phiquangtri);
                 System.out.println("thunhaptacgia " + thunhaptacgia);
@@ -125,6 +126,10 @@ public class ThanhtoanService {
         return thanhtoanRepository.findAll();
     }
 
+    public List<ThongkethanhtoanDto> findAllPay() {
+        return thanhtoanRepository.findThongkethanhtoanDto();
+    }
+
     public boolean checkThanhtoan(Long taikhoan, Long tailieu) {
         Thanhtoan thanhtoan = thanhtoanRepository.findByTaikhoan_MataikhoanAndTailieu_MatailieuAndTrangthai(taikhoan,tailieu,"Thành công");
         if (thanhtoan != null)
@@ -133,5 +138,6 @@ public class ThanhtoanService {
         }
         return  false;
     }
+
 
 }

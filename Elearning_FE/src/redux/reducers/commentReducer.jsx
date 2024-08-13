@@ -3,6 +3,7 @@ import {
   COMMENT_DELETE,
   COMMENT_SET,
   COMMENT_APPEND,
+  COMMENT_STATE_CLEAR,
 } from "../actions/actionTypes";
 const initialState = {
   comment: {},
@@ -21,6 +22,11 @@ const commentReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         comments: state.comments.filter((item) => item.mabinhluan !== payload),
+      };
+    case COMMENT_STATE_CLEAR:
+      return {
+        comment: {},
+        comments: [],
       };
     default:
       return state;

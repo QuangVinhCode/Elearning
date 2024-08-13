@@ -7,6 +7,7 @@ import com.vn.edu.elearning.domain.Tailieu;
 import com.vn.edu.elearning.dto.KiemduyettailieuDto;
 import com.vn.edu.elearning.dto.LichsukiemduyetDto;
 import com.vn.edu.elearning.dto.TailieuDto;
+import com.vn.edu.elearning.dto.ThongtintailieuDto;
 import com.vn.edu.elearning.exeception.TailieuException;
 import com.vn.edu.elearning.repository.*;
 import jakarta.transaction.Transactional;
@@ -40,8 +41,7 @@ public class TailieuService {
     private ThanhtoanRepository thanhtoanRepository;
 
     @Autowired
-    private DangtaiRepository dangtaiRepository;
-
+    BaocaotailieuRepository baocaotailieuRepository;
     public Tailieu save(TailieuDto dto) {
         Tailieu entity = new Tailieu();
         BeanUtils.copyProperties(dto,entity);
@@ -98,12 +98,16 @@ public class TailieuService {
         return tailieuRepository.findTailieudangtaiDtosByMataikhoan(mtk);
     }
 
+    public List<?> findAllUpload() {
+        return tailieuRepository.findTailieudangtaiAdminDto();
+    }
+
     public List<?> findAllPayByAccount(Long mtk) {
         return tailieuRepository.findTailieuthanhtoanByMataikhoan(mtk) ;
     }
 
     public List<?> findAllPay() {
-        return tailieuRepository.findThunhaptailieu() ;
+        return tailieuRepository.findTailieuthanhtoanAdmin() ;
     }
 
     public List<?> findAllTransactionAdmin() {
@@ -119,7 +123,7 @@ public class TailieuService {
     }
 
     public List<Tailieu> getListDocumentByName(String name){
-        return tailieuRepository.findByTentailieuContains(name);
+        return tailieuRepository.findByTentailieu(name);
     }
     public Tailieu findById(Long id) {
         Optional<Tailieu> found = tailieuRepository.findById(id);
@@ -130,9 +134,26 @@ public class TailieuService {
         }
         return found.get();
     }
+
+    public ThongtintailieuDto findThongtintailieuById(Long id) {
+        ThongtintailieuDto thongtintailieuDto = tailieuRepository.findTailieuTKDangtaiByMatailieu(id);
+
+        if (thongtintailieuDto==null)
+        {
+            throw new TailieuException("Tài liệu có id "+ id + " không tồn tại");
+        }
+        return thongtintailieuDto;
+    }
     @Transactional
     public void  deleteById(Long id){
         List<?> list = thanhtoanRepository.findByTailieu_Matailieu(id);
+
+        List<?> listReport = baocaotailieuRepository.findByTailieu_Matailieu(id);
+
+        if(!listReport.isEmpty())
+        {
+            throw new TailieuException("Tài liệu đã bị tố cáo");
+        }
 
         if (!list.isEmpty())
         {

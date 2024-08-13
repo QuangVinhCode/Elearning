@@ -21,6 +21,13 @@ class TradingHistory extends Component {
     this.props.getTransactionsbyAccount(UserSesion.mataikhoan);
   }
 
+  formatCurrency = (amount) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  };
+
   render() {
     const { navigate } = this.props.router;
     const { transactions, isLoading } = this.props;
@@ -64,9 +71,9 @@ class TradingHistory extends Component {
                 {record.lydo === "Nạp tiền vào tài khoản" ||
                 (record.lydo &&
                   record.lydo.startsWith("Thu nhập từ bán tài liệu")) ? (
-                  <span style={{ color: "green" }}>+ {text}</span>
+                  <span style={{ color: "green" }}>+ {this.formatCurrency(text)}</span>
                 ) : (
-                  <span style={{ color: "red" }}>- {text}</span>
+                  <span style={{ color: "red" }}>- {this.formatCurrency(text)}</span>
                 )}
               </div>
             )}

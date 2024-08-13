@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Pdf from "@mikecousins/react-pdf";
 import withRouter from "../../helpers/withRouter";
 import {
-  getDocument,
+  getDocumentInfo,
   payDocument,
   clearDocumentState,
 } from "../../redux/actions/documentAction";
@@ -17,7 +17,6 @@ import {
 } from "../../redux/actions/commentAction";
 import {
   insertReportDocument,
-  getReportDocuments,
 } from "../../redux/actions/reportAction";
 
 import DocumentService from "../../services/documentService";
@@ -58,7 +57,6 @@ class UserDocumentDetails extends Component {
 
   componentDidMount() {
     this.loadDocument();
-    this.props.getReportDocuments();
   }
   componentDidUpdate(prevProps) {
     const { id } = this.props.router.params;
@@ -68,7 +66,7 @@ class UserDocumentDetails extends Component {
   }
   loadDocument = () => {
     const { id } = this.props.router.params;
-    this.props.getDocument(id).then((result) => {
+    this.props.getDocumentInfo(id).then((result) => {
       if (result) {
         this.props.getCommentsByDocument(id);
         const storedUserSession = sessionStorage.getItem("userSession");
@@ -109,6 +107,19 @@ class UserDocumentDetails extends Component {
     this.props.clearDocumentState();
   }
 
+  openDownloadConfirmModal = () => {
+   
+    const message = "Bạn có chắt chắn muốn tải về";
+
+    Modal.confirm({
+      title: "Xác nhận",
+      icon: <ExclamationCircleOutlined />,
+      content: message,
+      onOk: this.handleDownload,
+      okText: "Đồng ý",
+      cancelText: "Hủy",
+    });
+  };
   // Xử lý sự kiện khi nhấn vào nút Tải
   handleDownload = async () => {
     const { canDownload, tendangnhap } = this.state;
@@ -450,11 +461,14 @@ class UserDocumentDetails extends Component {
           <p className="document-description">
             <b>Mô tả:</b> {document.mota}
           </p>
+          <p className="document-description">
+            <b>Tài khoản đăng tải:</b> <i>{document.tentaikhoandangtai}</i>
+          </p>
           <p className="document-price">
             <b>Giá:</b> {document.giaban === 0 ? "Miễn phí" : formattedPrice}
           </p>
           <div className="action-buttons">
-            <button className="button-download" onClick={this.handleDownload}>
+            <button className="button-download" onClick={this.openDownloadConfirmModal}>
               Tải về
             </button>
             {!isPaid && (
@@ -547,12 +561,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   getAccount,
-  getDocument,
+  getDocumentInfo,
   payDocument,
   insertComment,
   getCommentsByDocument,
   clearDocumentState,
-  getReportDocuments,
   insertReportDocument,
 };
 

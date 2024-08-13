@@ -18,8 +18,13 @@ public interface BinhluanRepository extends JpaRepository<Binhluan, Long> {
             "AND b.trangthai = 'Thành công'")
     List<BinhluanTheoTailieuDto> findBinhluansByMatailieu(@Param("matailieu") Long matailieu);
 
-    @Query("SELECT new com.vn.edu.elearning.dto.ThongtinbinhluanDto(b.mabinhluan, b.taikhoan.mataikhoan, b.taikhoan.tendangnhap, b.noidung, b.trangthai, b.matbinhluandatraloi, b.thoigianbinhluan,b.tailieu.tentailieu) " +
-            "FROM Binhluan b ")
+    @Query("SELECT new com.vn.edu.elearning.dto.ThongtinbinhluanDto(" +
+            "b.mabinhluan, b.taikhoan.mataikhoan," +
+            " b.taikhoan.tendangnhap, b.noidung, b.trangthai," +
+            " b.matbinhluandatraloi, b.thoigianbinhluan," +
+            "b.tailieu.tentailieu) " +
+            "FROM Binhluan b " +
+            "ORDER BY b.mabinhluan DESC ")
     List<ThongtinbinhluanDto> findBinhluans();
 
     List<Binhluan> findByTaikhoan_Mataikhoan(Long mataikhoan);
@@ -33,4 +38,6 @@ public interface BinhluanRepository extends JpaRepository<Binhluan, Long> {
     @Modifying
     @Query("UPDATE Binhluan b SET b.trangthai = :status WHERE b.matbinhluandatraloi = :mabinhluan AND b.trangthai = :parentStatus")
     int updateRepliesStatus(Long mabinhluan, String status, String parentStatus);
+
+    List<Binhluan> findByMatbinhluandatraloi(Long matbinhluandatraloi);
 }

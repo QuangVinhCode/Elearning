@@ -21,6 +21,13 @@ class Statistics extends Component {
     this.props.getRevenues(UserSesion.mataikhoan);
   }
 
+  formatCurrency = (amount) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  };
+
   render() {
     const { navigate } = this.props.router;
     const { transactions, isLoading } = this.props;
@@ -55,9 +62,9 @@ class Statistics extends Component {
             render={(text) => (
               <div>
                 {text === "Nạp tiền" || "Thu nhập" ? (
-                  <span style={{ color: "green" }}>+ {text}</span>
+                  <span style={{ color: "green" }}>+ {this.formatCurrency(text)}</span>
                 ) : (
-                  <span style={{ color: "red" }}>- {text}</span>
+                  <span style={{ color: "red" }}>- {this.formatCurrency(text)}</span>
                 )}
               </div>
             )}
@@ -71,9 +78,9 @@ class Statistics extends Component {
             render={(text) => (
               <div>
                 {text === "Thanh toán" ? (
-                  <span style={{ color: "red" }}>- {text}</span>
+                  <span style={{ color: "red" }}>- {this.formatCurrency(text)}</span>
                 ) : (
-                  <span style={{ color: "red" }}>- {text}</span>
+                  <span style={{ color: "red" }}>- {this.formatCurrency(text)}</span>
                 )}
               </div>
             )}
@@ -87,9 +94,9 @@ class Statistics extends Component {
             render={(text) => (
               <div>
                 {text === "Nạp tiền" || "Thu nhập" ? (
-                  <span style={{ color: "green" }}>+ {text}</span>
+                  <span style={{ color: "green" }}>+ {this.formatCurrency(text)}</span>
                 ) : (
-                  <span style={{ color: "red" }}>- {text}</span>
+                  <span style={{ color: "red" }}>- {this.formatCurrency(text)}</span>
                 )}
               </div>
             )}

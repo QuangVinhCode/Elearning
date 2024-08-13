@@ -39,4 +39,6 @@ public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, 
 
     List<Baocaobinhluan> findByBinhluan_Taikhoan_Mataikhoan(Long mataikhoan);
 
+
+
 }

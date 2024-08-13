@@ -171,7 +171,7 @@ const ListOfDocumentsBeingCensored = ({
                   <Button
                     type="default"
                     size="small"
-                    onClick={() => onRecensorship(record)}
+                    onClick={() => onNote(record)}
                   >
                     <GiConfirmed style={{ marginRight: 4 }} />
                     Kiểm duyệt lại

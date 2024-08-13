@@ -3,6 +3,7 @@ import {
   REPORTS_SET,
   REPORT_STATE_CLEAR,
   REPORTS_DETAILS_SET,
+  REPORT_DETAILS_STATE_CLEAR,
 } from "./../actions/actionTypes";
 const initialState = {
   report: {},
@@ -23,6 +24,10 @@ const reportReducer = (state = initialState, { type, payload }) => {
         report: {},
         reports: [],
       };
+      case REPORT_DETAILS_STATE_CLEAR:
+        return {
+          report_details: [],
+        };
     default:
       return state;
   }

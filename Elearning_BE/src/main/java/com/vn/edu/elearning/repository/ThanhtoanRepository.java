@@ -1,6 +1,7 @@
 package com.vn.edu.elearning.repository;
 
 import com.vn.edu.elearning.domain.Thanhtoan;
+import com.vn.edu.elearning.dto.ThongkethanhtoanDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,5 +22,18 @@ public interface ThanhtoanRepository extends JpaRepository<Thanhtoan, Long> {
 
     List<Thanhtoan> findByTailieu_Matailieu(Long matailieu);
 
-
+    @Query("SELECT new com.vn.edu.elearning.dto.ThongkethanhtoanDto(" +
+            "tt.mathanhtoan, " +
+            "t.tentailieu, " +
+            "tt.taikhoan.tendangnhap, " +
+            "dt.taikhoan.tendangnhap, " +
+            "t.giaban, " +
+            "(t.giaban * t.tylethunhaptacgia / 100), " +
+            "(t.giaban * t.tylephiquantri / 100), " +
+            "tt.thoigianthanhtoan" +
+            ") " +
+            "FROM Thanhtoan tt " +
+            "JOIN tt.tailieu t " +
+            "JOIN t.dsdangtai dt")
+    List<ThongkethanhtoanDto> findThongkethanhtoanDto();
 }

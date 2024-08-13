@@ -200,6 +200,10 @@ button {
   text-align: center;
 }
 
+.button-download:hover {
+ opacity: 0.6;
+}
+
 .button-pay {
   background-color: #28a745;
   margin-top: 10px;

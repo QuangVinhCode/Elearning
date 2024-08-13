@@ -144,13 +144,18 @@ public class TailieuController {
         return new ResponseEntity<>(tailieuService.findAllUploadByAccount(id),HttpStatus.OK);
     }
 
+    @GetMapping("/upload-admin")
+    public ResponseEntity<?> getDocumentUploadAdmin(){
+        return new ResponseEntity<>(tailieuService.findAllUpload(),HttpStatus.OK);
+    }
+
     @GetMapping("/pay-account/{id}")
     public ResponseEntity<?> getDocumentPayByAccount(@PathVariable("id") Long id){
         return new ResponseEntity<>(tailieuService.findAllPayByAccount(id),HttpStatus.OK);
     }
 
-    @GetMapping("/all-pay")
-    public ResponseEntity<?> getDocumentAllPay(){
+    @GetMapping("/pay-admin")
+    public ResponseEntity<?> getDocumentPayAdmin(){
         return new ResponseEntity<>(tailieuService.findAllPay(),HttpStatus.OK);
     }
 
@@ -182,6 +187,11 @@ public class TailieuController {
     @GetMapping("/{id}/get")
     public  ResponseEntity<?> getDocument(@PathVariable("id") Long id){
         return new ResponseEntity<>(tailieuService.findById(id),HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/info")
+    public  ResponseEntity<?> getDocumentInfo(@PathVariable("id") Long id){
+        return new ResponseEntity<>(tailieuService.findThongtintailieuById(id),HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteDocument(@PathVariable("id") Long id) {

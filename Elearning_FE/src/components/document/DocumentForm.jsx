@@ -116,17 +116,25 @@ class DocumentForm extends Component {
   };
 
   handlePercentageChange = (changedValue, allValues) => {
-    const { tylephiquantri, tylethunhaptacgia } = allValues;
+    let { tylephiquantri, tylethunhaptacgia } = allValues;
+  
     if (changedValue.hasOwnProperty("tylephiquantri")) {
+      tylephiquantri = Math.round(tylephiquantri / 10) * 10;
+      tylethunhaptacgia = 100 - tylephiquantri;
       this.form.current.setFieldsValue({
-        tylethunhaptacgia: 10 - tylephiquantri,
+        tylephiquantri,
+        tylethunhaptacgia,
       });
     } else if (changedValue.hasOwnProperty("tylethunhaptacgia")) {
+      tylethunhaptacgia = Math.round(tylethunhaptacgia / 10) * 10;
+      tylephiquantri = 100 - tylethunhaptacgia;
       this.form.current.setFieldsValue({
-        tylephiquantri: 10 - tylethunhaptacgia,
+        tylephiquantri,
+        tylethunhaptacgia,
       });
     }
   };
+  
 
   render() {
     const { open, onCreate, onCancel } = this.props;
@@ -272,7 +280,7 @@ class DocumentForm extends Component {
                   },
                 ]}
               >
-                <InputNumber min={0} max={10} />
+                <InputNumber min={10} max={90} step={10} />
               </Form.Item>
               <Form.Item
                 label="Tỷ lệ phí quản trị viên (%)"
@@ -285,7 +293,7 @@ class DocumentForm extends Component {
                   },
                 ]}
               >
-                <InputNumber min={0} max={10} />
+                <InputNumber min={10} max={90} step={10}  />
               </Form.Item>
             </>
           ) : (
@@ -293,7 +301,7 @@ class DocumentForm extends Component {
               <Form.Item
                 label="Tỷ lệ thu nhập tác giả (%)"
                 name="tylethunhaptacgia"
-                initialValue={10}
+                initialValue={100}
                 hidden={true}
               >
                 <InputNumber />

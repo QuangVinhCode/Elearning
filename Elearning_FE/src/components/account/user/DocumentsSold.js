@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import {
-  getDocumentUploadByCategory,
-  updateDocument,
+  getDocumentUploadByAccount,
+  updateDocumentUser,
+  deleteDocument,
 } from "../../../redux/actions/documentAction";
-import DocumentFormUser from "../../document/DocumentFormUser";
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
-import { Button, Skeleton, Table, Space, Modal } from "antd";
+import { Button, Table, Space, Modal, Tooltip } from "antd";
 import Column from "antd/lib/table/Column";
 import {
   EditOutlined,
@@ -17,6 +17,7 @@ import {
 } from "@ant-design/icons";
 import CensorshipHistory from "../../document/CensorshipHistory";
 import DocumentDetails from "../../document/DocumentDetails";
+import DocumentForm from "../../document/DocumentForm";
 class DocumentsSold extends Component {
   constructor() {
     super();
@@ -42,7 +43,7 @@ class DocumentsSold extends Component {
   componentDidMount() {
     const storedUserSession = sessionStorage.getItem("userSession");
     const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
-    this.props.getDocumentUploadByCategory(UserSesion.mataikhoan);
+    this.props.getDocumentUploadByAccount(UserSesion.mataikhoan);
   }
 
   onEdit = (value) => {
@@ -52,8 +53,10 @@ class DocumentsSold extends Component {
   onCreate = (values) => {
     console.log("object in ListDocument");
     console.log(values);
+    const storedUserSession = sessionStorage.getItem("userSession");
+    const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
     if (values.matailieu) {
-      this.props.updateDocument(values);
+      this.props.updateDocumentUser(values, UserSesion.mataikhoan);
     }
     this.setState({
       ...this.state,
@@ -107,14 +110,19 @@ class DocumentsSold extends Component {
             title="Tên tài liệu"
             key="tentailieu"
             dataIndex="tentailieu"
-            width={40}
+            width={80}
             align="center"
+            render={(tentailieu) => (
+              <Tooltip placement="topLeft" title={tentailieu}>
+                {tentailieu}
+              </Tooltip>
+            )}
           />
           <Column
             title="Trạng thái"
             key="trangthai"
             dataIndex="trangthai"
-            width={40}
+            width={20}
             align="center"
             render={(text, record) => (
               <div>
@@ -122,9 +130,12 @@ class DocumentsSold extends Component {
                   <span style={{ color: "green" }}>{text}</span>
                 )}
                 {record.trangthai === "Chờ kiểm duyệt" && (
-                  <span style={{ color: "yellow" }}>{text}</span>
+                  <span style={{ color: "blue" }}>{text}</span>
                 )}
                 {record.trangthai === "Cần chỉnh sửa" && (
+                  <span style={{ color: "yellow" }}>{text}</span>
+                )}
+                {record.trangthai === "Cấm" && (
                   <span style={{ color: "red" }}>{text}</span>
                 )}
               </div>
@@ -142,14 +153,14 @@ class DocumentsSold extends Component {
             title="Thời gian được duyệt"
             key="thoigianduocduyet"
             dataIndex="thoigianduocduyet"
-            width={60}
+            width={40}
             align="center"
           />
           <Column
             title="Tác vụ"
             key="action"
             dataIndex="action"
-            width={20}
+            width={80}
             align="center"
             render={(_, record) => (
               <Space size="middle">
@@ -162,28 +173,7 @@ class DocumentsSold extends Component {
                       onClick={() => this.onDetails(record)}
                     >
                       <EyeOutlined style={{ marginRight: 8 }} />
-                      Xem
-                    </Button>
-                    <Button
-                      key={record.key}
-                      type="primary"
-                      size="small"
-                      onClick={() => this.onEdit(record)}
-                    >
-                      <EditOutlined style={{ marginRight: 8 }} />
-                      Sửa
-                    </Button>
-                  </Space>
-                  <Space style={{ marginTop: 8 }}>
-                    <Button
-                      key={record.key}
-                      type="primary"
-                      danger
-                      size="small"
-                      onClick={() => this.onDeleteConfirm(record)}
-                    >
-                      <DeleteOutlined style={{ marginRight: 8 }} />
-                      Xóa
+                      Xem chi tiết
                     </Button>
                     <Button
                       key={record.key}
@@ -192,8 +182,53 @@ class DocumentsSold extends Component {
                       onClick={() => this.openHistory(record)}
                     >
                       <EyeOutlined style={{ marginRight: 8 }} />
-                      Lịch sử
+                      Xem lịch sử
                     </Button>
+                    {record.trangthai === "Đã kiểm duyệt" && (
+                      <Button
+                        key={record.key}
+                        type="primary"
+                        size="small"
+                        onClick={() => this.onEdit(record)}
+                      >
+                        <EditOutlined style={{ marginRight: 8 }} />
+                        Sửa
+                      </Button>
+                    )}
+                    {record.trangthai === "Chờ kiểm duyệt" && (
+                      <Button
+                        key={record.key}
+                        type="primary"
+                        size="small"
+                        onClick={() => this.onEdit(record)}
+                      >
+                        <EditOutlined style={{ marginRight: 8 }} />
+                        Sửa
+                      </Button>
+                    )}
+                    {record.trangthai === "Cần chỉnh sửa" && (
+                      <Button
+                        key={record.key}
+                        type="primary"
+                        size="small"
+                        onClick={() => this.onEdit(record)}
+                      >
+                        <EditOutlined style={{ marginRight: 8 }} />
+                        Sửa
+                      </Button>
+                    )}
+                  </Space>
+                  <Space style={{ marginTop: 8 }}>
+                    {/* <Button
+                      key={record.key}
+                      type="primary"
+                      danger
+                      size="small"
+                      onClick={() => this.onDeleteConfirm(record)}
+                    >
+                      <DeleteOutlined style={{ marginRight: 8 }} />
+                      Xóa
+                    </Button> */}
                   </Space>
                 </div>
               </Space>
@@ -211,7 +246,7 @@ class DocumentsSold extends Component {
         )}
         {this.state.details && (
           <DocumentDetails
-            document={this.state.document.matailieu}
+            tailieu={this.state.document.matailieu}
             open={this.state.details}
             onCancel={() => {
               this.setState({ ...this.state, document: {}, details: false });
@@ -219,7 +254,7 @@ class DocumentsSold extends Component {
           />
         )}
 
-        <DocumentFormUser
+        <DocumentForm
           document={this.state.document}
           open={this.state.open1}
           onCreate={this.onCreate}
@@ -238,8 +273,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  getDocumentUploadByCategory,
-  updateDocument,
+  getDocumentUploadByAccount,
+  updateDocumentUser,
+  deleteDocument,
 };
 
 export default withRouter(

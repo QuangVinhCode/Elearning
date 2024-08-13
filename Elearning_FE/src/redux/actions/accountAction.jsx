@@ -318,7 +318,7 @@ export const getAccount = (id) => async (dispatch) => {
     console.log("Lấy thông tin tài khoản Action");
 
     const response = await service.getAccount(id);
-    console.log(response);
+    console.log(response.data);
     if (response.status === 200) {
       dispatch({
         type: ACCOUNT_SET,
@@ -331,7 +331,6 @@ export const getAccount = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    console.log(error);
     dispatch({
       type: COMMON_ERROR_SET,
       payload: error.response.data
@@ -435,8 +434,6 @@ export const clearAccount = () => (dispatch) => {
     payload: {
       tendangnhap: "",
       matkhau: "",
-      gmail: "",
-      sodienthoai: "",
     },
   });
 };
@@ -695,3 +692,5 @@ export const changePassword =
       dispatch({ type: LOG_OUT });
     }
   };
+
+  

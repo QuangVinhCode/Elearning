@@ -2,7 +2,10 @@ import React, { Component } from "react";
 
 import { Modal, Table, Tooltip } from "antd";
 
-import { getReportsByComment } from "../../../redux/actions/reportAction";
+import {
+  getReportsByComment,
+  clearReportDetailsState,
+} from "../../../redux/actions/reportAction";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
 
@@ -16,8 +19,12 @@ class CommentReportHistory extends Component {
   }
 
   componentDidMount() {
-    this.props.getReportsByComment(this.props.mataikhoan);
+    this.props.getReportsByComment(this.props.mabinhluan);
   }
+
+  componentWillUnmount = () => {
+    this.props.clearReportDetailsState();
+  };
 
   render() {
     const { onCancel, open } = this.props;
@@ -77,6 +84,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   getReportsByComment,
+  clearReportDetailsState,
 };
 
 export default withRouter(
