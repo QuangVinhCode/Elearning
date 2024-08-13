@@ -41,6 +41,9 @@ export default class DocumentService {
   getDocumentByCensorship = async () => {
     return await axios.get(API_DOCUMENT + "/censorship");
   };
+  getDocumentIncome = async () => {
+    return await axios.get(API_DOCUMENT + "/income");
+  };
   getDocumentAllPayAmin = async () => {
     return await axios.get(API_DOCUMENT + "/admin");
   };
@@ -110,5 +113,13 @@ export default class DocumentService {
   };
   static getPDFView = (filename) => {
     return API_DOCUMENT + "/view/" + filename;
+  };
+
+  getDocumentUploadAdmin = async () => {
+    return await axios.get(API_DOCUMENT + "/upload-admin");
+  };
+
+  getDocumentPayAdmin = async () => {
+    return await axios.get(API_DOCUMENT + "/pay-admin");
   };
 }

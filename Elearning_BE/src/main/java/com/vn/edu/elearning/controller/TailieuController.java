@@ -184,6 +184,11 @@ public class TailieuController {
         return new ResponseEntity<>(tailieuService.findAllDocumentCensorship(),HttpStatus.OK);
     }
 
+    @GetMapping("/income")
+    public ResponseEntity<?> getAllDocumentIncome(){
+        return new ResponseEntity<>(tailieuService.findDocumentIncome(),HttpStatus.OK);
+    }
+
     @GetMapping("/{id}/get")
     public  ResponseEntity<?> getDocument(@PathVariable("id") Long id){
         return new ResponseEntity<>(tailieuService.findById(id),HttpStatus.OK);

@@ -23,13 +23,17 @@ class YourOrders extends Component {
     const storedUserSession = sessionStorage.getItem("userSession");
     const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
     this.props.getDocumentPayByAccount(UserSesion.mataikhoan);
-
   }
   onDocument = (object) => {
     const { navigate } = this.props.router;
-    if (object.trangthaitailieu === "Chặn") {
-      message.warning({
+    if (object.trangthaitailieu === "Cấm") {
+      message.error({
         content: "Tài liệu đã vi phạm nội quy hệ thống nên không thể xem",
+        style: { marginTop: "10vh" },
+      });
+    } else if (object.trangthaitailieu === "Cần chỉnh sửa") {
+      message.warning({
+        content: "Tài liệu đang được chỉnh sửa, Vui lòng quay lại sau!",
         style: { marginTop: "10vh" },
       });
     } else {

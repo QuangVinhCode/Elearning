@@ -265,11 +265,25 @@ class UserDocumentDetails extends Component {
         noidung: this.state.value,
         thoigianbinhluan: formattedDateTime,
       };
-      if (this.state.value) {
-        console.log(comment);
-        this.props.insertComment(comment);
-        this.setState({ value: "" });
+      const storedUserSession = sessionStorage.getItem("userSession");
+      const userSession = storedUserSession
+        ? JSON.parse(storedUserSession)
+        : null;
+      const trangthaibinhluan = userSession ? userSession.trangthaibinhluan : "";
+      if (trangthaibinhluan === "Bình thường")
+      {
+        if (this.state.value) {
+          console.log(comment);
+          this.props.insertComment(comment);
+          this.setState({ value: "" });
+        }
+      }else{
+        message.warning({
+          content: "Bạn đã bị tính năng bình luận",
+          style: { marginTop: "10vh" },
+        });
       }
+     
     }
   };
 

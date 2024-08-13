@@ -10,4 +10,8 @@ export default class TransactionService {
     console.log("object serivice " + id);
     return await axios.get(API_TRANSACTION + "/account/" + id);
   };
+
+  getTransactions = async () => {
+    return await axios.get(API_TRANSACTION + "/transaction");
+  };
 }

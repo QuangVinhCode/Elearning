@@ -110,6 +110,10 @@ public class TailieuService {
         return tailieuRepository.findTailieuthanhtoanAdmin() ;
     }
 
+    public List<?> findDocumentIncome() {
+        return tailieuRepository.findThunhaptailieu() ;
+    }
+
     public List<?> findAllTransactionAdmin() {
         return tailieuRepository.findLichsuthuchiAdmin() ;
     }
@@ -123,7 +127,7 @@ public class TailieuService {
     }
 
     public List<Tailieu> getListDocumentByName(String name){
-        return tailieuRepository.findByTentailieu(name);
+        return tailieuRepository.findByTentailieuContainingIgnoreCaseAndTrangthai(name,"Đã kiểm duyệt");
     }
     public Tailieu findById(Long id) {
         Optional<Tailieu> found = tailieuRepository.findById(id);

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { getDocumentAllPayAmin } from "../../redux/actions/documentAction";
 import ContentHeader from "../common/ContentHeader";
 import withRouter from "../../helpers/withRouter";
-
+import { getCollectiontAdmin } from "../../redux/actions/transactionAction";
 import { connect } from "react-redux";
 import { Select, Button, message, Skeleton, Table, Space } from "antd";
 import Column from "antd/lib/table/Column";
@@ -17,6 +17,9 @@ class Home extends Component {
 
   componentDidMount() {
     this.props.getDocumentAllPayAmin();
+    const storedUserSession = sessionStorage.getItem("userSession");
+    const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
+    this.props.getCollectiontAdmin();
   }
 
   formatCurrency = (amount) => {
@@ -28,7 +31,7 @@ class Home extends Component {
 
   render() {
     const { navigate } = this.props.router;
-    const { documents, isLoading } = this.props;
+    const { documents, isLoading, transactions } = this.props;
 
     if (isLoading) {
       return (
@@ -66,7 +69,9 @@ class Home extends Component {
             align="center"
             render={(text) => (
               <div>
-                <span style={{ color: "green" }}>+ {this.formatCurrency(text)}</span>
+                <span style={{ color: "green" }}>
+                  + {this.formatCurrency(text)}
+                </span>
               </div>
             )}
           />
@@ -78,7 +83,67 @@ class Home extends Component {
             align="center"
             render={(text) => (
               <div>
-                <span style={{ color: "green" }}>+ {this.formatCurrency(text)}</span>
+                <span style={{ color: "green" }}>
+                  + {this.formatCurrency(text)}
+                </span>
+              </div>
+            )}
+          />
+        </Table>
+        <Table dataSource={transactions} size="small" rowKey="matailieu">
+          <Column
+            title="Tên tài liệu"
+            key="tentailieu"
+            dataIndex="tentailieu"
+            width={80}
+            align="center"
+          />
+          <Column
+            title="Giá bán"
+            key="giaban"
+            dataIndex="giaban"
+            width={80}
+            align="center"
+            render={(text) => (
+              <div>
+                <span style={{ color: "green" }}>
+                  + {this.formatCurrency(text)}
+                </span>
+              </div>
+            )}
+          />
+          <Column
+            title="Số lần thanh toán"
+            key="solanthanhtoan"
+            dataIndex="solanthanhtoan"
+            width={80}
+            align="center"
+          />
+          <Column
+            title="Tổng thu nhập tác giả"
+            key="tongthunhaptacgia"
+            dataIndex="tongthunhaptacgia"
+            width={80}
+            align="center"
+            render={(text) => (
+              <div>
+                <span style={{ color: "green" }}>
+                  + {this.formatCurrency(text)}
+                </span>
+              </div>
+            )}
+          />
+          <Column
+            title="Tổng số phí quản trị"
+            key="tongthunhaptacgia"
+            dataIndex="tongphiquantri"
+            width={80}
+            align="center"
+            render={(text) => (
+              <div>
+                <span style={{ color: "green" }}>
+                  + {this.formatCurrency(text)}
+                </span>
               </div>
             )}
           />
@@ -90,11 +155,13 @@ class Home extends Component {
 
 const mapStateToProps = (state) => ({
   documents: state.documentReducer.documents,
+  transactions: state.transactionReducer.transactions,
   isLoading: state.commonReducer.isLoading,
 });
 
 const mapDispatchToProps = {
   getDocumentAllPayAmin,
+  getCollectiontAdmin,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));

@@ -48,7 +48,7 @@ const ListOfDocumentsBeingCensored = ({
           <Option value="Chờ kiểm duyệt"></Option>
           <Option value="Cần chỉnh sửa"></Option>
           <Option value="Đã kiểm duyệt"></Option>
-          <Option value="Chặn"></Option>
+          <Option value="Cấm"></Option>
         </Select>
       </Space>
       <Table dataSource={filteredData} size="small" rowKey="matailieu">

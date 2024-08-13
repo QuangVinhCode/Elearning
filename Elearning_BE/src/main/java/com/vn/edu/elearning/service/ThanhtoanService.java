@@ -35,6 +35,7 @@ public class ThanhtoanService {
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+
         if (tailieu==null)
         {
             throw  new TailieuException("Tài liệu không tồn tại");
@@ -42,6 +43,14 @@ public class ThanhtoanService {
         if (taikhoan==null)
         {
             throw  new TailieuException("Yêu cầu đăng nhập");
+        }
+        if (tailieu.getTrangthai().equals("Cấm"))
+        {
+            throw  new TailieuException("Tài liệu đã bị quản trị viên chặn");
+        }
+        if (tailieu.getTrangthai().equals("Cần chỉnh sửa"))
+        {
+            throw  new TailieuException("Tài liệu đang trong quá trình kiểm tra lại");
         }
         if (taikhoan.getSodu() < tailieu.getGiaban())
         {

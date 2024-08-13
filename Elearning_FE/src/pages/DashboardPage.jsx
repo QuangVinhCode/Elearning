@@ -37,6 +37,9 @@ import DocumentReportNumber from "../components/account/admin/DocumentReportNumb
 import CommentReportNumber from "../components/account/admin/CommentReportNumber";
 import StatisticsAdmin from "../components/document/StatisticsAdmin";
 import CommentHistory from "../components/document/CommentHistory";
+import PayAll from "../components/account/admin/PayAll";
+import UploadAll from "../components/account/admin/UploadAll";
+import TransactionAll from "../components/account/admin/TransactionAll";
 const { Header, Sider, Content } = Layout;
 
 function DashboardPage() {
@@ -44,7 +47,9 @@ function DashboardPage() {
   const [collapsed, setCollapsed] = useState(false);
 
   const navigate = useNavigate();
-
+  const siteLayoutStyle = { marginLeft: marginLeft };
+  const storedUserSession = sessionStorage.getItem("userSession");
+  const userSession = storedUserSession ? JSON.parse(storedUserSession) : null;
   const msg = useSelector((state) => state.commonReducer.message);
   const err = useSelector((state) => state.commonReducer.error);
   const dispatch = useDispatch();
@@ -57,6 +62,10 @@ function DashboardPage() {
     }
   };
   useEffect(() => {
+    if (!userSession) {
+      navigate("/users/login");
+      return;
+    }
     if (msg) {
       dispatch(setMessage(""));
       message.success(msg);
@@ -68,9 +77,6 @@ function DashboardPage() {
     }
   }, [msg, err]);
 
-  const siteLayoutStyle = { marginLeft: marginLeft };
-  const storedUserSession = sessionStorage.getItem("userSession");
-  const userSession = storedUserSession ? JSON.parse(storedUserSession) : null;
   return (
     <Layout>
       <Sider
@@ -101,7 +107,13 @@ function DashboardPage() {
               label: "Trang chủ",
               onClick: () => navigate("/dashboard/*"),
             },
-
+            {
+              key: "2",
+              icon: <AiOutlineTransaction />,
+              label: "Lịch sử giao dịch admin",
+              onClick: () =>
+                navigate("/dashboard/document/trading-history-admin"),
+            },
             {
               key: "3",
               icon: <MdClass />,
@@ -182,19 +194,30 @@ function DashboardPage() {
             {
               key: "9",
               icon: <AiOutlineTransaction />,
-              label: "Lịch sử giao dịch admin",
-              onClick: () =>
-                navigate("/dashboard/document/trading-history-admin"),
+              label: "Lịch sử giao dịch người dùng",
+              children: [
+                {
+                  key: "91",
+                  icon: <MdFormatListBulleted />,
+                  label: "Lịch sử đăng tài liệu",
+                  onClick: () => navigate("/dashboard/account/uploadall"),
+                },
+                {
+                  key: "92",
+                  icon: <IoEyeSharp />,
+                  label: "Lịch sử thanh toán tài liệu",
+                  onClick: () => navigate("/dashboard/account/payall"),
+                },
+                {
+                  key: "93",
+                  icon: <MdFormatListBulleted />,
+                  label: "Lịch sử giao dịch người dùng",
+                  onClick: () => navigate("/dashboard/account/transactionall"),
+                },
+              ],
             },
-
             {
               key: "10",
-              icon: <FcStatistics />,
-              label: "Thống kê",
-              onClick: () => navigate("/dashboard/document/statistics-admin"),
-            },
-            {
-              key: "11",
               icon: <MdLogout />,
               label: "Đăng xuất",
               onClick: handleLogout,
@@ -231,7 +254,7 @@ function DashboardPage() {
             <Col md={6}>
               <div className="User">
                 <Avatar size="default" icon={<UserOutlined />}></Avatar>
-                {userSession ? userSession.tendangnhap : "Null"}
+                {""} {userSession ? userSession.tendangnhap : "Null"}
               </div>
             </Col>
           </Row>
@@ -286,9 +309,11 @@ function DashboardPage() {
                 path="/account/comment-report-number"
                 element={<CommentReportNumber />}
               ></Route>
+               <Route path="/account/payall" element={<PayAll />}></Route>
+              <Route path="/account/uploadall" element={<UploadAll />}></Route>
               <Route
-                path="/document/statistics-admin"
-                element={<StatisticsAdmin />}
+                path="/account/transactionall"
+                element={<TransactionAll />}
               ></Route>
             </Routes>
             <Outlet></Outlet>

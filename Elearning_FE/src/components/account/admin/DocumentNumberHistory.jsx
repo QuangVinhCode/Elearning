@@ -20,7 +20,7 @@ class DocumentNumberHistory extends Component {
   }
 
   componentWillUnmount = () => {
-    this.props.clearReportDetailsState();
+  //  this.props.clearReportDetailsState();
   };
 
   render() {

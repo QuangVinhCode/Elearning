@@ -23,7 +23,7 @@ class CommentNumberHistory extends Component {
   }
 
   componentWillUnmount = () => {
-    this.props.clearReportDetailsState();
+ //   this.props.clearReportDetailsState();
   };
 
   render() {

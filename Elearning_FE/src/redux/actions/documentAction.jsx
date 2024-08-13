@@ -152,7 +152,7 @@ export const getOutstandingDocuments = () => async (dispatch) => {
   const service = new DocumentService();
 
   try {
-    console.log("Danh sách tài liệu");
+    console.log("Tìm kiếm tài liệu");
     dispatch({
       type: COMMON_LOADING_SET,
       payload: true,
@@ -977,4 +977,76 @@ export const updateStatusBan = (object) => async (dispatch) => {
 
 export const clearDocumentState = () => (dispatch) => {
   dispatch({ type: DOCUMENT_STATE_CLEAR });
+};
+
+export const getDocumentUploadAdmin = () => async (dispatch) => {
+  const service = new DocumentService();
+  try {
+    console.log("Lấy tài liệu đã tải lên");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getDocumentUploadAdmin();
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: DOCUMENTS_SET,
+        payload: response.data,
+      });
+      return response;
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const getDocumentPayAdmin = () => async (dispatch) => {
+  const service = new DocumentService();
+  try {
+    console.log("Lấy tài liệu đã thanh toán");
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getDocumentPayAdmin();
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: DOCUMENTS_SET,
+        payload: response.data,
+      });
+      return response;
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
 };

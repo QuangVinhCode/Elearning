@@ -41,10 +41,18 @@ export const insertComment = (object) => async (dispatch) => {
         type: COMMENT_APPEND,
         payload: comment,
       });
-      dispatch({
-        type: COMMON_MESSAGE_SET,
-        payload: "Bình luận đã được thêm",
-      });
+      if (response.data.trangthai==="Thành công")
+      {
+        dispatch({
+          type: COMMON_MESSAGE_SET,
+          payload: "Bình luận thành công",
+        });
+      }else {
+        dispatch({
+          type: COMMON_MESSAGE_SET,
+          payload: "Bình luận thất bại",
+        });
+      }
     } else {
       dispatch({
         type: COMMON_ERROR_SET,

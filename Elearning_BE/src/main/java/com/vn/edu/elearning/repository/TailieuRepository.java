@@ -91,11 +91,23 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "JOIN t.dsdangtai dt " +
             "GROUP BY SUBSTRING(tt.thoigianthanhtoan, 7, 11)")
     List<LichsuthuchiAdminDto> findLichsuthuchiAdmin();
+
+    @Query("SELECT new com.vn.edu.elearning.dto.ThunhaptailieuDto(" +
+            "t.matailieu, " +
+            "t.tentailieu, " +
+            "t.giaban, " +
+            "COUNT (tt.mathanhtoan)," +
+            "SUM(CASE WHEN dt.taikhoan.quyenhan = 'Quản trị viên' THEN (t.giaban * t.tylethunhaptacgia) / 100 ELSE 0 END), " +
+            "SUM(CASE WHEN dt.taikhoan.quyenhan <> 'Quản trị viên' THEN (t.giaban * t.tylephiquantri) / 100 ELSE 0 END)) " +
+            "FROM Thanhtoan tt " +
+            "JOIN tt.tailieu t " +
+            "JOIN t.dsdangtai dt " +
+            "GROUP BY t.matailieu, t.tentailieu, t.giaban")
+    List<ThunhaptailieuDto> findThunhaptailieu();
     @Query("select t from Tailieu t JOIN t.dsdangtai dt WHERE dt.taikhoan.quyenhan = 'Quản trị viên' ORDER BY dt.thoigiantailen DESC")
     List<Tailieu> findAllDocumentAdmin();
 
-    @Query("select t from Tailieu t where t.tentailieu = ?1 AND t.trangthai='Đã kiểm duyệt'")
-    List<Tailieu> findByTentailieu(String tentailieu);
+    List<Tailieu> findByTentailieuContainingIgnoreCaseAndTrangthai(String tentailieu, String trangthai);
 
     @Query("select new com.vn.edu.elearning.dto.ThongtintailieuDto("+
             "t.matailieu,t.tentailieu,t.tacgia,t.mota,t.giaban,t.diachiluutru,"+

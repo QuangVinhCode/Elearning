@@ -71,9 +71,13 @@ class TradingHistory extends Component {
                 {record.lydo === "Nạp tiền vào tài khoản" ||
                 (record.lydo &&
                   record.lydo.startsWith("Thu nhập từ bán tài liệu")) ? (
-                  <span style={{ color: "green" }}>+ {this.formatCurrency(text)}</span>
+                  <span style={{ color: "green" }}>
+                    + {this.formatCurrency(text)}
+                  </span>
                 ) : (
-                  <span style={{ color: "red" }}>- {this.formatCurrency(text)}</span>
+                  <span style={{ color: "red" }}>
+                    - {this.formatCurrency(text)}
+                  </span>
                 )}
               </div>
             )}
@@ -100,6 +104,13 @@ class TradingHistory extends Component {
                 )}
               </div>
             )}
+          />
+          <Column
+            title="Thời gian"
+            key="thoigiangiaodich"
+            dataIndex="thoigiangiaodich"
+            width={80}
+            align="center"
           />
         </Table>
       </>
