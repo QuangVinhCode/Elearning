@@ -1,19 +1,9 @@
 import React, { Component } from "react";
-import { getDocumentPayAdmin } from "../../../redux/actions/documentAction";
+import { getPays } from "../../../redux/actions/payAction";
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
-
 import { connect } from "react-redux";
-import {
-  Select,
-  Button,
-  message,
-  Skeleton,
-  Table,
-  Space,
-  Tooltip,
-  Input,
-} from "antd";
+import { Table, Space, Input } from "antd";
 import Column from "antd/lib/table/Column";
 
 class PayAll extends Component {
@@ -27,7 +17,7 @@ class PayAll extends Component {
   }
 
   componentDidMount() {
-    this.props.getDocumentPayAdmin();
+    this.props.getPays();
   }
   handleSearch = (e) => {
     this.setState({ searchText: e.target.value });
@@ -69,9 +59,9 @@ class PayAll extends Component {
         </Space>
         <Table dataSource={filteredDocuments} size="small">
           <Column
-            title="Tên tài khoản"
-            key="tendangnhap"
-            dataIndex="tendangnhap"
+            title="Tài khoản thanh toán"
+            key="tentaidangnhapthanhtoan"
+            dataIndex="tentaidangnhapthanhtoan"
             width={80}
             align="center"
           />
@@ -83,16 +73,37 @@ class PayAll extends Component {
             align="center"
           />
           <Column
-            title="Thời gian thanh toán"
-            key="thoigianthanhtoan"
-            dataIndex="thoigianthanhtoan"
+            title="Tài khoản đăng tải"
+            key="tendangnhapchusohuu"
+            dataIndex="tendangnhapchusohuu"
             width={80}
             align="center"
           />
           <Column
-            title="Trạng thái"
-            key="trangthai"
-            dataIndex="trangthai"
+            title="Giá"
+            key="giaban"
+            dataIndex="giaban"
+            width={80}
+            align="center"
+          />
+          <Column
+            title="Thu nhập tác giả"
+            key="tongthunhaptacgia"
+            dataIndex="tongthunhaptacgia"
+            width={80}
+            align="center"
+          />
+          <Column
+            title="Phí quản trị"
+            key="tongphiquantri"
+            dataIndex="tongphiquantri"
+            width={80}
+            align="center"
+          />
+          <Column
+            title="Thời gian"
+            key="thoigianthanhtoan"
+            dataIndex="thoigianthanhtoan"
             width={80}
             align="center"
           />
@@ -108,7 +119,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  getDocumentPayAdmin,
+  getPays,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PayAll));

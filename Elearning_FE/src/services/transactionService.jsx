@@ -14,4 +14,6 @@ export default class TransactionService {
   getTransactions = async () => {
     return await axios.get(API_TRANSACTION + "/transaction");
   };
+
+ 
 }

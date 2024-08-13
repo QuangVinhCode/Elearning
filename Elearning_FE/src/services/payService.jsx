@@ -22,4 +22,8 @@ export default class PayService {
     };
     return await axios.get(API_PAYMENT + "/vn-pay", { params });
   };
+
+  getPays = async () => {
+    return await axios.get(API_PAYMENT);
+  };
 }
