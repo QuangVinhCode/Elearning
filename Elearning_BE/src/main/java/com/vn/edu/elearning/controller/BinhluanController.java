@@ -4,6 +4,7 @@ import com.vn.edu.elearning.domain.Binhluan;
 import com.vn.edu.elearning.dto.BinhluanDto;
 import com.vn.edu.elearning.service.BinhluanService;
 import com.vn.edu.elearning.service.MapValidationErrorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class BinhluanController {
     @Autowired
     MapValidationErrorService mapValidationErrorService;
     @PostMapping
-    public ResponseEntity<?> createComment(@Validated @RequestBody BinhluanDto dto, BindingResult result){
+    public ResponseEntity<?> createComment(@Valid @RequestBody BinhluanDto dto, BindingResult result){
 
        ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(result);
 

@@ -15,9 +15,7 @@ import {
   getCommentsByDocument,
   insertComment,
 } from "../../redux/actions/commentAction";
-import {
-  insertReportDocument,
-} from "../../redux/actions/reportAction";
+import { insertReportDocument } from "../../redux/actions/reportAction";
 
 import DocumentService from "../../services/documentService";
 import PayService from "../../services/payService";
@@ -108,7 +106,6 @@ class UserDocumentDetails extends Component {
   }
 
   openDownloadConfirmModal = () => {
-   
     const message = "Bạn có chắt chắn muốn tải về";
 
     Modal.confirm({
@@ -241,6 +238,7 @@ class UserDocumentDetails extends Component {
 
   handleChange = (e) => {
     console.log("Comment: " + e.target.value);
+
     this.setState({ value: e.target.value });
   };
   handleSubmit = () => {
@@ -269,26 +267,38 @@ class UserDocumentDetails extends Component {
       const userSession = storedUserSession
         ? JSON.parse(storedUserSession)
         : null;
-      const trangthaibinhluan = userSession ? userSession.trangthaibinhluan : "";
-      if (trangthaibinhluan === "Bình thường")
-      {
-        if (this.state.value) {
-          console.log(comment);
-          this.props.insertComment(comment);
-          this.setState({ value: "" });
-        }
-      }else{
+      const trangthaibinhluan = userSession
+        ? userSession.trangthaibinhluan
+        : "";
+      if (this.state.value.length === 0) {
         message.warning({
-          content: "Bạn đã bị tính năng bình luận",
+          content: "Vui lòng nhập nội dung",
           style: { marginTop: "10vh" },
         });
+      } else if (this.state.value.length > 500) {
+        message.warning({
+          content: "Nội dung không vượt quá 500 ký tự",
+          style: { marginTop: "10vh" },
+        });
+      } else {
+        if (trangthaibinhluan === "Bình thường") {
+          if (this.state.value) {
+            console.log(comment);
+            this.props.insertComment(comment);
+            this.setState({ value: "" });
+          }
+        } else {
+          message.warning({
+            content: "Bạn đã bị tính năng bình luận",
+            style: { marginTop: "10vh" },
+          });
+        }
       }
-     
     }
   };
 
   handleConfirmReport = () => {
-    const { selectedError, additionalContent,mataikhoan } = this.state;
+    const { selectedError, additionalContent, mataikhoan } = this.state;
     const { document } = this.props;
     if (!selectedError) {
       message.error("Vui lòng chọn lỗi tài liệu.");
@@ -482,7 +492,10 @@ class UserDocumentDetails extends Component {
             <b>Giá:</b> {document.giaban === 0 ? "Miễn phí" : formattedPrice}
           </p>
           <div className="action-buttons">
-            <button className="button-download" onClick={this.openDownloadConfirmModal}>
+            <button
+              className="button-download"
+              onClick={this.openDownloadConfirmModal}
+            >
               Tải về
             </button>
             {!isPaid && (

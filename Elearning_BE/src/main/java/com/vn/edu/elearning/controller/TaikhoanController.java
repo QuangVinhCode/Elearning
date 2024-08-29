@@ -5,6 +5,7 @@ import com.vn.edu.elearning.dto.TaikhoanDto;
 import com.vn.edu.elearning.service.MapValidationErrorService;
 import com.vn.edu.elearning.service.TaikhoanService;
 import jakarta.mail.MessagingException;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -158,12 +159,13 @@ public class TaikhoanController {
         if (responseEntity != null) {
             return responseEntity;
         }
+        taikhoan = taikhoanService.findById(id);
         boolean check = taikhoanService.checkGmail(id, dto.getGmail());
         if (!check)
         {
             mataikhoan=id;
             registeredDto = dto;
-            taikhoanService.changeGmail(dto.getGmail());
+            taikhoanService.changeGmail(taikhoan.getGmail());
             return ResponseEntity.ok(Map.of("message", "Mã xác nhận đã được gửi đến email mới của bạn. Vui lòng nhập mã để hoàn tất đăng ký tài khoản.",
                     "url", "/users/otp-change-gmail"));
 
@@ -173,6 +175,7 @@ public class TaikhoanController {
         }
     }
 
+    @SneakyThrows
     @PatchMapping("/change-gmail/{otp}")
     public ResponseEntity<?> changeGmail(@PathVariable("otp") String otp) {
         if (registeredDto == null) {
@@ -180,8 +183,23 @@ public class TaikhoanController {
         }
 
         // Validate OTP
-        if (taikhoanService.verifyOTP(registeredDto.getGmail(), otp)) {
+        if (taikhoanService.verifyOTP(taikhoan.getGmail(), otp)) {
             // Đăng ký tài khoản từ DTO đã lưu
+            taikhoanService.newGmail(registeredDto.getGmail());
+            return ResponseEntity.ok(Map.of("message", "Mã xác nhận đã được gửi đến email mới của bạn. Vui lòng nhập mã để hoàn tất đăng ký tài khoản.",
+                    "url", "/users/otp-new-gmail"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Mã xác nhận không chính xác!"));
+        }
+    }
+
+    @PatchMapping("/new-gmail/{otp}")
+    public ResponseEntity<?> newGmail(@PathVariable("otp") String otp) {
+        if (taikhoan == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không có dữ liệu tài khoản để xác nhận.");
+        }
+        // Validate OTP
+        if (taikhoanService.verifyOTP(registeredDto.getGmail(), otp)) {
             Taikhoan registeredAccount = taikhoanService.update(mataikhoan,registeredDto);
             return new ResponseEntity<>(registeredAccount, HttpStatus.CREATED);
         } else {

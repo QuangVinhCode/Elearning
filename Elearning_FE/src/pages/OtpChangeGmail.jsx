@@ -118,11 +118,11 @@ const OtpVerification = ({ changeGmailOpt }) => {
         ) : (
           <div style={{ textAlign: "center", marginTop: "20px" }}>
             <Text type="danger">
-              Thời gian đã hết. Vui lòng đăng ký lại để nhận mã OTP mới.
+              Thời gian đã hết. Vui lòng thực hiện lại để nhận mã OTP mới.
             </Text>
             {/* You can add a button to redirect users to the registration page or trigger the registration process again */}
-            <Button type="primary" onClick={() => navigate("/register")}>
-              Đăng ký lại
+            <Button type="primary" onClick={() => navigate(-1)}>
+              Quay lại
             </Button>
           </div>
         )}

@@ -8,6 +8,7 @@ import com.vn.edu.elearning.dto.BinhluanTheoTailieuDto;
 import com.vn.edu.elearning.dto.ThongtinbinhluanDto;
 import com.vn.edu.elearning.exeception.DanhmucException;
 import com.vn.edu.elearning.repository.BinhluanRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

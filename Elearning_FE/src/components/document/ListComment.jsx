@@ -93,6 +93,13 @@ class ListComment extends Component {
     const userSession = storedUserSession
       ? JSON.parse(storedUserSession)
       : null;
+      const currentDateTime = new Date();
+      const day = String(currentDateTime.getDate()).padStart(2, "0");
+      const month = String(currentDateTime.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+      const year = currentDateTime.getFullYear();
+      const hours = String(currentDateTime.getHours()).padStart(2, "0");
+      const minutes = String(currentDateTime.getMinutes()).padStart(2, "0");
+      const formattedDateTime = `${hours}:${minutes} ${day}/${month}/${year}`;
     const { document } = this.props;
     console.log(
       "Reply submitted to comment ID:",
@@ -105,6 +112,8 @@ class ListComment extends Component {
       matailieu: document.matailieu,
       matbinhluandatraloi: replyTo,
       noidung: replyContent,
+      tendangnhap: userSession.tendangnhap,
+      thoigianbinhluan: formattedDateTime,
     };
     this.props.insertComment(comment);
     this.setState({ replyTo: null, replyContent: "" }); // Reset the reply state

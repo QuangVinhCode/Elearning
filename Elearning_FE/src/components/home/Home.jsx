@@ -53,6 +53,7 @@ class Home extends Component {
           title="Doanh thu"
           className="site-page-header"
         />
+        <h1>Thống kế hàng ngày</h1>
         <Table dataSource={documents} size="small" rowKey="mataikhoan">
           <Column
             title="Thời gian"
@@ -90,6 +91,7 @@ class Home extends Component {
             )}
           />
         </Table>
+        <h1>Doanh thu tài liệu</h1>
         <Table dataSource={transactions} size="small" rowKey="matailieu">
           <Column
             title="Tên tài liệu"

@@ -24,6 +24,7 @@ import DocumentHome from "../components/document/DocumentHome";
 import Footer from "../components/home/Footer";
 import NotFound from "./NotFound";
 import OtpChangeGmail from "./OtpChangeGmail";
+import OtpNewGmail from "./OtpNewGmail";
 
 function Users({ insertDocumentUser, updateDocument }) {
   const [showDocumentForm, setShowDocumentForm] = useState(false);
@@ -99,6 +100,7 @@ function Users({ insertDocumentUser, updateDocument }) {
         <Route path="/otp-forget" element={<OtpForgotPassword />} />
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/otp-change-gmail" element={<OtpChangeGmail />} />
+        <Route path="/otp-new-gmail" element={<OtpNewGmail />} />
         <Route path="*" element={<NotFound />} />{" "}
         {/* Route cho các đường dẫn không hợp lệ */}
       </Routes>

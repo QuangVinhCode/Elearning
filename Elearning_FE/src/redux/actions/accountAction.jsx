@@ -200,7 +200,56 @@ export const changeGmailOpt = (otp, navigate) => async (dispatch) => {
     console.log("response");
     console.log(response);
     console.log(response.message);
+    if (response.status === 200) {
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: response.data.message,
+      });
+      const OtpUrl = response.data.url;
+      console.log("OtpUrl " + OtpUrl);
+      navigate(OtpUrl);
+    } else {
+      dispatch({
+        type: COMMON_ERROR_SET,
+        payload: response.message,
+      });
+    }
+    console.log(response);
+  } catch (error) {
+    dispatch({
+      type: COMMON_ERROR_SET,
+      payload: error.response.data
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+
+export const newGmailOpt = (otp, navigate) => async (dispatch) => {
+  const service = new AccountService();
+
+  try {
+    console.log("Kiểm tra gmail lấy lại tài khoản Action");
+
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    console.log("otp in action ");
+    console.log(otp);
+    const response = await service.newGmailOpt(otp);
+    console.log("response");
+    console.log(response);
+    console.log(response.message);
     if (response.status === 201) {
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: response.data.message,
+      });
       navigate("/users/profile/accountsettings");
     } else {
       dispatch({

@@ -1,5 +1,6 @@
 package com.vn.edu.elearning.dto;
 
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Value;
 
@@ -13,6 +14,7 @@ public class BinhluanDto implements Serializable {
     Long mabinhluan;
     Long mataikhoan;
     Long matailieu;
+    @Size(min = 1, max = 50, message = "Nội dung bình luận chỉ 50 ký tự")
     String noidung;
     String trangthai;
     Long matbinhluandatraloi;

@@ -115,7 +115,21 @@ public class TaikhoanService {
         otpStorage.put(email, new OTPInfo(otp, System.currentTimeMillis()));
 
         // Gửi email chứa mã xác nhận
-        String subject = "Xác nhận tài khoản mới";
+        String subject = "Xác nhận đổi gmail";
+        String content = "Mã xác nhận của bạn là: " + otp;
+
+        emailService.sendEmail(email, subject, content);
+    }
+
+    public void newGmail(String email) throws MessagingException {
+        // Sinh mã xác nhận
+        String otp = OTPGenerator.generateOTP(6);
+
+        // Lưu mã xác nhận cùng với email người dùng
+        otpStorage.put(email, new OTPInfo(otp, System.currentTimeMillis()));
+
+        // Gửi email chứa mã xác nhận
+        String subject = "Xác nhận gmai mới";
         String content = "Mã xác nhận của bạn là: " + otp;
 
         emailService.sendEmail(email, subject, content);
@@ -223,13 +237,13 @@ public class TaikhoanService {
     }
 
     public boolean checkGmail(Long id ,String gmail) {
-        Optional<?> foundGmail = taikhoanRepository.findByGmail(gmail);
-        if (!foundGmail.isEmpty()) {
-            throw new TaikhoanException("Gmail đã từng được dùng để đăng ký tài khoản khác!");
-        }
         Taikhoan foundAccount = findById(id);
         if (foundAccount.getGmail().equals(gmail))
             return true;
+        Optional<?> foundGmail = taikhoanRepository.findByGmail(gmail);
+        if (!foundGmail.isEmpty() && !foundAccount.getGmail().equals(gmail)) {
+            throw new TaikhoanException("Gmail đã từng được dùng để đăng ký tài khoản khác!");
+        }
         return false;
     }
 

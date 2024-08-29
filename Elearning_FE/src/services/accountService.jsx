@@ -17,6 +17,9 @@ export default class ClassService {
   changeGmailOpt = async (otp) => {
     return await axios.patch(API_ACCOUNT + "/change-gmail/" + otp);
   };
+  newGmailOpt = async (otp) => {
+    return await axios.patch(API_ACCOUNT + "/new-gmail/" + otp);
+  };
   resetPassword = async (password) => {
     return await axios.patch(API_ACCOUNT + "/reset/" + password);
   };

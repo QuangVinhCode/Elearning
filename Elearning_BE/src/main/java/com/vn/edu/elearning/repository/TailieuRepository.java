@@ -39,7 +39,8 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "JOIN t.danhmuc dm " +
             "JOIN t.dsdangtai dt " +
             "JOIN dt.taikhoan tk " +
-            "WHERE tk.mataikhoan = :mataikhoan")
+            "WHERE tk.mataikhoan = :mataikhoan " +
+            "ORDER BY t.matailieu DESC ")
     List<TailieudangtaiDto> findTailieudangtaiDtosByMataikhoan(@Param("mataikhoan") Long mataikhoan);
 
     @Query("SELECT new com.vn.edu.elearning.dto.TailieudangtaiAdminDto(" +

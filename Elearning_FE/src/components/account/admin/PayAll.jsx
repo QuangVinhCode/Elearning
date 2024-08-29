@@ -3,7 +3,7 @@ import { getPays } from "../../../redux/actions/payAction";
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
-import { Table, Space, Input } from "antd";
+import { Table, Space, Input, Tooltip } from "antd";
 import Column from "antd/lib/table/Column";
 
 class PayAll extends Component {
@@ -85,6 +85,11 @@ class PayAll extends Component {
             dataIndex="giaban"
             width={80}
             align="center"
+            render={(text) => (
+              <Tooltip placement="topLeft" title={formatCurrency(text)}>
+                {formatCurrency(text)}
+              </Tooltip>
+            )}
           />
           <Column
             title="Thu nhập tác giả"
@@ -92,6 +97,11 @@ class PayAll extends Component {
             dataIndex="tongthunhaptacgia"
             width={80}
             align="center"
+            render={(text) => (
+              <Tooltip placement="topLeft" title={formatCurrency(text)}>
+                {formatCurrency(text)}
+              </Tooltip>
+            )}
           />
           <Column
             title="Phí quản trị"
@@ -99,6 +109,11 @@ class PayAll extends Component {
             dataIndex="tongphiquantri"
             width={80}
             align="center"
+            render={(text) => (
+              <Tooltip placement="topLeft" title={formatCurrency(text)}>
+                {formatCurrency(text)}
+              </Tooltip>
+            )}
           />
           <Column
             title="Thời gian"
