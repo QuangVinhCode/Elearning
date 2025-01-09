@@ -7,6 +7,7 @@ import com.vn.edu.elearning.exeception.TailieuException;
 import com.vn.edu.elearning.repository.DangtaiRepository;
 import com.vn.edu.elearning.repository.GiaodichRepository;
 import com.vn.edu.elearning.repository.ThanhtoanRepository;
+import com.vn.edu.elearning.util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,13 +55,13 @@ public class ThanhtoanService {
         }
         if (taikhoan.getSodu() < tailieu.getGiaban())
         {
-            dto.setTrangthai("Thất bại");
+            dto.setTrangthai(Status.TB.getValue());
             Giaodich giaodichThanhtoan = new Giaodich();
             giaodichThanhtoan.setLydo("Thanh toán tài liệu " + tailieu.getTentailieu());
             giaodichThanhtoan.setSotien(tailieu.getGiaban());
             giaodichThanhtoan.setThoigiangiaodich(LocalDateTime.now().format(formatter));
             giaodichThanhtoan.setTaikhoan(taikhoan);
-            giaodichThanhtoan.setTrangthai("Thất bại");
+            giaodichThanhtoan.setTrangthai(Status.TB.getValue());
             giaodichRepository.save(giaodichThanhtoan);
         }
         else {
@@ -69,8 +70,8 @@ public class ThanhtoanService {
             Giaodich giaodichTacgia = new Giaodich();
             Giaodich giaodichAdmin = new Giaodich();
             Giaodich giaodichThanhtoan = new Giaodich();
-            dto.setTrangthai("Thành công");
-            if (taikhoandangtai.getQuyenhan().equals("Quản trị viên"))
+            dto.setTrangthai(Status.TC.getValue());
+            if (taikhoandangtai.getQuyenhan().equals(Status.ADMIN.getValue()))
             {
                 Long soduTK = taikhoan.getSodu() - tailieu.getGiaban();
                 taikhoanService.incrementSodu(taikhoandangtai.getMataikhoan(),giaban);
@@ -80,14 +81,14 @@ public class ThanhtoanService {
                 giaodichTacgia.setSotien(giaban);
                 giaodichTacgia.setThoigiangiaodich(LocalDateTime.now().format(formatter));
                 giaodichTacgia.setTaikhoan(taikhoandangtai);
-                giaodichTacgia.setTrangthai("Thành công");
+                giaodichTacgia.setTrangthai(Status.TC.getValue());
                 giaodichRepository.save(giaodichTacgia);
 
                 giaodichThanhtoan.setLydo("Thanh toán tài liệu " + tailieu.getTentailieu());
                 giaodichThanhtoan.setSotien(giaban);
                 giaodichThanhtoan.setThoigiangiaodich(LocalDateTime.now().format(formatter));
                 giaodichThanhtoan.setTaikhoan(taikhoan);
-                giaodichThanhtoan.setTrangthai("Thành công");
+                giaodichThanhtoan.setTrangthai(Status.TC.getValue());
                 giaodichRepository.save(giaodichThanhtoan);
 
             }else {
@@ -105,22 +106,22 @@ public class ThanhtoanService {
                 giaodichTacgia.setSotien(thunhaptacgia);
                 giaodichTacgia.setThoigiangiaodich(LocalDateTime.now().format(formatter));
                 giaodichTacgia.setTaikhoan(taikhoandangtai);
-                giaodichTacgia.setTrangthai("Thành công");
+                giaodichTacgia.setTrangthai(Status.TC.getValue());
                 giaodichRepository.save(giaodichTacgia);
 
-                Taikhoan taikhoanadmin = taikhoanService.findAccountRole("Quản trị viên");
+                Taikhoan taikhoanadmin = taikhoanService.findAccountRole(Status.ADMIN.getValue());
                 giaodichAdmin.setLydo("Thu nhập từ thu phí quản trị tài liệu " + tailieu.getTentailieu());
                 giaodichAdmin.setSotien(phiquangtri);
                 giaodichAdmin.setThoigiangiaodich(LocalDateTime.now().format(formatter));
                 giaodichAdmin.setTaikhoan(taikhoanadmin);
-                giaodichAdmin.setTrangthai("Thành công");
+                giaodichAdmin.setTrangthai(Status.TC.getValue());
                 giaodichRepository.save(giaodichAdmin);
 
                 giaodichThanhtoan.setLydo("Thanh toán tài liệu " + tailieu.getTentailieu());
                 giaodichThanhtoan.setSotien(giaban);
                 giaodichThanhtoan.setThoigiangiaodich(LocalDateTime.now().format(formatter));
                 giaodichThanhtoan.setTaikhoan(taikhoan);
-                giaodichThanhtoan.setTrangthai("Thành công");
+                giaodichThanhtoan.setTrangthai(Status.TC.getValue());
                 giaodichRepository.save(giaodichThanhtoan);
             }
 

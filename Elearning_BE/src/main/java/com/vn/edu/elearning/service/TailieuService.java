@@ -10,6 +10,7 @@ import com.vn.edu.elearning.dto.TailieuDto;
 import com.vn.edu.elearning.dto.ThongtintailieuDto;
 import com.vn.edu.elearning.exeception.TailieuException;
 import com.vn.edu.elearning.repository.*;
+import com.vn.edu.elearning.util.Status;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,19 +51,16 @@ public class TailieuService {
         entity.setDanhmuc(danhmuc);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
         System.out.println("entity  taikhoan:" + taikhoan.getTendangnhap().toString());
-        if (!taikhoan.getTrangthaidangtai().equals("Bình thường"))
+        if (!taikhoan.getTrangthaidangtai().equals(Status.BT.getValue()))
         {
             throw new TailieuException("Tài koản của bạn đã bị chặn đăng tải");
         }
-        if (taikhoan.getQuyenhan().equals("Quản trị viên"))
+        if (taikhoan.getQuyenhan().equals(Status.ADMIN.getValue()))
         {
-            entity.setTrangthai("Đã kiểm duyệt");
-        }
-        else{
-            entity.setTrangthai("Chờ kiểm duyệt");
+            entity.setTrangthai(Status.DKD.getValue());
         }
 
-        System.out.println("entity Trạng thái :" + entity.getTrangthai());
+
         if (dto.getPdfFile() != null)
         {
             String filename = fileStorageService.storePDFFile(dto.getPdfFile());
@@ -91,7 +89,7 @@ public class TailieuService {
 
 
     public List<?> findAllByCategory(Long madm) {
-        return tailieuRepository.findByDanhmuc_MadanhmucAndTrangthai(madm,"Đã kiểm duyệt");
+        return tailieuRepository.findByDanhmuc_MadanhmucAndTrangthai(madm,Status.DKD.getValue());
     }
 
     public List<?> findAllUploadByAccount(Long mtk) {
@@ -127,7 +125,7 @@ public class TailieuService {
     }
 
     public List<Tailieu> getListDocumentByName(String name){
-        return tailieuRepository.findByTentailieuContainingIgnoreCaseAndTrangthai(name,"Đã kiểm duyệt");
+        return tailieuRepository.findByTentailieuContainingIgnoreCaseAndTrangthai(name,Status.DKD.getValue());
     }
     public Tailieu findById(Long id) {
         Optional<Tailieu> found = tailieuRepository.findById(id);
@@ -191,33 +189,32 @@ public class TailieuService {
         entity.setMatailieu(id);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
         System.out.println("entity  taikhoan:" + taikhoan.getTendangnhap().toString());
-        if (found.getTrangthai().equals("Đã kiểm duyệt"))
+        if (found.getTrangthai().equals(Status.DKD.getValue()))
         {
-            if (taikhoan.getQuyenhan().equals("Quản trị viên"))
+            if (taikhoan.getQuyenhan().equals(Status.ADMIN.getValue()))
             {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
                 LichsukiemduyetDto lichsukiemduyetDto = new LichsukiemduyetDto();
                 lichsukiemduyetDto.setMatailieu(id);
-                lichsukiemduyetDto.setKetqua("Đã duyệt");
+                lichsukiemduyetDto.setKetqua(Status.DKD.getValue());
                 lichsukiemduyetDto.setLydo("Quản trị viên đã cập nhật thông tin mới");
                 kiemduyetService.save(lichsukiemduyetDto);
                 kiemduyetService.updateCensorshipTime(LocalDateTime.now().format(formatter),taikhoan,found);
             }else {
                 LichsukiemduyetDto lichsukiemduyetDto = new LichsukiemduyetDto();
                 lichsukiemduyetDto.setMatailieu(id);
-                lichsukiemduyetDto.setKetqua("Chờ kiểm duyệt");
                 lichsukiemduyetDto.setLydo("Người dùng cập nhật thông tin mới cần kiểm duyệt lại");
                 kiemduyetService.save(lichsukiemduyetDto);
                 kiemduyetService.updateCensorshipTime("",taikhoan,found);
             }
         }
-        if (taikhoan.getQuyenhan().equals("Quản trị viên"))
+        if (taikhoan.getQuyenhan().equals(Status.ADMIN.getValue()))
         {
 
-            entity.setTrangthai("Đã kiểm duyệt");
+            entity.setTrangthai(Status.DKD.getValue());
         }
         else{
-            entity.setTrangthai("Chờ kiểm duyệt");
+            entity.setTrangthai(Status.CKD.getValue());
         }
         System.out.println("entity trang thai: " + entity.getTrangthai());
         if (list.isEmpty())

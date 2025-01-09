@@ -8,6 +8,7 @@ import com.vn.edu.elearning.dto.BinhluanTheoTailieuDto;
 import com.vn.edu.elearning.dto.ThongtinbinhluanDto;
 import com.vn.edu.elearning.exeception.DanhmucException;
 import com.vn.edu.elearning.repository.BinhluanRepository;
+import com.vn.edu.elearning.util.Status;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +31,12 @@ public class BinhluanService {
         Binhluan entity = new Binhluan();
         BeanUtils.copyProperties(dto,entity);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
-        if (taikhoan.getTrangthaibinhluan().equals("Bình thường"))
+        if (taikhoan.getTrangthaibinhluan().equals(Status.BT.getValue()))
         {
-            entity.setTrangthai("Thành công");
+            entity.setTrangthai(Status.TC.getValue());
         }
         else {
-            entity.setTrangthai("Thất bại");
+            entity.setTrangthai(Status.TB.getValue());
         }
         Tailieu tailieu = new Tailieu();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
@@ -81,7 +82,7 @@ public class BinhluanService {
     }
 
     public void blockCommentAndReplies(Long mabinhluan) {
-        blockCommentAndRepliesRecursive(mabinhluan, "Chặn");
+        blockCommentAndRepliesRecursive(mabinhluan, Status.C.getValue());
         // Attempt to update the main comment's status
 //        int updated = binhluanRepository.updateCommentStatus(mabinhluan, "Chặn");
 //

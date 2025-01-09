@@ -1,6 +1,7 @@
 package com.vn.edu.elearning.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vn.edu.elearning.util.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,7 +44,7 @@ public class Tailieu {
     private Long tylethunhaptacgia;
 
     @Column(name = "trangthai",length = 20, nullable = false)
-    private String trangthai;
+    private String trangthai = Status.CKD.getValue();
 
     @ManyToOne
     @JoinColumn(name = "madanhmuc")

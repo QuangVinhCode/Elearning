@@ -10,6 +10,7 @@ import com.vn.edu.elearning.dto.LichsukiemduyetDto;
 import com.vn.edu.elearning.dto.TailieuDto;
 import com.vn.edu.elearning.exeception.FileNotFoundException;
 import com.vn.edu.elearning.service.*;
+import com.vn.edu.elearning.util.Status;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -70,11 +71,11 @@ public class TailieuController {
         dangtaiService.save(taikhoan,tailieu);
         LichsukiemduyetDto kiemduyet = new LichsukiemduyetDto();
         kiemduyet.setMatailieu(tailieu.getMatailieu());
-        if (taikhoan.getQuyenhan().equals("Quản trị viên"))
+        if (taikhoan.getQuyenhan().equals(Status.ADMIN.getValue()))
         {
-            kiemduyet.setKetqua("Đã duyệt");
+            kiemduyet.setKetqua(Status.DKD.getValue());
         }else {
-            kiemduyet.setKetqua("Chờ kiểm duyệt");
+            kiemduyet.setKetqua(Status.CKD.getValue());
         }
         kiemduyetService.save(kiemduyet);
 
@@ -117,8 +118,6 @@ public class TailieuController {
         if (responseEntity != null) {
             return responseEntity;
         }
-        System.out.println("id:" + id);
-        System.out.println("dto:" + dto);
         // Save the new Subject entity
         Tailieu tailieu = tailieuService.update(id,dto);
 

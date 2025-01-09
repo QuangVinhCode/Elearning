@@ -64,10 +64,6 @@ public class TaikhoanService {
         String password = encryptPassword(dto.getMatkhau());
         System.out.println("MK : " + password);
         entity.setMatkhau(password);
-        entity.setQuyenhan("Người dùng");
-        entity.setTrangthaibinhluan("Bình thường");
-        entity.setTrangthaidangtai("Bình thường");
-        entity.setSodu(0L);
         return taikhoanRepository.save(entity);
     }
 
