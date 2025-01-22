@@ -1,27 +1,37 @@
 import React, { Component } from "react";
-import { getOutstandingDocuments } from "../../redux/actions/documentAction";
 import "./Card.css";
-import { connect } from "react-redux";
 import withRouter from "../../helpers/withRouter";
 import DocumentService from "../../services/documentService";
 import { Tooltip } from "antd";
 class Card extends Component {
+  constructor() {
+    super();
+    this.state = {
+      documents: {},
+    };
+    this.documentService = new DocumentService();
+  }
+
   componentDidMount() {
-    this.props.getOutstandingDocuments();
+    this.getDocument();
+  }
+  getDocument = async () => {
+    const response = await this.documentService.getOutstandingDocuments();
+    this.setState({ documents: response.data })
   }
   onDocument = (id) => {
     const { navigate } = this.props.router;
     navigate("/users/detail/" + id);
   };
   render() {
-    const { documents } = this.props;
+    const { documents } = this.state;
     return (
       <div className="cards">
         <h1>TÀI LIỆU NỔI BẬT</h1>
         <div className="cards__container">
           <div className="cards__wrapper">
             <ul className="cards__items">
-              {documents.map((document) => (
+              {documents.length > 0 && documents.map((document) => (
                 <div
                   className="productCard"
                   onClick={() => this.onDocument(document.matailieu)}
@@ -50,9 +60,9 @@ class Card extends Component {
                       {document.giaban === 0
                         ? "Miễn phí"
                         : new Intl.NumberFormat("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                          }).format(document.giaban)}
+                          style: "currency",
+                          currency: "VND",
+                        }).format(document.giaban)}
                     </div>
                   </div>
                 </div>
@@ -65,12 +75,5 @@ class Card extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  documents: state.documentReducer.documents,
-});
 
-const mapDispatchToProps = {
-  getOutstandingDocuments,
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Card));
+export default withRouter(Card);

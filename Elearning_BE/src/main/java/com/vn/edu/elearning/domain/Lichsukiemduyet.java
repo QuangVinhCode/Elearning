@@ -1,5 +1,6 @@
 package com.vn.edu.elearning.domain;
 
+import com.vn.edu.elearning.util.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Lichsukiemduyet {
     private Long malichsukiemduyet;
 
     @Column(name = "ketqua",length = 50, nullable = false)
-    private String ketqua;
+    private String ketqua = Status.CKD.getValue();
 
     @Column(name = "lydo",length = 150 )
     private String lydo;

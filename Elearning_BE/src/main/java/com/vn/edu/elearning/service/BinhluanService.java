@@ -6,9 +6,8 @@ import com.vn.edu.elearning.domain.Tailieu;
 import com.vn.edu.elearning.dto.BinhluanDto;
 import com.vn.edu.elearning.dto.BinhluanTheoTailieuDto;
 import com.vn.edu.elearning.dto.ThongtinbinhluanDto;
-import com.vn.edu.elearning.exeception.DanhmucException;
+import com.vn.edu.elearning.exeception.ClassException;
 import com.vn.edu.elearning.repository.BinhluanRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,7 +66,7 @@ public class BinhluanService {
 
         if (!found.isPresent())
         {
-            throw new DanhmucException("Bình luận có id "+ id + "không tồn tại");
+            throw new ClassException("Bình luận có id "+ id + "không tồn tại");
         }
         return found.get();
     }

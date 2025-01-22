@@ -41,7 +41,7 @@ export const loginAccount = (object, navigate) => async (dispatch) => {
       sessionStorage.setItem("userSession", JSON.stringify(userSession));
       sessionStorage.setItem("jwtToken", JSON.stringify(jwtToken));
       console.log(response.data);
-      if (response.data.taikhoan.quyenhan === "Quản trị viên") {
+      if (response.data.taikhoan.quyenhan === "Admin") {
         navigate("/dashboard/*");
       } else {
         navigate("/users");

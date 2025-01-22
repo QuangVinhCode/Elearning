@@ -4,7 +4,7 @@ import ContentHeader from "../common/ContentHeader";
 import withRouter from "../../helpers/withRouter";
 import { getCollectiontAdmin } from "../../redux/actions/transactionAction";
 import { connect } from "react-redux";
-import { Select, Button, message, Skeleton, Table, Space } from "antd";
+import { Skeleton, Table } from "antd";
 import Column from "antd/lib/table/Column";
 
 class Home extends Component {
@@ -17,8 +17,6 @@ class Home extends Component {
 
   componentDidMount() {
     this.props.getDocumentAllPayAmin();
-    const storedUserSession = sessionStorage.getItem("userSession");
-    const UserSesion = storedUserSession ? JSON.parse(storedUserSession) : null;
     this.props.getCollectiontAdmin();
   }
 

@@ -1,6 +1,7 @@
 package com.vn.edu.elearning.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vn.edu.elearning.util.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class Taikhoan {
     private String matkhau;
 
     @Column(name = "sodu",nullable = false)
-    private Long sodu;
+    private Long sodu = 0L;
 
     @Column(name = "gmail",length = 100, nullable = false)
     private String gmail;
@@ -36,13 +37,13 @@ public class Taikhoan {
     private String sodienthoai;
 
     @Column(name = "quyenhan",length = 20, nullable = false)
-    private String quyenhan;
+    private String quyenhan = Status.USER.getValue();
 
     @Column(name = "trangthaidangtai",length = 20, nullable = false)
-    private String trangthaidangtai;
+    private String trangthaidangtai =Status.BT.getValue();
 
     @Column(name = "trangthaibinhluan",length = 20, nullable = false)
-    private String trangthaibinhluan;
+    private String trangthaibinhluan=Status.BT.getValue();
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     @JsonIgnore

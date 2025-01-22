@@ -2,7 +2,6 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import DashboardPage from "./pages/DashboardPage";
 import Users from "./pages/Users";
-
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import NotFound from "./pages/NotFound";

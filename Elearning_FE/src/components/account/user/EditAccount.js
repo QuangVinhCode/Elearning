@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./EditAccount.css";
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Input, InputNumber, message } from "antd";
+import { Button, Form, Input, InputNumber } from "antd";
 import { connect } from "react-redux";
 import {
   updateAccount,
@@ -52,7 +52,7 @@ const EditAccount = ({ updateAccount, getAccount, account }) => {
       const { mataikhoan } = userSession;
       getAccount(mataikhoan);
     }
-  }, []);
+  });
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
     const data = {

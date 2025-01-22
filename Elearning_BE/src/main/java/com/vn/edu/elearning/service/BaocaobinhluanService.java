@@ -2,9 +2,8 @@ package com.vn.edu.elearning.service;
 
 import com.vn.edu.elearning.domain.*;
 import com.vn.edu.elearning.dto.*;
-import com.vn.edu.elearning.exeception.BaocaoException;
+import com.vn.edu.elearning.exeception.ClassException;
 import com.vn.edu.elearning.repository.BaocaobinhluanRepository;
-import com.vn.edu.elearning.repository.BaocaotailieuRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class BaocaobinhluanService {
         Baocaobinhluan baocaobinhluan = baocaobinhluanRepository.findByTaikhoan_MataikhoanAndBinhluan_Mabinhluan(dto.getMataikhoan(), dto.getMabinhluan());
         if (baocaobinhluan!=null)
         {
-            throw new BaocaoException("Báo cáo của bạn đã được ghi nhận!");
+            throw new ClassException("Báo cáo của bạn đã được ghi nhận!");
         }
         BeanUtils.copyProperties(dto,entity);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());

@@ -11,6 +11,7 @@ import com.vn.edu.elearning.service.KiemduyetService;
 import com.vn.edu.elearning.service.MapValidationErrorService;
 import com.vn.edu.elearning.service.TaikhoanService;
 import com.vn.edu.elearning.service.TailieuService;
+import com.vn.edu.elearning.util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,15 +47,15 @@ public class KiemduyetController {
        Lichsukiemduyet entity = kiemduyetService.save(dto);
         Taikhoan taikhoan = taikhoanService.findByPostedDocuments(dto.getMatailieu());
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
-        if (entity.getKetqua().equals("Đã duyệt"))
+        if (entity.getKetqua().equals(Status.DKD.getValue()))
         {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
             String thoigian = LocalDateTime.now().format(formatter);
             kiemduyetService.updateCensorshipTime(thoigian,taikhoan,tailieu);
-            tailieuService.updateTrangthai("Đã kiểm duyệt",entity.getTailieu().getMatailieu());
+            tailieuService.updateTrangthai(Status.DKD.getValue(), entity.getTailieu().getMatailieu());
         }else {
             kiemduyetService.updateCensorshipTime("",taikhoan,tailieu);
-            tailieuService.updateTrangthai("Cần chỉnh sửa",entity.getTailieu().getMatailieu());
+            tailieuService.updateTrangthai(Status.CCS.getValue(), entity.getTailieu().getMatailieu());
         }
 
 
@@ -67,7 +68,7 @@ public class KiemduyetController {
         Taikhoan taikhoan = taikhoanService.findByPostedDocuments(dto.getMatailieu());
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
         kiemduyetService.updateCensorshipTime("",taikhoan,tailieu);
-        tailieuService.updateTrangthai("Cần chỉnh sửa",entity.getTailieu().getMatailieu());
+        tailieuService.updateTrangthai(Status.CCS.getValue(), entity.getTailieu().getMatailieu());
 
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }
@@ -77,7 +78,7 @@ public class KiemduyetController {
         Lichsukiemduyet entity = kiemduyetService.save(dto);
         Taikhoan taikhoan = taikhoanService.findByPostedDocuments(dto.getMatailieu());
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
-        tailieuService.updateTrangthai("Cấm",entity.getTailieu().getMatailieu());
+        tailieuService.updateTrangthai(Status.CAM.getValue(), entity.getTailieu().getMatailieu());
 
         return new ResponseEntity<>(entity, HttpStatus.CREATED);
     }

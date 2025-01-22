@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import DocumentService from "../../services/documentService";
 import { message, Modal } from "antd";
-import Pdf from "@mikecousins/react-pdf";
 import {
   getDocument,
   payDocument,

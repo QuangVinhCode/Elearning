@@ -65,7 +65,7 @@ public class BinhluanController {
         return  new ResponseEntity<>("Xóa thành công",HttpStatus.OK);
     }
 
-        @PatchMapping("/block/{mabinhluan}")
+    @PatchMapping("/block/{mabinhluan}")
     public ResponseEntity<?> blockCommentAndReplies(@PathVariable Long mabinhluan) {
         binhluanService.blockCommentAndReplies(mabinhluan);
         return  new ResponseEntity<>("Chặn thành công",HttpStatus.OK);

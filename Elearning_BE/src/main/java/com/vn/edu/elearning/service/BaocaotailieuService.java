@@ -2,11 +2,8 @@ package com.vn.edu.elearning.service;
 
 import com.vn.edu.elearning.domain.*;
 import com.vn.edu.elearning.dto.*;
-import com.vn.edu.elearning.exeception.BaocaoException;
-import com.vn.edu.elearning.exeception.DanhmucException;
-import com.vn.edu.elearning.exeception.TailieuException;
+import com.vn.edu.elearning.exeception.ClassException;
 import com.vn.edu.elearning.repository.BaocaotailieuRepository;
-import com.vn.edu.elearning.repository.BinhluanRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,16 +33,16 @@ public class BaocaotailieuService {
         Tailieu tailieu = tailieuService.findById(dto.getMatailieu());
         if (taikhoan==null)
         {
-            throw  new BaocaoException("Tài khoản không tồn tại");
+            throw  new ClassException("Tài khoản không tồn tại");
         }
         if (tailieu==null)
         {
-            throw  new BaocaoException("Tài liệu không tồn tại");
+            throw  new ClassException("Tài liệu không tồn tại");
         }
         boolean check = isReportAllowed(taikhoan,tailieu);
         if (!check)
         {
-            throw  new BaocaoException("Báo cáo tài liệu này chỉ được phép thực hiện nếu cách báo cáo gần nhất ít nhất 1 giờ.");
+            throw  new ClassException("Báo cáo tài liệu này chỉ được phép thực hiện nếu cách báo cáo gần nhất ít nhất 1 giờ.");
         }
         entity.setTaikhoan(taikhoan);
         entity.setTailieu(tailieu);
