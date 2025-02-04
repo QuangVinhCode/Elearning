@@ -40,10 +40,10 @@ public class Taikhoan {
     private String quyenhan = Status.USER.getValue();
 
     @Column(name = "trangthaidangtai",length = 20, nullable = false)
-    private String trangthaidangtai = Status.BT.getValue();
+    private String trangthaidangtai =Status.BT.getValue();
 
     @Column(name = "trangthaibinhluan",length = 20, nullable = false)
-    private String trangthaibinhluan =  Status.BT.getValue();
+    private String trangthaibinhluan=Status.BT.getValue();
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     @JsonIgnore

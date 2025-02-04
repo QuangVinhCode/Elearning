@@ -6,10 +6,8 @@ import com.vn.edu.elearning.domain.Tailieu;
 import com.vn.edu.elearning.dto.BinhluanDto;
 import com.vn.edu.elearning.dto.BinhluanTheoTailieuDto;
 import com.vn.edu.elearning.dto.ThongtinbinhluanDto;
-import com.vn.edu.elearning.exeception.DanhmucException;
+import com.vn.edu.elearning.exeception.ClassException;
 import com.vn.edu.elearning.repository.BinhluanRepository;
-import com.vn.edu.elearning.util.Status;
-import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,12 +29,12 @@ public class BinhluanService {
         Binhluan entity = new Binhluan();
         BeanUtils.copyProperties(dto,entity);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
-        if (taikhoan.getTrangthaibinhluan().equals(Status.BT.getValue()))
+        if (taikhoan.getTrangthaibinhluan().equals("Bình thường"))
         {
-            entity.setTrangthai(Status.TC.getValue());
+            entity.setTrangthai("Thành công");
         }
         else {
-            entity.setTrangthai(Status.TB.getValue());
+            entity.setTrangthai("Thất bại");
         }
         Tailieu tailieu = new Tailieu();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
@@ -68,7 +66,7 @@ public class BinhluanService {
 
         if (!found.isPresent())
         {
-            throw new DanhmucException("Bình luận có id "+ id + "không tồn tại");
+            throw new ClassException("Bình luận có id "+ id + "không tồn tại");
         }
         return found.get();
     }
@@ -82,7 +80,7 @@ public class BinhluanService {
     }
 
     public void blockCommentAndReplies(Long mabinhluan) {
-        blockCommentAndRepliesRecursive(mabinhluan, Status.C.getValue());
+        blockCommentAndRepliesRecursive(mabinhluan, "Chặn");
         // Attempt to update the main comment's status
 //        int updated = binhluanRepository.updateCommentStatus(mabinhluan, "Chặn");
 //

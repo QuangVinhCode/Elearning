@@ -11,7 +11,6 @@ import { Button, Table, Space, Modal, Tooltip } from "antd";
 import Column from "antd/lib/table/Column";
 import {
   EditOutlined,
-  DeleteOutlined,
   ExclamationCircleOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
@@ -96,7 +95,7 @@ class DocumentsSold extends Component {
 
   render() {
     const { navigate } = this.props.router;
-    const { documents, isLoading } = this.props;
+    const { documents } = this.props;
 
     return (
       <>

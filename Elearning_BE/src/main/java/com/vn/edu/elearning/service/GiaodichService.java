@@ -1,20 +1,12 @@
 package com.vn.edu.elearning.service;
 
-import com.vn.edu.elearning.domain.Danhmuc;
 import com.vn.edu.elearning.domain.Giaodich;
-import com.vn.edu.elearning.domain.Lichsukiemduyet;
-import com.vn.edu.elearning.dto.DanhmucDto;
-import com.vn.edu.elearning.dto.GiaodichDto;
 import com.vn.edu.elearning.dto.LichsuthuchiDto;
-import com.vn.edu.elearning.exeception.DanhmucException;
-import com.vn.edu.elearning.repository.DanhmucRepository;
 import com.vn.edu.elearning.repository.GiaodichRepository;
-import com.vn.edu.elearning.repository.TailieuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GiaodichService {

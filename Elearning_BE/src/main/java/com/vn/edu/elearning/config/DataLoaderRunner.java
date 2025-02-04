@@ -1,5 +1,6 @@
 package com.vn.edu.elearning.config;
 
+import ch.qos.logback.core.status.StatusUtil;
 import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.repository.TaikhoanRepository;
 import com.vn.edu.elearning.util.Status;
@@ -32,6 +33,7 @@ public class DataLoaderRunner {
             adminAccount.setSodienthoai("0123456789");
             adminAccount.setGmail("admin@gmail.com");
             adminAccount.setQuyenhan(Status.ADMIN.getValue());
+
             taikhoanRepository.save(adminAccount);
         }
         LocalDate currentDate = LocalDate.now();

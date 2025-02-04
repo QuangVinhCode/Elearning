@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { getDocumentCollectionByAccount } from "../../../redux/actions/documentAction";
-
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
-import { Select, Button, Tooltip, Skeleton, Table, Space } from "antd";
+import { Tooltip, Skeleton, Table } from "antd";
 import Column from "antd/lib/table/Column";
 
 class DocumentIncomeHistory extends Component {

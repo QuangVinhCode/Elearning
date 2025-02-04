@@ -1,13 +1,10 @@
 package com.vn.edu.elearning.service;
 
 import com.vn.edu.elearning.domain.*;
-import com.vn.edu.elearning.dto.DanhmucDto;
 import com.vn.edu.elearning.dto.LichsukiemduyetDto;
-import com.vn.edu.elearning.exeception.DanhmucException;
+import com.vn.edu.elearning.exeception.ClassException;
 import com.vn.edu.elearning.repository.DangtaiRepository;
-import com.vn.edu.elearning.repository.DanhmucRepository;
 import com.vn.edu.elearning.repository.LichsukiemduyetRepository;
-import com.vn.edu.elearning.repository.TailieuRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +47,7 @@ public class KiemduyetService {
 
         if (!found.isPresent())
         {
-            throw new DanhmucException("Danh mục có id "+ id + "không tồn tại");
+            throw new ClassException("Danh mục có id "+ id + "không tồn tại");
         }
         return found.get();
     }

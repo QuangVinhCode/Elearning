@@ -9,14 +9,15 @@ import com.vn.edu.elearning.config.OTPGenerator;
 import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.dto.OTPInfo;
 import com.vn.edu.elearning.dto.TaikhoanDto;
-import com.vn.edu.elearning.exeception.TaikhoanException;
+import com.vn.edu.elearning.exeception.ClassException;
 import com.vn.edu.elearning.repository.DangtaiRepository;
 import com.vn.edu.elearning.repository.TaikhoanRepository;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,10 @@ public class TaikhoanService {
     private DangtaiRepository dangtaiRepository;
 
     private static final long OTP_EXPIRATION_TIME = 5 * 60 * 1000;
-    protected static final  String SIGNER_KEY = "LWwRhNg8jexoFVR3TnJu3R/qtjpjZO9FVsXwllzFCpXLFoXMAKv0cMmIYCZBmZ+Q";
+
+    @Value("${jwt.secret}")
+    private String SIGNER_KEY;
+
     private Map<String, OTPInfo> otpStorage = new HashMap<>();
     public Taikhoan register(TaikhoanDto dto) {
 
@@ -70,11 +74,11 @@ public class TaikhoanService {
     public void registerUser(String email,String name) throws MessagingException {
         Optional<?> found = taikhoanRepository.findByTendangnhap(name);
         if (!found.isEmpty()) {
-            throw new TaikhoanException("Tên tài khoản đã tồn tại trong hệ thống");
+            throw new ClassException("Tên tài khoản đã tồn tại trong hệ thống");
         }
         Optional<?> foundGmail = taikhoanRepository.findByGmail(email);
         if (!foundGmail.isEmpty()) {
-            throw new TaikhoanException("Gmail đã từng được dùng để đăng ký tài khoản khác!");
+            throw new ClassException("Gmail đã từng được dùng để đăng ký tài khoản khác!");
         }
         // Sinh mã xác nhận
         String otp = OTPGenerator.generateOTP(6);
@@ -142,7 +146,7 @@ public class TaikhoanService {
         }
         return false;
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     public List<?> findAll() {
         return taikhoanRepository.findAll();
     }
@@ -156,12 +160,14 @@ public class TaikhoanService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
+
+   @PostAuthorize("returnObject.tendangnhap == authentication.name")
     public Taikhoan findById(Long id) {
         Optional<Taikhoan> found = taikhoanRepository.findById(id);
 
-        if (!found.isPresent())
+        if (found.isEmpty())
         {
-            throw new TaikhoanException("Yêu cầu đăng nhập");
+            throw new ClassException("Yêu cầu đăng nhập");
         }
         return found.get();
     }
@@ -171,7 +177,7 @@ public class TaikhoanService {
 
         if (!found.isPresent())
         {
-            throw new TaikhoanException("Tài khoản có quyền hạn "+ role + " không tồn tại");
+            throw new ClassException("Tài khoản có quyền hạn "+ role + " không tồn tại");
         }
         return found.get();
     }
@@ -186,7 +192,7 @@ public class TaikhoanService {
 
         if (!found.isPresent())
         {
-            throw new TaikhoanException("Tên đăng nhập hoặc gmail đăng ký không chính xác!");
+            throw new ClassException("Tên đăng nhập hoặc gmail đăng ký không chính xác!");
         }
         return found.get();
     }
@@ -196,13 +202,13 @@ public class TaikhoanService {
         Optional<Taikhoan> found = taikhoanRepository.findByTendangnhap(username);
         if (!found.isPresent())
         {
-            throw new TaikhoanException("Tài khoản không tồn tại");
+            throw new ClassException("Tài khoản không tồn tại");
         }
         // Giải mã mật khẩu
         boolean matches = matchesPassword(password,found.get().getMatkhau());
         if (matches == false)
         {
-            throw new TaikhoanException("Tên đăng nhập hoặc mật khẩu không chính xác");
+            throw new ClassException("Tên đăng nhập hoặc mật khẩu không chính xác");
         }
         return found.get();
     }
@@ -238,11 +244,10 @@ public class TaikhoanService {
             return true;
         Optional<?> foundGmail = taikhoanRepository.findByGmail(gmail);
         if (!foundGmail.isEmpty() && !foundAccount.getGmail().equals(gmail)) {
-            throw new TaikhoanException("Gmail đã từng được dùng để đăng ký tài khoản khác!");
+            throw new ClassException("Gmail đã từng được dùng để đăng ký tài khoản khác!");
         }
         return false;
     }
-
 
     public Taikhoan changedPassword(Long id ,String oldPassword,String newPassword) {
         Taikhoan foundAccount = findById(id);
@@ -251,7 +256,7 @@ public class TaikhoanService {
         System.out.println("found Account Password : " + matches);
         if (matches == false)
         {
-            throw new TaikhoanException("Mật khẩu không chính xác");
+            throw new ClassException("Mật khẩu không chính xác");
         }
         String password = encryptPassword(newPassword);
         foundAccount.setMatkhau(password);
@@ -276,15 +281,21 @@ public class TaikhoanService {
         taikhoanRepository.updateSodu(id,amount);
     }
 
-    public String generateToken(String username){
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+    public String generateToken(Long id){
+
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+
+        System.out.println("key " + SIGNER_KEY.toString());
+
+         Taikhoan taikhoan =  findById(id);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(username)
+                .subject(taikhoan.getTendangnhap())
                 .issuer("Elearning.com")
                 .issueTime(new Date())
-                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()))
-                .claim("role","role")
+                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .claim("scope",taikhoan.getQuyenhan())
+                .claim("id",taikhoan.getMataikhoan())
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -293,6 +304,7 @@ public class TaikhoanService {
 
         try {
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+
             return jwsObject.serialize();
         } catch (JOSEException e) {
             System.out.println("Error create token: " + e);

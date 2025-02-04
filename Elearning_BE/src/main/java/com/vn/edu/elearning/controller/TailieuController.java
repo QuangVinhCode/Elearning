@@ -118,7 +118,6 @@ public class TailieuController {
         if (responseEntity != null) {
             return responseEntity;
         }
-        // Save the new Subject entity
         Tailieu tailieu = tailieuService.update(id,dto);
 
 

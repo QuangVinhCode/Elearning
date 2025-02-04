@@ -35,15 +35,15 @@ class ListCategory extends Component {
   };
 
   editCategory = (object) => {
-     console.log(object);
+    console.log(object);
 
-     const { navigate } = this.props.router;
+    const { navigate } = this.props.router;
     console.log("EditClas is " + object.madanhmuc);
-     navigate("/dashboard/category/update/" + object.madanhmuc);
+    navigate("/dashboard/category/update/" + object.madanhmuc);
   };
   deleteCategory = () => {
     this.props.deleteCategory(this.state.object.madanhmuc);
-   
+
   };
 
   openDeleteConfirmModal = (object) => {
@@ -110,9 +110,10 @@ class ListCategory extends Component {
                   key={record.key}
                   type="primary"
                   size="small"
+                  icon={<EditOutlined />}
                   onClick={() => this.editCategory(record)}
                 >
-                  <EditOutlined style={{ marginRight: 8 }} />
+
                   Sửa
                 </Button>
                 <Button
@@ -120,9 +121,10 @@ class ListCategory extends Component {
                   type="primary"
                   danger
                   size="small"
+                  icon={<DeleteOutlined />}
                   onClick={() => this.openDeleteConfirmModal(record)}
                 >
-                  <DeleteOutlined style={{ marginRight: 8 }} />
+
                   Xóa
                 </Button>
               </Space>

@@ -3,8 +3,7 @@ package com.vn.edu.elearning.service;
 import com.vn.edu.elearning.domain.*;
 import com.vn.edu.elearning.dto.ThanhtoanDto;
 import com.vn.edu.elearning.dto.ThongkethanhtoanDto;
-import com.vn.edu.elearning.exeception.TailieuException;
-import com.vn.edu.elearning.repository.DangtaiRepository;
+import com.vn.edu.elearning.exeception.ClassException;
 import com.vn.edu.elearning.repository.GiaodichRepository;
 import com.vn.edu.elearning.repository.ThanhtoanRepository;
 import com.vn.edu.elearning.util.Status;
@@ -39,19 +38,19 @@ public class ThanhtoanService {
 
         if (tailieu==null)
         {
-            throw  new TailieuException("Tài liệu không tồn tại");
+            throw  new ClassException("Tài liệu không tồn tại");
         }
         if (taikhoan==null)
         {
-            throw  new TailieuException("Yêu cầu đăng nhập");
+            throw  new ClassException("Yêu cầu đăng nhập");
         }
-        if (tailieu.getTrangthai().equals("Cấm"))
+        if (tailieu.getTrangthai().equals(Status.CAM.getValue()))
         {
-            throw  new TailieuException("Tài liệu đã bị quản trị viên chặn");
+            throw  new ClassException("Tài liệu đã bị quản trị viên chặn");
         }
-        if (tailieu.getTrangthai().equals("Cần chỉnh sửa"))
+        if (tailieu.getTrangthai().equals(Status.CCS.getValue()))
         {
-            throw  new TailieuException("Tài liệu đang trong quá trình kiểm tra lại");
+            throw  new ClassException("Tài liệu đang trong quá trình kiểm tra lại");
         }
         if (taikhoan.getSodu() < tailieu.getGiaban())
         {

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Input, Button, Row, Col, Typography, Space, Tag } from "antd";
-import "antd/dist/antd.css";
 import "./OtpVerification.css";
 import { insertOtpForRegister } from "../redux/actions/accountAction";
 import { connect } from "react-redux";

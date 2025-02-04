@@ -15,7 +15,6 @@ import {
   MdOutlinePlayLesson,
   MdReportProblem,
 } from "react-icons/md";
-import { FcStatistics } from "react-icons/fc";
 import { AiOutlineTransaction, AiOutlineMonitor } from "react-icons/ai";
 import { IoEyeSharp } from "react-icons/io5";
 import { HiMiniUserGroup } from "react-icons/hi2";
@@ -35,7 +34,6 @@ import DocumentReport from "../components/account/admin/DocumentReport";
 import TradingHistoryAdmin from "../components/document/TradingHistoryAdmin";
 import DocumentReportNumber from "../components/account/admin/DocumentReportNumber";
 import CommentReportNumber from "../components/account/admin/CommentReportNumber";
-import StatisticsAdmin from "../components/document/StatisticsAdmin";
 import CommentHistory from "../components/document/CommentHistory";
 import PayAll from "../components/account/admin/PayAll";
 import UploadAll from "../components/account/admin/UploadAll";

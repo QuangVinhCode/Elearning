@@ -129,7 +129,7 @@ public class TaikhoanController {
     public ResponseEntity<?> loginAccount(@PathVariable("username") String username,@PathVariable("password") String password) {
 
         Taikhoan loggedInAccount = taikhoanService.login(username,password);
-        String token = taikhoanService.generateToken(loggedInAccount.getTendangnhap());
+        String token = taikhoanService.generateToken(loggedInAccount.getMataikhoan());
         return new ResponseEntity<>(Map.of("taikhoan",loggedInAccount,"token",token), HttpStatus.OK);
     }
 

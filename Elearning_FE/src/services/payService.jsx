@@ -1,7 +1,11 @@
 import axios from "axios";
 import {  API_PAYMENT } from "./constant";
 
-export default class PayService {
+export default class PayService { getToken = () => {
+  const jwtToken = sessionStorage.getItem("jwtToken");
+  const sessionToken = jwtToken ? JSON.parse(jwtToken) : null;
+  return sessionToken.token;
+};
   static checkDocumentView = async (matk, matl) => {
     try {
       const response = await axios.get(API_PAYMENT + "/check/" + matk + "/" + matl);

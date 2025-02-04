@@ -6,15 +6,16 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Status {
-    ADMIN("admin"),
-    USER("user"),
+    ADMIN("Admin"),
+    USER("User"),
     BT("Bình thường"),
-    TC("Thành công"),
-    TB("Thất bại"),
-    C("Chặn"),
+    CHAN("Chặn"),
     CAM("Cấm"),
     CKD("Chờ kiểm duyệt"),
-    DKD("Đã kiểm duyệt"),
-    CCS("Cần chỉnh sửa");
+    DKD("Đã kểm duyệt"),
+    CCS("Cần chỉnh sửa"),
+    TC("Thành công"),
+    TB("Thất bại");
     private final String value;
+
 }

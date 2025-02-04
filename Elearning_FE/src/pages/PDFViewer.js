@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { pdfjs, Document, Page } from "react-pdf/dist/esm/entry.webpack";
+import { pdfjs, Document, Page } from "react-pdf";
 import axios from "axios";
 import "./PDFViewer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";

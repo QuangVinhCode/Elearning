@@ -3,12 +3,10 @@ import { getDocumentPayByAccount } from "../../../redux/actions/documentAction";
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
-import { Select, Button, Tooltip, Skeleton, Table, Space, message } from "antd";
+import { Button, Tooltip, Skeleton, Table, Space, message } from "antd";
 import Column from "antd/lib/table/Column";
 import {
   EyeOutlined,
-  DeleteOutlined,
-  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 class YourOrders extends Component {
   constructor() {

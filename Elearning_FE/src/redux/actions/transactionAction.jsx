@@ -1,7 +1,6 @@
 import DocumentService from "../../services/documentService";
 import TransactionService from "../../services/transactionService";
 import {
-  TRANSACTION_SET,
   TRANSACTIONS_SET,
   TRANSACTION_STATE_CLEAR,
   COMMON_LOADING_SET,

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, Input } from "antd";
+import {  Form, Input } from "antd";
 import { useDispatch } from "react-redux";
 import { insertAccount } from "../redux/actions/accountAction";
 import { FaUser, FaLock, FaPhoneAlt } from "react-icons/fa";

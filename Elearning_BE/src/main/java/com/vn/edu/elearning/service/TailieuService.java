@@ -4,16 +4,17 @@ package com.vn.edu.elearning.service;
 import com.vn.edu.elearning.domain.Danhmuc;
 import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.domain.Tailieu;
-import com.vn.edu.elearning.dto.KiemduyettailieuDto;
 import com.vn.edu.elearning.dto.LichsukiemduyetDto;
 import com.vn.edu.elearning.dto.TailieuDto;
 import com.vn.edu.elearning.dto.ThongtintailieuDto;
-import com.vn.edu.elearning.exeception.TailieuException;
+import com.vn.edu.elearning.exeception.ClassException;
 import com.vn.edu.elearning.repository.*;
 import com.vn.edu.elearning.util.Status;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -43,6 +44,8 @@ public class TailieuService {
 
     @Autowired
     BaocaotailieuRepository baocaotailieuRepository;
+
+   @PreAuthorize("#dto.mataikhoan == authentication.principal.claims['id']")
     public Tailieu save(TailieuDto dto) {
         Tailieu entity = new Tailieu();
         BeanUtils.copyProperties(dto,entity);
@@ -53,14 +56,16 @@ public class TailieuService {
         System.out.println("entity  taikhoan:" + taikhoan.getTendangnhap().toString());
         if (!taikhoan.getTrangthaidangtai().equals(Status.BT.getValue()))
         {
-            throw new TailieuException("Tài koản của bạn đã bị chặn đăng tải");
+            throw new ClassException("Tài koản của bạn đã bị chặn đăng tải");
         }
         if (taikhoan.getQuyenhan().equals(Status.ADMIN.getValue()))
         {
             entity.setTrangthai(Status.DKD.getValue());
+        }else {
+            entity.setTrangthai(Status.CKD.getValue());
         }
 
-
+        System.out.println("entity Trạng thái :" + entity.getTrangthai());
         if (dto.getPdfFile() != null)
         {
             String filename = fileStorageService.storePDFFile(dto.getPdfFile());
@@ -69,7 +74,7 @@ public class TailieuService {
             dto.setPdfFile(null);
         }else
         {
-            throw  new TailieuException("Chưa thêm file pdf");
+            throw  new ClassException("Chưa thêm file pdf");
         }
 
         return tailieuRepository.save(entity);
@@ -132,7 +137,7 @@ public class TailieuService {
 
         if (!found.isPresent())
         {
-            throw new TailieuException("Tài liệu có id "+ id + " không tồn tại");
+            throw new ClassException("Tài liệu có id "+ id + " không tồn tại");
         }
         return found.get();
     }
@@ -142,7 +147,7 @@ public class TailieuService {
 
         if (thongtintailieuDto==null)
         {
-            throw new TailieuException("Tài liệu có id "+ id + " không tồn tại");
+            throw new ClassException("Tài liệu có id "+ id + " không tồn tại");
         }
         return thongtintailieuDto;
     }
@@ -154,12 +159,12 @@ public class TailieuService {
 
         if(!listReport.isEmpty())
         {
-            throw new TailieuException("Tài liệu đã bị tố cáo");
+            throw new ClassException("Tài liệu đã bị tố cáo");
         }
 
         if (!list.isEmpty())
         {
-            throw new TailieuException("Tài liệu đã có người thanh toán");
+            throw new ClassException("Tài liệu đã có người thanh toán");
         }
         Tailieu existed = findById(id);
 
@@ -171,13 +176,13 @@ public class TailieuService {
     public void  updateTrangthai(String trangthai,Long matailieu){
         tailieuRepository.updateTrangthaiByMatailieu(trangthai,matailieu);
     }
-
+    @PreAuthorize("#dto.mataikhoan == authentication.principal.claims['id']")
     public Tailieu update(Long id ,TailieuDto dto) {
         Tailieu found = findById(id);
         List<?> list = thanhtoanRepository.findByTailieu_Matailieu(id);
         if (found==null)
         {
-            throw  new TailieuException("Không tìm thấy tài liệu");
+            throw  new ClassException("Không tìm thấy tài liệu");
         }
 
         Tailieu entity = new Tailieu();
@@ -188,7 +193,6 @@ public class TailieuService {
         entity.setDanhmuc(danhmuc);
         entity.setMatailieu(id);
         Taikhoan taikhoan = taikhoanService.findById(dto.getMataikhoan());
-        System.out.println("entity  taikhoan:" + taikhoan.getTendangnhap().toString());
         if (found.getTrangthai().equals(Status.DKD.getValue()))
         {
             if (taikhoan.getQuyenhan().equals(Status.ADMIN.getValue()))

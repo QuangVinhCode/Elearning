@@ -68,8 +68,6 @@ public class ThanhtoanController {
         ThanhtoanDto dto = new ThanhtoanDto();
         dto.setMataikhoan(tk);
         dto.setMatailieu(tl);
-        System.out.println("User getMataikhoan: " + dto.getMataikhoan());
-        System.out.println("User getMatailieu: " + dto.getMatailieu());
         Thanhtoan thanhtoan = thanhtoanService.save(dto);
         return new ResponseEntity<>(thanhtoan, HttpStatus.OK);
     }

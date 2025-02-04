@@ -1,7 +1,6 @@
 package com.vn.edu.elearning.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vn.edu.elearning.util.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -32,7 +31,7 @@ public class Binhluan {
     @Column(name = "noidung", nullable = false, length = 500)
     private String noidung;
     @Column(name = "trangthai",length = 20, nullable = false)
-    private String trangthai = Status.BT.getValue();
+    private String trangthai;
     @Column(name = "matbinhluandatraloi",length = 20)
     private Long matbinhluandatraloi;
     @Column(name = "thoigianbinhluan",length = 50, nullable = false)

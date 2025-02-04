@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {  Route, Routes } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
