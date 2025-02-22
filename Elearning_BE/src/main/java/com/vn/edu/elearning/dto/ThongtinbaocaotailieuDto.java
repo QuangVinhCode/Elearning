@@ -12,5 +12,5 @@ public class ThongtinbaocaotailieuDto implements Serializable {
     Long solanbaocao;
     String tentailieu;
     String tentaikhoanbitocao;
-    Long matailieu;
+    String matailieu;
 }

@@ -4,7 +4,7 @@ import "./UserManage.css";
 import ContentHeader from "../../common/ContentHeader";
 import withRouter from "../../../helpers/withRouter";
 import { connect } from "react-redux";
-import { Select, Button, message, Skeleton, Table, Space, Tooltip } from "antd";
+import {  Button, Skeleton, Table, Space, Tooltip } from "antd";
 import Column from "antd/lib/table/Column";
 import { IoEyeSharp } from "react-icons/io5";
 import CommentReportHistory from "./CommentReportHistory";

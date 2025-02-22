@@ -2,7 +2,7 @@ package com.vn.edu.elearning.service;
 
 import com.vn.edu.elearning.domain.Danhmuc;
 import com.vn.edu.elearning.dto.DanhmucDto;
-import com.vn.edu.elearning.exeception.DanhmucException;
+import com.vn.edu.elearning.exeception.ClassException;
 import com.vn.edu.elearning.repository.DanhmucRepository;
 import com.vn.edu.elearning.repository.TailieuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ public class DanhmucService {
         return danhmucRepository.save(danhmuc);
     }
 
-    public Danhmuc update(Long id, DanhmucDto entity) {
+    public Danhmuc update(String id, DanhmucDto entity) {
         Optional<Danhmuc> existed = danhmucRepository.findById(id);
         if(!existed.isPresent())
         {
-            throw new DanhmucException("Danh mục có id " + id + " không tồn tại");
+            throw new ClassException("Danh mục có id " + id + " không tồn tại");
         }
 
         try {
@@ -37,7 +37,7 @@ public class DanhmucService {
            return danhmucRepository.save(existedDanhmuc);
         }catch (Exception ex)
         {
-            throw new DanhmucException("Danh mục muốn cập nhật bị lỗi");
+            throw new ClassException("Danh mục muốn cập nhật bị lỗi");
         }
     }
 
@@ -45,21 +45,21 @@ public class DanhmucService {
         return danhmucRepository.findAll();
     }
 
-    public Danhmuc findById(Long id) {
+    public Danhmuc findById(String id) {
         Optional<Danhmuc> found = danhmucRepository.findById(id);
 
         if (!found.isPresent())
         {
-            throw new DanhmucException("Danh mục có id "+ id + "không tồn tại");
+            throw new ClassException("Danh mục có id "+ id + "không tồn tại");
         }
         return found.get();
     }
 
-    public void  deleteById(Long id){
+    public void  deleteById(String id){
         List<?> exitList = tailieuRepository.findByDanhmuc_Madanhmuc(id);
         if (!exitList.isEmpty())
         {
-            throw new DanhmucException("Danh mục có tồn tại tài liệu");
+            throw new ClassException("Danh mục có tồn tại tài liệu");
         }
         Danhmuc existed = findById(id);
         danhmucRepository.delete(existed);

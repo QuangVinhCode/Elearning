@@ -10,16 +10,16 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
+public interface TaikhoanRepository extends JpaRepository<Taikhoan, String> {
     @Modifying
     @Transactional
     @Query("UPDATE Taikhoan t SET t.sodu = :sodu WHERE t.mataikhoan = :id")
-    void updateSodu(@Param("id") Long id, @Param("sodu") Long sodu);
+    void updateSodu(@Param("id") String id, @Param("sodu") Long sodu);
 
     @Modifying
     @Transactional
     @Query("UPDATE Taikhoan t SET t.sodu = t.sodu + :amount WHERE t.mataikhoan = :id")
-    void incrementSodu(@Param("id") Long id, @Param("amount") Long amount);
+    void incrementSodu(@Param("id") String id, @Param("amount") Long amount);
 
     @Modifying
     @Transactional
@@ -30,12 +30,12 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
     @Modifying
     @Query("UPDATE Taikhoan t SET t.trangthaidangtai = :trangthai WHERE t.mataikhoan = :id")
     @Transactional
-    void updateTrangThaiDangTai(@Param("id") Long id, @Param("trangthai") String trangthai);
+    void updateTrangThaiDangTai(@Param("id") String id, @Param("trangthai") String trangthai);
 
     @Modifying
     @Query("UPDATE Taikhoan t SET t.trangthaibinhluan = :trangthai WHERE t.mataikhoan = :id")
     @Transactional
-    void updateTrangThaiBinhlLuan(@Param("id") Long id, @Param("trangthai") String trangthai);
+    void updateTrangThaiBinhlLuan(@Param("id") String id, @Param("trangthai") String trangthai);
 
     @Query("SELECT t FROM Taikhoan t WHERE t.quyenhan <> 'Quản trị viên'")
     List<Taikhoan> findAllWithoutAdmin();
@@ -62,7 +62,7 @@ public interface TaikhoanRepository extends JpaRepository<Taikhoan, Long> {
 
     Optional<Taikhoan> findByGmail(String gmail);
 
-    Taikhoan findByDsdangtai_Tailieu_Matailieu(Long matailieu);
+    Taikhoan findByDsdangtai_Tailieu_Matailieu(String matailieu);
 
     Optional<Taikhoan> findByQuyenhan(String quyenhan);
 

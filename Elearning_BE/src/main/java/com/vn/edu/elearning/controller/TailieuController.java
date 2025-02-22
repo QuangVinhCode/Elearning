@@ -10,6 +10,7 @@ import com.vn.edu.elearning.dto.LichsukiemduyetDto;
 import com.vn.edu.elearning.dto.TailieuDto;
 import com.vn.edu.elearning.exeception.FileNotFoundException;
 import com.vn.edu.elearning.service.*;
+import com.vn.edu.elearning.util.Status;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -70,11 +71,11 @@ public class TailieuController {
         dangtaiService.save(taikhoan,tailieu);
         LichsukiemduyetDto kiemduyet = new LichsukiemduyetDto();
         kiemduyet.setMatailieu(tailieu.getMatailieu());
-        if (taikhoan.getQuyenhan().equals("Quản trị viên"))
+        if (taikhoan.getQuyenhan().equals(Status.ADMIN.getValue()))
         {
-            kiemduyet.setKetqua("Đã duyệt");
+            kiemduyet.setKetqua(Status.DKD.getValue());
         }else {
-            kiemduyet.setKetqua("Chờ kiểm duyệt");
+            kiemduyet.setKetqua(Status.CKD.getValue());
         }
         kiemduyetService.save(kiemduyet);
 
@@ -111,15 +112,12 @@ public class TailieuController {
             MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateDocument(
-            @PathVariable Long id,@Validated @ModelAttribute TailieuDto dto, BindingResult result){
+            @PathVariable String id,@Validated @ModelAttribute TailieuDto dto, BindingResult result){
 
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(result);
         if (responseEntity != null) {
             return responseEntity;
         }
-        System.out.println("id:" + id);
-        System.out.println("dto:" + dto);
-        // Save the new Subject entity
         Tailieu tailieu = tailieuService.update(id,dto);
 
 
@@ -140,7 +138,7 @@ public class TailieuController {
     }
 
     @GetMapping("/upload-account/{id}")
-    public ResponseEntity<?> getDocumentUploadByAccount(@PathVariable("id") Long id){
+    public ResponseEntity<?> getDocumentUploadByAccount(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findAllUploadByAccount(id),HttpStatus.OK);
     }
 
@@ -150,7 +148,7 @@ public class TailieuController {
     }
 
     @GetMapping("/pay-account/{id}")
-    public ResponseEntity<?> getDocumentPayByAccount(@PathVariable("id") Long id){
+    public ResponseEntity<?> getDocumentPayByAccount(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findAllPayByAccount(id),HttpStatus.OK);
     }
 
@@ -170,12 +168,12 @@ public class TailieuController {
     }
 
     @GetMapping("/collection-account/{id}")
-    public ResponseEntity<?> getDocumentCollectionByAccount(@PathVariable("id") Long id){
+    public ResponseEntity<?> getDocumentCollectionByAccount(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findAllDocumentCollectionByAccount(id),HttpStatus.OK);
     }
 
     @GetMapping("/category/{id}")
-    public ResponseEntity<?> getDocumentsByCategory(@PathVariable("id") Long id){
+    public ResponseEntity<?> getDocumentsByCategory(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findAllByCategory(id),HttpStatus.OK);
     }
 
@@ -190,16 +188,16 @@ public class TailieuController {
     }
 
     @GetMapping("/{id}/get")
-    public  ResponseEntity<?> getDocument(@PathVariable("id") Long id){
+    public  ResponseEntity<?> getDocument(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findById(id),HttpStatus.OK);
     }
 
     @GetMapping("/{id}/info")
-    public  ResponseEntity<?> getDocumentInfo(@PathVariable("id") Long id){
+    public  ResponseEntity<?> getDocumentInfo(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findThongtintailieuById(id),HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteDocument(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteDocument(@PathVariable("id") String id) {
 
         tailieuService.deleteById(id);
 

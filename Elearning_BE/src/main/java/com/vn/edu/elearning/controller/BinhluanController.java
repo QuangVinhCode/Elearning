@@ -44,29 +44,29 @@ public class BinhluanController {
     }
 
     @GetMapping("/account/{id}")
-    public ResponseEntity<?> getCommentsByAccount(@PathVariable("id") Long id){
+    public ResponseEntity<?> getCommentsByAccount(@PathVariable("id") String id){
         return new ResponseEntity<>(binhluanService.findAllByAccount(id),HttpStatus.OK);
     }
 
     @GetMapping("/document/{id}")
-    public ResponseEntity<?> getCommentsByDocument(@PathVariable("id") Long id){
+    public ResponseEntity<?> getCommentsByDocument(@PathVariable("id") String id){
         return new ResponseEntity<>(binhluanService.findBinhluansByMatailieu(id),HttpStatus.OK);
     }
 
     @GetMapping("/{id}/get")
-    public  ResponseEntity<?> getComment(@PathVariable("id") Long id){
+    public  ResponseEntity<?> getComment(@PathVariable("id") String id){
         return new ResponseEntity<>(binhluanService.findById(id),HttpStatus.OK);
     }
 
     @DeleteMapping("/{matk}/{matl}/{mabl}")
-    public ResponseEntity<?> deleteComment(@PathVariable("matk") Long matk,@PathVariable("matl") Long matl,@PathVariable("mabl") Long mabl)
+    public ResponseEntity<?> deleteComment(@PathVariable("matk") String matk,@PathVariable("matl") String matl,@PathVariable("mabl") String mabl)
     {
         binhluanService.deleteById(mabl);
         return  new ResponseEntity<>("Xóa thành công",HttpStatus.OK);
     }
 
-        @PatchMapping("/block/{mabinhluan}")
-    public ResponseEntity<?> blockCommentAndReplies(@PathVariable Long mabinhluan) {
+    @PatchMapping("/block/{mabinhluan}")
+    public ResponseEntity<?> blockCommentAndReplies(@PathVariable String mabinhluan) {
         binhluanService.blockCommentAndReplies(mabinhluan);
         return  new ResponseEntity<>("Chặn thành công",HttpStatus.OK);
     }

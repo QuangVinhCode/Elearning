@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-
 import { Modal, Table } from "antd";
-
 import { getCensorshipByDocument } from "../../redux/actions/documentAction";
 import withRouter from "../../helpers/withRouter";
 import { connect } from "react-redux";

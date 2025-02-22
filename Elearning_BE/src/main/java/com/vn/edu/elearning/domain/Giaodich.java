@@ -16,22 +16,16 @@ import java.util.List;
 @Entity
 @Table(name = "giaodich")
 public class Giaodich {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "magiaodich", nullable = false)
-    private Long magiaodich;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String magiaodich;
 
-    @Column(name = "sotien",nullable = false)
     private Long sotien;
 
-    @Column(name = "lydo",length = 250, nullable = false)
     private String lydo;
 
-    @Column(name = "trangthai",length = 20, nullable = false)
     private String trangthai;
 
-    @Column(name = "thoigiangiaodich",length = 50,nullable = false)
     private String thoigiangiaodich;
 
     @ManyToOne

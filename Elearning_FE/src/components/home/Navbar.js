@@ -6,26 +6,11 @@ import { Button, message, Modal } from "antd";
 import DropdownMenu from "./DropdownMenu";
 import { useDispatch } from "react-redux";
 import { LOG_OUT } from "../../redux/actions/actionTypes";
-import { FaSearch } from "react-icons/fa";
+import { FaBars, FaSearch, FaTimes } from "react-icons/fa";
 
 const useUserSession = () => {
   const storedUserSession = sessionStorage.getItem("userSession");
   return storedUserSession ? JSON.parse(storedUserSession) : null;
-};
-
-const useWindowSize = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 960);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  return isMobile;
 };
 
 const Navbar = ({ onUploadClick }) => {
@@ -35,7 +20,7 @@ const Navbar = ({ onUploadClick }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userSession = useUserSession();
-  const isMobile = useWindowSize();
+  const [isOpen, setIsOpen] = useState(false);
   const handleLogout = () => {
     sessionStorage.removeItem("userSession");
     sessionStorage.removeItem("jwtToken");
@@ -85,80 +70,68 @@ const Navbar = ({ onUploadClick }) => {
   };
 
   return (
-    <div className="container-fluid fixed-top">
-      <div className="container px-0">
-        <nav className="navbar navbar-light bg-white navbar-expand-xl">
-          <Link to="/" className="navbar-brand">
-            <h1 className="text-primary display-6">E Learning</h1>
-          </Link>
-          <div className="navbar-nav align-items-center">
-            <Link to="/" className="nav-item nav-link active">
-              Trang chủ
-            </Link>
-            <div className="nav-item nav-link">
-              <DropdownMenu />
-            </div>
-            <div className="nav-item nav-link">
-              <form onSubmit={handleSearchSubmit}>
-                <input
-                  type="text"
-                  placeholder="Tìm kiếm..."
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-                <button
-                  className="btn-search btn border border-secondary btn-md-square rounded-circle bg-white"
-                  type="submit"
-                >
-                  <FaSearch className="fas fa-search text-primary" />
-                </button>
-              </form>
-            </div>
+    <div className="nav__container">
+      <div className="nav__title">
+        <h1>Elearning</h1>
+        <div className="hamburger" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <FaBars /> :<FaTimes />}
+        </div>
+      </div>
+
+      <div className={`nav__list ${isOpen ? "nav__list--open" : ""}`}>
+        <div className="nav__list--item">
+          <div className="nav__item nav__home">
+            <Link to="/">Trang chủ</Link>
           </div>
-          <button
-            className="navbar-toggler py-2 px-3"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarCollapse"
-          >
-            <span className="fa fa-bars text-primary"></span>
-          </button>
-          <div
-            className="collapse navbar-collapse bg-white"
-            id="navbarCollapse"
-          >
-            <div className="navbar-nav ms-auto">
-              <Link
-                to="#"
-                className="nav-item nav-link"
-                onClick={() => {
-                  handleUploadClick();
-                }}
+          <div className="nav__item nav__menu">
+            <DropdownMenu />
+          </div>
+          <div className="nav__item nav__search">
+            <form onSubmit={handleSearchSubmit}>
+              <input
+                type="text"
+                placeholder="Tìm kiếm..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                style={{ border: "none" }}
+              />
+              <button
+                className="btn-search btn border border-secondary btn-md-square rounded-circle bg-white"
+                type="submit"
               >
-                Tải lên
-              </Link>
-            </div>
-            <div className="d-flex m-3 me-0">
-              {userSession ? (
-                <Link
-                  to="/users/profile/accountsettings"
-                  className="nav-item nav-link"
-                >
-                  <span className="nav-link">
-                    Chào, {userSession.tendangnhap}
-                  </span>
-                </Link>
-              ) : (
-                <Link to="/users/login" className="nav-links-mobile">
-                  Đăng nhập
-                </Link>
-              )}
-              {!isMobile && userSession && (
-                <Button onClick={handleLogout}>Đăng xuất</Button>
-              )}
-            </div>
+                <FaSearch className="fas fa-search text-primary" />
+              </button>
+            </form>
           </div>
-        </nav>
+        </div>
+        <div className="nav__list--item">
+          {userSession ? (
+            <>
+              <div className="nav__item nav__action--item">
+                <Link
+                  to="#"
+                  onClick={() => {
+                    handleUploadClick();
+                  }}
+                >
+                  Tải lên
+                </Link>
+              </div>
+              <div className="nav__item nav__action--item">
+                <Link to="/users/profile/accountsettings">
+                  <span>Chào, {userSession.tendangnhap}</span>
+                </Link>
+              </div>
+              <div>
+                <button onClick={handleLogout}>Đăng xuất</button>
+              </div>
+            </>
+          ) : (
+            <div className="nav__item nav__action--item">
+              <Link to="/users/login">Đăng nhập</Link>
+            </div>
+          )}
+        </div>
       </div>
 
       <Modal

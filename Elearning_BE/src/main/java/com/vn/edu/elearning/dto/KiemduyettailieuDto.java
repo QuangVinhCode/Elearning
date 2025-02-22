@@ -15,9 +15,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class KiemduyettailieuDto implements Serializable {
-    Long matailieu;
+    String matailieu;
     String tentailieu;
-    Long mataikhoan;
+    String mataikhoan;
     String tendangnhap;
     String trangthai;;
     String thoigiandangtai;

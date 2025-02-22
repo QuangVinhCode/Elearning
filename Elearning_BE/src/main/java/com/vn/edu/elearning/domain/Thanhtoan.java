@@ -16,9 +16,8 @@ import java.time.LocalDateTime;
 @Table(name = "thanhtoan")
 public class Thanhtoan {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mathanhtoan", nullable = false)
-    private Long mathanhtoan;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String mathanhtoan;
 
     @ManyToOne
     @JoinColumn(name = "mataikhoan", nullable = false)
@@ -28,9 +27,7 @@ public class Thanhtoan {
     @JoinColumn(name = "matailieu", nullable = false)
     private Tailieu tailieu;
 
-    @Column(name = "thoigianthanhtoan",length = 50,nullable = false)
     private String thoigianthanhtoan;
 
-    @Column(length = 20, nullable = false)
     private String trangthai;
 }

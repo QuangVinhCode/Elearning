@@ -1,10 +1,20 @@
 import axios from "axios";
-import {  API_PAYMENT } from "./constant";
+import { API_PAYMENT } from "./constant";
 
 export default class PayService {
-  static checkDocumentView = async (matk, matl) => {
+  getToken = () => {
+    const jwtToken = sessionStorage.getItem("jwtToken");
+    const sessionToken = jwtToken ? JSON.parse(jwtToken) : null;
+    return sessionToken.token;
+  };
+  checkDocumentView = async (matk, matl) => {
     try {
-      const response = await axios.get(API_PAYMENT + "/check/" + matk + "/" + matl);
+      const response = await axios.get(
+        API_PAYMENT + "/check/" + matk + "/" + matl,
+        {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        }
+      );
       return response.data; // Assuming your API returns the necessary data directly
     } catch (error) {
       console.error("Error checking document view:", error);
@@ -12,7 +22,9 @@ export default class PayService {
     }
   };
   payDocument = async (matk, matl) => {
-    return await axios.post(API_PAYMENT + "/pay/" + matk + "/" + matl);
+    return await axios.post(API_PAYMENT + "/pay/" + matk + "/" + matl, {
+      headers: { Authorization: `Bearer ${this.getToken()}` },
+    });
   };
   getVnPay = async (amount, bankCode, account) => {
     const params = {

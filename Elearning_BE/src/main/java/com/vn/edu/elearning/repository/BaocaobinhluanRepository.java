@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, Mabaocaobinhluan> {
 
-    List<Baocaobinhluan> findByTaikhoan_Mataikhoan(Long mataikhoan);
+    List<Baocaobinhluan> findByTaikhoan_Mataikhoan(String mataikhoan);
 
 
     @Query("SELECT new com.vn.edu.elearning.dto.ThongtinbaocaobinhluanDto(COUNT(b), bl.noidung, tk.tendangnhap,bl.mabinhluan) " +
@@ -33,11 +33,11 @@ public interface BaocaobinhluanRepository extends JpaRepository<Baocaobinhluan, 
             "ORDER BY COUNT(b) DESC")
     List<TheodoibaocaoDto> findReportMonitor();
 
-    Baocaobinhluan findByTaikhoan_MataikhoanAndBinhluan_Mabinhluan(Long mataikhoan, Long mabinhluan);
+    Baocaobinhluan findByTaikhoan_MataikhoanAndBinhluan_Mabinhluan(String mataikhoan, String mabinhluan);
 
-    List<Baocaobinhluan> findByBinhluan_Mabinhluan(Long mabinhluan);
+    List<Baocaobinhluan> findByBinhluan_Mabinhluan(String mabinhluan);
 
-    List<Baocaobinhluan> findByBinhluan_Taikhoan_Mataikhoan(Long mataikhoan);
+    List<Baocaobinhluan> findByBinhluan_Taikhoan_Mataikhoan(String mataikhoan);
 
 
 

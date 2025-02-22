@@ -26,7 +26,7 @@ public class ThanhtoanController {
     private final PaymentService paymentService;
 
     private Long amount;
-    private Long account;
+    private String account;
 
     @Autowired
     TailieuService tailieuService;
@@ -44,7 +44,7 @@ public class ThanhtoanController {
     DangtaiService dangtaiService;
 
     @GetMapping("/check/{tk}/{tl}")
-    public ResponseEntity<?> checkDocumentViewingPermissions(@PathVariable("tk") Long tk, @PathVariable("tl") Long tl) {
+    public ResponseEntity<?> checkDocumentViewingPermissions(@PathVariable("tk") String tk, @PathVariable("tl") String tl) {
         String check = "Chưa thanh toán";
         boolean checkSalesAccount = dangtaiService.checkDangtai(tk,tl);
         boolean checkBuyAccount = thanhtoanService.checkThanhtoan(tk,tl);
@@ -64,19 +64,17 @@ public class ThanhtoanController {
         return new ResponseEntity<>(check, HttpStatus.OK);
     }
     @PostMapping("/pay/{tk}/{tl}")
-    public ResponseEntity<?> payDocument(@PathVariable("tk") Long tk,@PathVariable("tl") Long tl) {
+    public ResponseEntity<?> payDocument(@PathVariable("tk") String tk,@PathVariable("tl") String tl) {
         ThanhtoanDto dto = new ThanhtoanDto();
         dto.setMataikhoan(tk);
         dto.setMatailieu(tl);
-        System.out.println("User getMataikhoan: " + dto.getMataikhoan());
-        System.out.println("User getMatailieu: " + dto.getMatailieu());
         Thanhtoan thanhtoan = thanhtoanService.save(dto);
         return new ResponseEntity<>(thanhtoan, HttpStatus.OK);
     }
     @GetMapping("/vn-pay")
     public ResponseObject<PaymentDTO.VNPayResponse> pay(HttpServletRequest request) {
         amount = Long.parseLong(request.getParameter("amount"));
-        account = Long.parseLong(request.getParameter("account"));
+        account = request.getParameter("account");
 
         return new ResponseObject<>(HttpStatus.OK, "Success", paymentService.createVnPayPayment(request));
     }

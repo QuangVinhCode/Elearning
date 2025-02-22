@@ -1,7 +1,9 @@
 package com.vn.edu.elearning.config;
 
+import ch.qos.logback.core.status.StatusUtil;
 import com.vn.edu.elearning.domain.Taikhoan;
 import com.vn.edu.elearning.repository.TaikhoanRepository;
+import com.vn.edu.elearning.util.Status;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,15 +27,11 @@ public class DataLoaderRunner {
             // Create admin account if no accounts exist
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             Taikhoan adminAccount = new Taikhoan();
-            adminAccount.setMataikhoan(111111111111111L);
             adminAccount.setTendangnhap("admin");
             adminAccount.setMatkhau(passwordEncoder.encode("1234"));
             adminAccount.setSodienthoai("0123456789");
             adminAccount.setGmail("admin@gmail.com");
-            adminAccount.setQuyenhan("Quản trị viên");
-            adminAccount.setSodu(0L);
-            adminAccount.setTrangthaidangtai("Bình thường");
-            adminAccount.setTrangthaibinhluan("Bình thường");
+            adminAccount.setQuyenhan(Status.ADMIN.getValue());
 
             taikhoanRepository.save(adminAccount);
         }

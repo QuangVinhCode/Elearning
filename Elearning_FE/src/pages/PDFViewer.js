@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { pdfjs, Document, Page } from "react-pdf/dist/esm/entry.webpack";
+import { pdfjs, Document, Page } from "react-pdf";
 import axios from "axios";
 import "./PDFViewer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 
-// Cấu hình workerSrc cho pdfjs
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
 const PDFViewer = ({ filename, token, pageNumber, onLoadSuccess }) => {
   const [pdfUrl, setPdfUrl] = useState(null);

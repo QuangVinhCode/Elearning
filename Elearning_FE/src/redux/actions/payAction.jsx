@@ -2,7 +2,6 @@ import PayService from "../../services/payService";
 import {
   COMMON_ERROR_SET,
   COMMON_LOADING_SET,
-  COMMON_MESSAGE_SET,
   DOCUMENTS_SET,
 } from "./actionTypes";
 

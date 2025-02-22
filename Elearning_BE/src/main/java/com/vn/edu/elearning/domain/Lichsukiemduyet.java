@@ -1,5 +1,6 @@
 package com.vn.edu.elearning.domain;
 
+import com.vn.edu.elearning.util.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,17 +17,13 @@ import java.time.LocalDateTime;
 @Table(name = "lichsukiemduyet")
 public class Lichsukiemduyet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "malichsukiemduyet", nullable = false)
-    private Long malichsukiemduyet;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String malichsukiemduyet;
 
-    @Column(name = "ketqua",length = 50, nullable = false)
-    private String ketqua;
+    private String ketqua = Status.CKD.getValue();
 
-    @Column(name = "lydo",length = 150 )
     private String lydo;
 
-    @Column(name = "thoigiankiemduyet",length = 50,nullable = false)
     private String thoigiankiemduyet;
 
     @ManyToOne

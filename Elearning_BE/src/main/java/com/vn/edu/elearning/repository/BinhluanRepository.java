@@ -11,12 +11,12 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface BinhluanRepository extends JpaRepository<Binhluan, Long> {
+public interface BinhluanRepository extends JpaRepository<Binhluan, String> {
     @Query("SELECT new com.vn.edu.elearning.dto.BinhluanTheoTailieuDto(b.mabinhluan, b.taikhoan.mataikhoan, b.taikhoan.tendangnhap, b.noidung, b.trangthai, b.matbinhluandatraloi, b.thoigianbinhluan) " +
             "FROM Binhluan b " +
             "WHERE b.tailieu.matailieu = :matailieu " +
             "AND b.trangthai = 'Thành công'")
-    List<BinhluanTheoTailieuDto> findBinhluansByMatailieu(@Param("matailieu") Long matailieu);
+    List<BinhluanTheoTailieuDto> findBinhluansByMatailieu(@Param("matailieu") String matailieu);
 
     @Query("SELECT new com.vn.edu.elearning.dto.ThongtinbinhluanDto(" +
             "b.mabinhluan, b.taikhoan.mataikhoan," +
@@ -27,17 +27,17 @@ public interface BinhluanRepository extends JpaRepository<Binhluan, Long> {
             "ORDER BY b.mabinhluan DESC ")
     List<ThongtinbinhluanDto> findBinhluans();
 
-    List<Binhluan> findByTaikhoan_Mataikhoan(Long mataikhoan);
+    List<Binhluan> findByTaikhoan_Mataikhoan(String mataikhoan);
 
     @Transactional
     @Modifying
     @Query("UPDATE Binhluan b SET b.trangthai = :status WHERE b.mabinhluan = :mabinhluan")
-    int updateCommentStatus(Long mabinhluan, String status);
+    int updateCommentStatus(String mabinhluan, String status);
 
     @Transactional
     @Modifying
     @Query("UPDATE Binhluan b SET b.trangthai = :status WHERE b.matbinhluandatraloi = :mabinhluan AND b.trangthai = :parentStatus")
-    int updateRepliesStatus(Long mabinhluan, String status, String parentStatus);
+    int updateRepliesStatus(String mabinhluan, String status, String parentStatus);
 
-    List<Binhluan> findByMatbinhluandatraloi(Long matbinhluandatraloi);
+    List<Binhluan> findByMatbinhluandatraloi(String matbinhluandatraloi);
 }

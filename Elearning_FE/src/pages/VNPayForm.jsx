@@ -23,9 +23,8 @@ const VNPayForm = ({ getVnPay }) => {
     return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const parseCurrency = (value) => {
-    return value.replace(/\đ\s?|(\,*)/g, "");
-  };
+  const parseCurrency = (value) => value.replace(/đ\s?|,*/g, "");
+
   return (
     <div className="container-vnpay">
       <div className="vnpayform">

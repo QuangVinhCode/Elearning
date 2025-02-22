@@ -244,7 +244,7 @@ class DocumentForm extends Component {
             rules={[{ required: true, message: "Yêu cầu nhập giá tiền" }]}
           >
             <InputNumber
-              style={{ width: "100%" }}
+              style={{ width: "100%",border:'none',boxShadow: 'none' }}
               min={0}
               step={1000}
               formatter={this.formatCurrency}
@@ -280,7 +280,7 @@ class DocumentForm extends Component {
                   },
                 ]}
               >
-                <InputNumber min={10} max={90} step={10} />
+                <InputNumber style={{ border: 'none', boxShadow: 'none' }}  min={10} max={90} step={10} />
               </Form.Item>
               <Form.Item
                 label="Tỷ lệ phí quản trị viên (%)"
@@ -293,7 +293,7 @@ class DocumentForm extends Component {
                   },
                 ]}
               >
-                <InputNumber min={10} max={90} step={10}  />
+                <InputNumber style={{ border: 'none', boxShadow: 'none' }}  min={10} max={90} step={10}  />
               </Form.Item>
             </>
           ) : (
@@ -304,7 +304,7 @@ class DocumentForm extends Component {
                 initialValue={100}
                 hidden={true}
               >
-                <InputNumber />
+                <InputNumber style={{ border: 'none', boxShadow: 'none' }} />
               </Form.Item>
               <Form.Item
                 label="Tỷ lệ phí quản trị viên (%)"
@@ -312,7 +312,7 @@ class DocumentForm extends Component {
                 initialValue={0}
                 hidden={true}
               >
-                <InputNumber />
+                <InputNumber style={{ border: 'none', boxShadow: 'none' }} />
               </Form.Item>
             </>
           )}

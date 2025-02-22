@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface LichsukiemduyetRepository extends JpaRepository<Lichsukiemduyet, Long> {
-    List<Lichsukiemduyet> findByTailieu_Matailieu(Long matailieu);
+public interface LichsukiemduyetRepository extends JpaRepository<Lichsukiemduyet, String> {
+    List<Lichsukiemduyet> findByTailieu_Matailieu(String matailieu);
 
     long deleteByTailieu(Tailieu tailieu);
 

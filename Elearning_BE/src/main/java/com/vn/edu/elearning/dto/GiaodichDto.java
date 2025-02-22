@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 @Data
 public class GiaodichDto implements Serializable {
-    Long magiaodich;
+    String magiaodich;
     Long sotien;
     String lydo;
     String trangthai;

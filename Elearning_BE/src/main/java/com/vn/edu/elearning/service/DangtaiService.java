@@ -1,19 +1,14 @@
 package com.vn.edu.elearning.service;
 
 import com.vn.edu.elearning.domain.*;
-import com.vn.edu.elearning.dto.DanhmucDto;
-import com.vn.edu.elearning.exeception.DanhmucException;
-import com.vn.edu.elearning.exeception.TailieuException;
 import com.vn.edu.elearning.repository.DangtaiRepository;
-import com.vn.edu.elearning.repository.DanhmucRepository;
-import com.vn.edu.elearning.repository.TailieuRepository;
+import com.vn.edu.elearning.util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DangtaiService {
@@ -30,10 +25,9 @@ public class DangtaiService {
         entity.setTaikhoan(taikhoan);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
         entity.setThoigiantailen(LocalDateTime.now().format(formatter));
-        if(taikhoan.getQuyenhan().equals("Quản trị viên"))
+        if(taikhoan.getQuyenhan().equals(Status.ADMIN.getValue()))
         {
-            DateTimeFormatter Thoigianduocduyet = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
-            entity.setThoigianduocduyet(LocalDateTime.now().format(Thoigianduocduyet));
+            entity.setThoigianduocduyet(LocalDateTime.now().format(formatter));
         }
         return dangtaiRepository.save(entity);
     }
@@ -41,7 +35,7 @@ public class DangtaiService {
         return dangtaiRepository.findAll();
     }
 
-    public boolean checkDangtai(Long taikhoan, Long tailieu) {
+    public boolean checkDangtai(String taikhoan, String tailieu) {
         Dangtai dangtai = dangtaiRepository.findByTaikhoan_MataikhoanAndTailieu_Matailieu(taikhoan,tailieu);
         if (dangtai != null)
         {
@@ -50,7 +44,7 @@ public class DangtaiService {
         return  false;
     }
 
-    public void  deleteById(Long matl){
+    public void  deleteById(String matl){
         dangtaiRepository.deleteByMatailieu(matl);
     }
 }

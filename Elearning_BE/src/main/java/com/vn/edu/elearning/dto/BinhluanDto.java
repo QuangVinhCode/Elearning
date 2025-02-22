@@ -11,12 +11,12 @@ import java.io.Serializable;
  */
 @Data
 public class BinhluanDto implements Serializable {
-    Long mabinhluan;
-    Long mataikhoan;
-    Long matailieu;
+    String mabinhluan;
+    String mataikhoan;
+    String matailieu;
     @Size(min = 1, max = 50, message = "Nội dung bình luận chỉ 50 ký tự")
     String noidung;
     String trangthai;
-    Long matbinhluandatraloi;
+    String matbinhluandatraloi;
     String thoigianbinhluan;
 }

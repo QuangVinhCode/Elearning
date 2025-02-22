@@ -13,6 +13,6 @@ import java.io.Serializable;
 @Setter
 @Embeddable
 public class Madangtai implements Serializable {
-    private Long mataikhoan;
-    private Long matailieu;
+    private String mataikhoan;
+    private String matailieu;
 }

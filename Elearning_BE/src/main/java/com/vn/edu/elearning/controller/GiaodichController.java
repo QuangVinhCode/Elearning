@@ -20,11 +20,11 @@ public class GiaodichController {
     @Autowired
     GiaodichService giaodichService;
     @GetMapping("/account/{id}")
-    public  ResponseEntity<?> getTransactionsbyAccount(@PathVariable("id") Long id){
+    public  ResponseEntity<?> getTransactionsbyAccount(@PathVariable("id") String id){
         return new ResponseEntity<>(giaodichService.findAllByAccount(id),HttpStatus.OK);
     }
     @GetMapping("/revenue/{id}")
-    public  ResponseEntity<?> getRevenues(@PathVariable("id") Long id){
+    public  ResponseEntity<?> getRevenues(@PathVariable("id") String id){
         return new ResponseEntity<>(giaodichService.findAllTransactionByAccount(id),HttpStatus.OK);
     }
 

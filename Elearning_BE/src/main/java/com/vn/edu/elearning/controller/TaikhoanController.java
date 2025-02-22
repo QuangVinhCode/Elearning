@@ -30,7 +30,7 @@ public class TaikhoanController {
 
     private Taikhoan taikhoan;
 
-    private Long mataikhoan;
+    private String mataikhoan;
 
     @PostMapping()
     public ResponseEntity<?> register(@Validated @RequestBody TaikhoanDto dto, BindingResult result) {
@@ -114,7 +114,7 @@ public class TaikhoanController {
     }
 
     @GetMapping("/{id}/get")
-    public ResponseEntity<?> getAccountById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getAccountById(@PathVariable("id") String id) {
         Taikhoan account = taikhoanService.findById(id);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
@@ -129,32 +129,32 @@ public class TaikhoanController {
     public ResponseEntity<?> loginAccount(@PathVariable("username") String username,@PathVariable("password") String password) {
 
         Taikhoan loggedInAccount = taikhoanService.login(username,password);
-        String token = taikhoanService.generateToken(loggedInAccount.getTendangnhap());
+        String token = taikhoanService.generateToken(loggedInAccount.getMataikhoan());
         return new ResponseEntity<>(Map.of("taikhoan",loggedInAccount,"token",token), HttpStatus.OK);
     }
 
     @PatchMapping("/status-document/{id}/{status}")
-    public ResponseEntity<?> statusDocumentAccount(@PathVariable("id") Long id,@PathVariable("status") String status) {
+    public ResponseEntity<?> statusDocumentAccount(@PathVariable("id") String id,@PathVariable("status") String status) {
         taikhoanService.updateTrangThaiDangTai(id,status);
         Taikhoan taikhoan = taikhoanService.findById(id);
         return new ResponseEntity<>(taikhoan, HttpStatus.OK);
     }
 
     @PatchMapping("/status-comment/{id}/{status}")
-    public ResponseEntity<?> statusCommentAccount(@PathVariable("id") Long id,@PathVariable("status") String status) {
+    public ResponseEntity<?> statusCommentAccount(@PathVariable("id") String id,@PathVariable("status") String status) {
         taikhoanService.updateTrangThaiBinhLuan(id,status);
         Taikhoan taikhoan = taikhoanService.findById(id);
         return new ResponseEntity<>(taikhoan, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAccountById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteAccountById(@PathVariable String id) {
         taikhoanService.deleteById(id);
         return new ResponseEntity<>("Account with ID " + id + " has been deleted", HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateAccount(@PathVariable("id") Long id, @Validated @RequestBody TaikhoanDto dto, BindingResult result) throws MessagingException {
+    public ResponseEntity<?> updateAccount(@PathVariable("id") String id, @Validated @RequestBody TaikhoanDto dto, BindingResult result) throws MessagingException {
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(result);
         if (responseEntity != null) {
             return responseEntity;
@@ -208,7 +208,7 @@ public class TaikhoanController {
     }
 
     @PatchMapping("/change/{id}/{oldpassword}/{newpassword}")
-    public ResponseEntity<?> changePassword(@PathVariable("id") Long id,@PathVariable("oldpassword") String oldpassword,@PathVariable("newpassword") String newpassword) {
+    public ResponseEntity<?> changePassword(@PathVariable("id") String id,@PathVariable("oldpassword") String oldpassword,@PathVariable("newpassword") String newpassword) {
         taikhoanService.changedPassword(id,oldpassword,newpassword);
         return new ResponseEntity<>("Đổi mật khẩu thành công", HttpStatus.OK);
     }

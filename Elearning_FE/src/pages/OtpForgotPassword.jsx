@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Input, Button, Row, Col, Typography, Space, Tag } from "antd";
-import "antd/dist/antd.css";
 import "./OtpVerification.css";
 import { forgotPasswordOpt } from "../redux/actions/accountAction";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ContentHeader from "../components/common/ContentHeader";
-
 const { Text } = Typography;
 
 const OtpVerification = ({ forgotPasswordOpt }) => {

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Pdf from "@mikecousins/react-pdf";
 import withRouter from "../../helpers/withRouter";
 import {
   getDocumentInfo,
@@ -8,7 +7,6 @@ import {
   clearDocumentState,
 } from "../../redux/actions/documentAction";
 import { PDFDocument, rgb } from "pdf-lib";
-
 import fontkit from "@pdf-lib/fontkit";
 import { getAccount } from "../../redux/actions/accountAction";
 import {
@@ -21,7 +19,6 @@ import DocumentService from "../../services/documentService";
 import PayService from "../../services/payService";
 import "./UserDocumentDetails.css";
 import { Comment, message, Modal, Form, Select, Button } from "antd";
-
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import CommentDocument from "./CommentDocument";
 import ListComment from "./ListComment";
@@ -51,6 +48,7 @@ class UserDocumentDetails extends Component {
       open: false,
     };
     this.intervalId = null;
+    this.payService = new PayService();
   }
 
   componentDidMount() {
@@ -75,7 +73,7 @@ class UserDocumentDetails extends Component {
         const tendangnhap = userSession ? userSession.tendangnhap : "";
         console.log("mataikhoan in loadDocument" + mataikhoan);
         this.props.getAccount(mataikhoan);
-        PayService.checkDocumentView(mataikhoan, id).then((status) => {
+        this.payService.checkDocumentView(mataikhoan, id).then((status) => {
           console.log(status);
           this.setState({
             status,
@@ -148,7 +146,7 @@ class UserDocumentDetails extends Component {
         const pages = pdfDoc.getPages();
         const firstPage = pages[0];
 
-        const { width, height } = firstPage.getSize();
+        const { height } = firstPage.getSize();
 
         // Add watermark to each page with the custom font
         pages.forEach((page) => {
@@ -395,7 +393,7 @@ class UserDocumentDetails extends Component {
       documentNotFound,
       pageNumber,
       numPages,
-      maxPages,
+
       goToPage,
       reset,
     } = this.state;

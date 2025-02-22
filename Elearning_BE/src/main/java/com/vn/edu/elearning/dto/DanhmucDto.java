@@ -10,6 +10,6 @@ import java.io.Serializable;
  */
 @Data
 public class DanhmucDto implements Serializable {
-    Long madanhmuc;
+    String madanhmuc;
     String tendanhmuc;
 }
