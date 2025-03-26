@@ -9,18 +9,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface ThanhtoanRepository extends JpaRepository<Thanhtoan, Long> {
+public interface ThanhtoanRepository extends JpaRepository<Thanhtoan, String> {
 
     @Transactional
     @Modifying
     @Query("update Thanhtoan t set t.trangthai = ?1 where t.mathanhtoan = ?2")
-    void updateTrangthaiByMathanhtoan(String trangthai, Long mathanhtoan);
+    void updateTrangthaiByMathanhtoan(String trangthai, String mathanhtoan);
 
-    Thanhtoan findByTaikhoan_MataikhoanAndTailieu_Matailieu(Long mataikhoan, Long matailieu);
+    Thanhtoan findByTaikhoan_MataikhoanAndTailieu_Matailieu(String mataikhoan, String matailieu);
 
-    Thanhtoan findByTaikhoan_MataikhoanAndTailieu_MatailieuAndTrangthai(Long mataikhoan, Long matailieu, String trangthai);
+    Thanhtoan findByTaikhoan_MataikhoanAndTailieu_MatailieuAndTrangthai(String mataikhoan, String matailieu, String trangthai);
 
-    List<Thanhtoan> findByTailieu_Matailieu(Long matailieu);
+    List<Thanhtoan> findByTailieu_Matailieu(String matailieu);
 
     @Query("SELECT new com.vn.edu.elearning.dto.ThongkethanhtoanDto(" +
             "tt.mathanhtoan, " +

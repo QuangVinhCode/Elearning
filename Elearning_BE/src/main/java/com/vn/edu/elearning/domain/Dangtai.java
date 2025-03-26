@@ -28,9 +28,7 @@ public class Dangtai {
     @JoinColumn(name = "matailieu")
     private Tailieu tailieu;
 
-    @Column(name = "thoigiantailen",length = 50,nullable = false)
     private String thoigiantailen;
 
-    @Column(name = "thoigianduocduyet",length = 50)
     private String thoigianduocduyet;
 }

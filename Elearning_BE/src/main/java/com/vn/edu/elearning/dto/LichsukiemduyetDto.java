@@ -10,9 +10,9 @@ import java.io.Serializable;
  */
 @Data
 public class LichsukiemduyetDto implements Serializable {
-    Long malichsukiemduyet;
+    String malichsukiemduyet;
     String ketqua;
     String lydo;
     String thoigiankiemduyet;
-    Long matailieu;
+    String matailieu;
 }

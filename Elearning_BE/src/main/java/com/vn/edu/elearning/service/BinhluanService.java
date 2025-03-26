@@ -49,11 +49,11 @@ public class BinhluanService {
         return binhluanRepository.findAll();
     }
 
-    public List<Binhluan> findAllByAccount(Long id) {
+    public List<Binhluan> findAllByAccount(String id) {
         return binhluanRepository.findByTaikhoan_Mataikhoan(id);
     }
 
-    public List<BinhluanTheoTailieuDto> findBinhluansByMatailieu(Long matl) {
+    public List<BinhluanTheoTailieuDto> findBinhluansByMatailieu(String matl) {
         return binhluanRepository.findBinhluansByMatailieu(matl);
     }
 
@@ -61,7 +61,7 @@ public class BinhluanService {
         return binhluanRepository.findBinhluans();
     }
 
-    public Binhluan findById(Long id) {
+    public Binhluan findById(String id) {
         Optional<Binhluan> found = binhluanRepository.findById(id);
 
         if (!found.isPresent())
@@ -73,13 +73,13 @@ public class BinhluanService {
 
 
 
-    public void  deleteById(Long id){
+    public void  deleteById(String id){
 
         Binhluan existed = findById(id);
         binhluanRepository.delete(existed);
     }
 
-    public void blockCommentAndReplies(Long mabinhluan) {
+    public void blockCommentAndReplies(String mabinhluan) {
         blockCommentAndRepliesRecursive(mabinhluan, "Chặn");
         // Attempt to update the main comment's status
 //        int updated = binhluanRepository.updateCommentStatus(mabinhluan, "Chặn");
@@ -91,7 +91,7 @@ public class BinhluanService {
 //        }
     }
 
-    private void blockCommentAndRepliesRecursive(Long mabinhluan, String status) {
+    private void blockCommentAndRepliesRecursive(String mabinhluan, String status) {
         // Cập nhật trạng thái của bình luận hiện tại
         int updated = binhluanRepository.updateCommentStatus(mabinhluan, status);
 

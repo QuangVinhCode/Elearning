@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 @Value
 public class TailieuthanhtoanAdminDto implements Serializable {
-    Long matailieu;
+    String matailieu;
     String tentailieu;
     Long giaban;
     String trangthai;

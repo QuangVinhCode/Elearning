@@ -46,25 +46,8 @@ public class TaikhoanService {
 
     private Map<String, OTPInfo> otpStorage = new HashMap<>();
     public Taikhoan register(TaikhoanDto dto) {
-
         Taikhoan entity = new Taikhoan();
         BeanUtils.copyProperties(dto,entity);
-        Random random = new Random();
-
-        // Tạo ID ngẫu nhiên trong khoảng từ 1 đến 9999
-        int randomId = random.nextInt(99) + 1;
-
-        // Lấy thời gian hiện tại
-        LocalDateTime currentTime = LocalDateTime.now();
-
-        // Định dạng thời gian với giờ, phút, giây
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-
-        // Ghép số ngẫu nhiên với thời gian hiện tại
-        String finalId = randomId + currentTime.format(formatter);
-        Long mataikhoan = Long.parseLong(finalId);
-        entity.setMataikhoan(mataikhoan);
-        // Mã hóa mật khẩu
         String password = encryptPassword(dto.getMatkhau());
         System.out.println("MK : " + password);
         entity.setMatkhau(password);
@@ -162,7 +145,7 @@ public class TaikhoanService {
     }
 
    @PostAuthorize("returnObject.tendangnhap == authentication.name")
-    public Taikhoan findById(Long id) {
+    public Taikhoan findById(String id) {
         Optional<Taikhoan> found = taikhoanRepository.findById(id);
 
         if (found.isEmpty())
@@ -182,7 +165,7 @@ public class TaikhoanService {
         return found.get();
     }
 
-    public Taikhoan findByPostedDocuments(Long id) {
+    public Taikhoan findByPostedDocuments(String id) {
         Taikhoan found = taikhoanRepository.findByDsdangtai_Tailieu_Matailieu(id);
         return found;
     }
@@ -213,17 +196,17 @@ public class TaikhoanService {
         return found.get();
     }
 
-    public void  deleteById(Long id){
+    public void  deleteById(String id){
         Taikhoan existed = findById(id);
 
         taikhoanRepository.delete(existed);
     }
 
-    public void  updateTrangThaiDangTai(Long id,String stautus){
+    public void  updateTrangThaiDangTai(String id,String stautus){
         taikhoanRepository.updateTrangThaiDangTai(id,stautus);
     }
 
-    public void  updateTrangThaiBinhLuan(Long id,String stautus){
+    public void  updateTrangThaiBinhLuan(String id,String stautus){
         taikhoanRepository.updateTrangThaiBinhlLuan(id,stautus);
     }
 
@@ -231,14 +214,14 @@ public class TaikhoanService {
         return taikhoanRepository.findAllWithoutAdmin();
     }
 
-    public Taikhoan update(Long id ,TaikhoanDto dto) {
+    public Taikhoan update(String id ,TaikhoanDto dto) {
         Taikhoan foundAccount = findById(id);
         foundAccount.setSodienthoai(dto.getSodienthoai());
         foundAccount.setGmail(dto.getGmail());
         return taikhoanRepository.save(foundAccount);
     }
 
-    public boolean checkGmail(Long id ,String gmail) {
+    public boolean checkGmail(String id ,String gmail) {
         Taikhoan foundAccount = findById(id);
         if (foundAccount.getGmail().equals(gmail))
             return true;
@@ -249,7 +232,7 @@ public class TaikhoanService {
         return false;
     }
 
-    public Taikhoan changedPassword(Long id ,String oldPassword,String newPassword) {
+    public Taikhoan changedPassword(String id ,String oldPassword,String newPassword) {
         Taikhoan foundAccount = findById(id);
         System.out.println("found Account Password : " + foundAccount.getMatkhau());
         boolean matches = matchesPassword(oldPassword,foundAccount.getMatkhau());
@@ -269,7 +252,7 @@ public class TaikhoanService {
         taikhoanRepository.save(taikhoan);
     }
 
-    public void  incrementSodu(Long id,Long amount){
+    public void  incrementSodu(String id,Long amount){
         taikhoanRepository.incrementSodu(id,amount);
     }
 
@@ -277,11 +260,11 @@ public class TaikhoanService {
         taikhoanRepository.incrementSoduForAdmin(amount);
     }
 
-    public void  updateSodu(Long id,Long amount){
+    public void  updateSodu(String id,Long amount){
         taikhoanRepository.updateSodu(id,amount);
     }
 
-    public String generateToken(Long id){
+    public String generateToken(String id){
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
 

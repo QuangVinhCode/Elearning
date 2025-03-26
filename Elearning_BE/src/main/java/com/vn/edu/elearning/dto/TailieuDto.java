@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @Data
 public class TailieuDto implements Serializable {
-    Long matailieu;
+    String matailieu;
     String tentailieu;
     String tacgia;
     String mota;
@@ -21,8 +21,8 @@ public class TailieuDto implements Serializable {
     Long tylephiquantri;
     Long tylethunhaptacgia;
     String trangthai;
-    Long madanhmuc;
-    Long mataikhoan;
+    String madanhmuc;
+    String mataikhoan;
     @JsonIgnore
     private MultipartFile pdfFile;
 }

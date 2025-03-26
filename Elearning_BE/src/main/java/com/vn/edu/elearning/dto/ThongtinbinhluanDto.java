@@ -9,12 +9,12 @@ import java.io.Serializable;
  */
 @Value
 public class ThongtinbinhluanDto implements Serializable {
-    Long mabinhluan;
-    Long mataikhoan;
+    String mabinhluan;
+    String mataikhoan;
     String tendangnhap;
     String noidung;
     String trangthai;
-    Long matbinhluandatraloi;
+    String matbinhluandatraloi;
     String thoigianbinhluan;
     String tentailieu;
 }

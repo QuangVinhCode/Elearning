@@ -35,7 +35,7 @@ public class DangtaiService {
         return dangtaiRepository.findAll();
     }
 
-    public boolean checkDangtai(Long taikhoan, Long tailieu) {
+    public boolean checkDangtai(String taikhoan, String tailieu) {
         Dangtai dangtai = dangtaiRepository.findByTaikhoan_MataikhoanAndTailieu_Matailieu(taikhoan,tailieu);
         if (dangtai != null)
         {
@@ -44,7 +44,7 @@ public class DangtaiService {
         return  false;
     }
 
-    public void  deleteById(Long matl){
+    public void  deleteById(String matl){
         dangtaiRepository.deleteByMatailieu(matl);
     }
 }

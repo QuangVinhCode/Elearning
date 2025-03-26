@@ -9,8 +9,8 @@ import java.io.Serializable;
  */
 @Value
 public class BaocaotailieuDto implements Serializable {
-    Long mataikhoan;
-    Long matailieu;
+    String mataikhoan;
+    String matailieu;
     String thoigianbaocao;
     String lydo;
     String trangthai;

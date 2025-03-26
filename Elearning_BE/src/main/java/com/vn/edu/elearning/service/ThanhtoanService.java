@@ -139,7 +139,7 @@ public class ThanhtoanService {
         return thanhtoanRepository.findThongkethanhtoanDto();
     }
 
-    public boolean checkThanhtoan(Long taikhoan, Long tailieu) {
+    public boolean checkThanhtoan(String taikhoan, String tailieu) {
         Thanhtoan thanhtoan = thanhtoanRepository.findByTaikhoan_MataikhoanAndTailieu_MatailieuAndTrangthai(taikhoan,tailieu,"Thành công");
         if (thanhtoan != null)
         {

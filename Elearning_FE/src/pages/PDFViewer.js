@@ -3,11 +3,9 @@ import { pdfjs, Document, Page } from "react-pdf";
 import axios from "axios";
 import "./PDFViewer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-import "react-pdf/dist/esm/Page/TextLayer.css";
 
-// Cấu hình workerSrc cho pdfjs
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 const PDFViewer = ({ filename, token, pageNumber, onLoadSuccess }) => {
   const [pdfUrl, setPdfUrl] = useState(null);
 
@@ -43,7 +41,6 @@ const PDFViewer = ({ filename, token, pageNumber, onLoadSuccess }) => {
       }
     };
   }, [filename, token]);
-
 
   return (
     <div className="pdf-viewer-container">

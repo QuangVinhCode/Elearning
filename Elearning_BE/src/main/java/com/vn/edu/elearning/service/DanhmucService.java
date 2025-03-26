@@ -24,7 +24,7 @@ public class DanhmucService {
         return danhmucRepository.save(danhmuc);
     }
 
-    public Danhmuc update(Long id, DanhmucDto entity) {
+    public Danhmuc update(String id, DanhmucDto entity) {
         Optional<Danhmuc> existed = danhmucRepository.findById(id);
         if(!existed.isPresent())
         {
@@ -45,7 +45,7 @@ public class DanhmucService {
         return danhmucRepository.findAll();
     }
 
-    public Danhmuc findById(Long id) {
+    public Danhmuc findById(String id) {
         Optional<Danhmuc> found = danhmucRepository.findById(id);
 
         if (!found.isPresent())
@@ -55,7 +55,7 @@ public class DanhmucService {
         return found.get();
     }
 
-    public void  deleteById(Long id){
+    public void  deleteById(String id){
         List<?> exitList = tailieuRepository.findByDanhmuc_Madanhmuc(id);
         if (!exitList.isEmpty())
         {

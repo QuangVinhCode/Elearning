@@ -16,12 +16,12 @@ public class GiaodichService {
         return giaodichRepository.save(entity);
     }
 
-    public List<Giaodich> findAllByAccount(Long id) {
+    public List<Giaodich> findAllByAccount(String id) {
         return giaodichRepository.findByTaikhoan_Mataikhoan(id);
 
     }
 
-    public List<LichsuthuchiDto> findAllTransactionByAccount(Long id) {
+    public List<LichsuthuchiDto> findAllTransactionByAccount(String id) {
         return giaodichRepository.findLichsuthuchiByTaikhoan(id);
 
     }

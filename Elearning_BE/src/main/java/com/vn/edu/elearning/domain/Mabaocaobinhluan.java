@@ -13,6 +13,6 @@ import java.io.Serializable;
 @Setter
 @Embeddable
 public class Mabaocaobinhluan implements Serializable {
-    private Long mataikhoan;
-    private Long mabinhluan;
+    private String mataikhoan;
+    private String mabinhluan;
 }

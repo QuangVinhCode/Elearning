@@ -46,7 +46,7 @@ public class BaocaobinhluanService {
         return baocaobinhluanRepository.findAll();
     }
 
-    public List<Baocaobinhluan> findReportsByComment(Long id) {
+    public List<Baocaobinhluan> findReportsByComment(String id) {
         return baocaobinhluanRepository.findByBinhluan_Mabinhluan(id);
     }
     public List<ThongtinbaocaobinhluanDto> findReportedCommentsInfo() {
@@ -56,7 +56,7 @@ public class BaocaobinhluanService {
     public List<TheodoibaocaoDto> findReportMonitor() {
         return baocaobinhluanRepository.findReportMonitor();
     }
-    public List<Baocaobinhluan> findReportsByAccount(Long matk) {
+    public List<Baocaobinhluan> findReportsByAccount(String matk) {
         return baocaobinhluanRepository.findByBinhluan_Taikhoan_Mataikhoan(matk);
     }
 

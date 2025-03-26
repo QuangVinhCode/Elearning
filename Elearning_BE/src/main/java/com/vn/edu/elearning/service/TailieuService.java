@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -37,6 +38,9 @@ public class TailieuService {
     private FileStorageService fileStorageService;
 
     @Autowired
+    CloudinaryService cloudinaryService;
+
+    @Autowired
     private DangtaiService dangtaiService;
 
     @Autowired
@@ -46,7 +50,7 @@ public class TailieuService {
     BaocaotailieuRepository baocaotailieuRepository;
 
    @PreAuthorize("#dto.mataikhoan == authentication.principal.claims['id']")
-    public Tailieu save(TailieuDto dto) {
+    public Tailieu save(TailieuDto dto) throws IOException {
         Tailieu entity = new Tailieu();
         BeanUtils.copyProperties(dto,entity);
         Danhmuc danhmuc = new Danhmuc();
@@ -68,8 +72,8 @@ public class TailieuService {
         System.out.println("entity Trạng thái :" + entity.getTrangthai());
         if (dto.getPdfFile() != null)
         {
-            String filename = fileStorageService.storePDFFile(dto.getPdfFile());
-
+             String filename= fileStorageService.storePDFFile(dto.getPdfFile());
+//          String filename = cloudinaryService.uploadFile(dto.getPdfFile());
             entity.setDiachiluutru(filename);
             dto.setPdfFile(null);
         }else
@@ -93,11 +97,11 @@ public class TailieuService {
     }
 
 
-    public List<?> findAllByCategory(Long madm) {
+    public List<?> findAllByCategory(String madm) {
         return tailieuRepository.findByDanhmuc_MadanhmucAndTrangthai(madm,Status.DKD.getValue());
     }
 
-    public List<?> findAllUploadByAccount(Long mtk) {
+    public List<?> findAllUploadByAccount(String mtk) {
         return tailieuRepository.findTailieudangtaiDtosByMataikhoan(mtk);
     }
 
@@ -105,7 +109,7 @@ public class TailieuService {
         return tailieuRepository.findTailieudangtaiAdminDto();
     }
 
-    public List<?> findAllPayByAccount(Long mtk) {
+    public List<?> findAllPayByAccount(String mtk) {
         return tailieuRepository.findTailieuthanhtoanByMataikhoan(mtk) ;
     }
 
@@ -121,7 +125,7 @@ public class TailieuService {
         return tailieuRepository.findLichsuthuchiAdmin() ;
     }
 
-    public List<?> findAllDocumentCollectionByAccount(Long mtk) {
+    public List<?> findAllDocumentCollectionByAccount(String mtk) {
         return tailieuRepository.findThunhaptailieuByMataikhoan(mtk) ;
     }
 
@@ -132,7 +136,7 @@ public class TailieuService {
     public List<Tailieu> getListDocumentByName(String name){
         return tailieuRepository.findByTentailieuContainingIgnoreCaseAndTrangthai(name,Status.DKD.getValue());
     }
-    public Tailieu findById(Long id) {
+    public Tailieu findById(String id) {
         Optional<Tailieu> found = tailieuRepository.findById(id);
 
         if (!found.isPresent())
@@ -142,7 +146,7 @@ public class TailieuService {
         return found.get();
     }
 
-    public ThongtintailieuDto findThongtintailieuById(Long id) {
+    public ThongtintailieuDto findThongtintailieuById(String id) {
         ThongtintailieuDto thongtintailieuDto = tailieuRepository.findTailieuTKDangtaiByMatailieu(id);
 
         if (thongtintailieuDto==null)
@@ -152,7 +156,7 @@ public class TailieuService {
         return thongtintailieuDto;
     }
     @Transactional
-    public void  deleteById(Long id){
+    public void  deleteById(String id){
         List<?> list = thanhtoanRepository.findByTailieu_Matailieu(id);
 
         List<?> listReport = baocaotailieuRepository.findByTailieu_Matailieu(id);
@@ -173,11 +177,11 @@ public class TailieuService {
         tailieuRepository.delete(existed);
     }
 
-    public void  updateTrangthai(String trangthai,Long matailieu){
+    public void  updateTrangthai(String trangthai,String matailieu){
         tailieuRepository.updateTrangthaiByMatailieu(trangthai,matailieu);
     }
     @PreAuthorize("#dto.mataikhoan == authentication.principal.claims['id']")
-    public Tailieu update(Long id ,TailieuDto dto) {
+    public Tailieu update(String id ,TailieuDto dto) throws IOException {
         Tailieu found = findById(id);
         List<?> list = thanhtoanRepository.findByTailieu_Matailieu(id);
         if (found==null)
@@ -225,8 +229,8 @@ public class TailieuService {
         {
             if (dto.getPdfFile() != null)
             {
-                String filename = fileStorageService.storePDFFile(dto.getPdfFile());
-
+                String filename =  fileStorageService.storePDFFile(dto.getPdfFile());
+//                String filename = cloudinaryService.uploadFile(dto.getPdfFile());
                 entity.setDiachiluutru(filename);
                 dto.setPdfFile(null);
             }else{

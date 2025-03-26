@@ -54,7 +54,7 @@ public class BaocaotailieuService {
         return baocaotailieuRepository.findAll();
     }
 
-    public List<Baocaotailieu> findReportsByDocument(Long id) {
+    public List<Baocaotailieu> findReportsByDocument(String id) {
         return baocaotailieuRepository.findByTailieu_Matailieu(id);
     }
 
@@ -65,7 +65,7 @@ public class BaocaotailieuService {
     public List<TheodoibaocaoDto> findReportMonitor() {
         return baocaotailieuRepository.findReportMonitor();
     }
-    public List<Baocaotailieu> findReportsByAccount(Long matk) {
+    public List<Baocaotailieu> findReportsByAccount(String matk) {
         Taikhoan taikhoan = taikhoanService.findById(matk);
         return baocaotailieuRepository.findByTailieu_Dsdangtai_Taikhoan(taikhoan);
     }

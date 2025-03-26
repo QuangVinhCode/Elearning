@@ -38,11 +38,11 @@ public class KiemduyetService {
         return lichsukiemduyetRepository.findAll();
     }
 
-    public List<Lichsukiemduyet> findAllByDocument(Long id) {
+    public List<Lichsukiemduyet> findAllByDocument(String id) {
         return lichsukiemduyetRepository.findByTailieu_Matailieu(id);
     }
 
-    public Lichsukiemduyet findById(Long id) {
+    public Lichsukiemduyet findById(String id) {
         Optional<Lichsukiemduyet> found = lichsukiemduyetRepository.findById(id);
 
         if (!found.isPresent())

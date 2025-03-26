@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 @Value
 public class ThongtintailieuDto implements Serializable {
-    Long matailieu;
+    String matailieu;
     String tentailieu;
     String tacgia;
     String mota;
@@ -19,6 +19,6 @@ public class ThongtintailieuDto implements Serializable {
     Long tylephiquantri;
     Long tylethunhaptacgia;
     String trangthai;
-    Long mataikhoandangtai;
+    String mataikhoandangtai;
     String tentaikhoandangtai;
 }

@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
+public interface TailieuRepository extends JpaRepository<Tailieu, String> {
 
-    List<Tailieu> findByDanhmuc_Madanhmuc(Long madanhmuc);
+    List<Tailieu> findByDanhmuc_Madanhmuc(String madanhmuc);
 
     @Query(value = "SELECT tl.* FROM tailieu tl JOIN thanhtoan tt ON tl.matailieu = tt.matailieu GROUP BY tl.matailieu ORDER BY COUNT(tl.matailieu) DESC LIMIT 5", nativeQuery = true)
     List<Tailieu> findTop5TailieuByThanhtoanNhieuNhat();
@@ -23,9 +23,9 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
     @Transactional
     @Modifying
     @Query("update Tailieu t set t.trangthai = ?1 where t.matailieu = ?2")
-    void updateTrangthaiByMatailieu(String trangthai, Long matailieu);
+    void updateTrangthaiByMatailieu(String trangthai, String matailieu);
 
-    List<Tailieu> findByDanhmuc_MadanhmucAndTrangthai(Long madanhmuc, String trangthai);
+    List<Tailieu> findByDanhmuc_MadanhmucAndTrangthai(String madanhmuc, String trangthai);
 
     @Query("SELECT new com.vn.edu.elearning.dto.KiemduyettailieuDto(t.matailieu, t.tentailieu, tk.mataikhoan, tk.tendangnhap,t.trangthai,dt.thoigiantailen)" +
             "FROM Tailieu t JOIN t.dsdangtai dt JOIN dt.taikhoan tk ORDER BY t.matailieu DESC")
@@ -41,7 +41,7 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "JOIN dt.taikhoan tk " +
             "WHERE tk.mataikhoan = :mataikhoan " +
             "ORDER BY t.matailieu DESC ")
-    List<TailieudangtaiDto> findTailieudangtaiDtosByMataikhoan(@Param("mataikhoan") Long mataikhoan);
+    List<TailieudangtaiDto> findTailieudangtaiDtosByMataikhoan(@Param("mataikhoan") String mataikhoan);
 
     @Query("SELECT new com.vn.edu.elearning.dto.TailieudangtaiAdminDto(" +
             "t.matailieu, t.tentailieu, " +
@@ -59,7 +59,7 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "FROM Tailieu t " +
             "JOIN Thanhtoan tt ON t.matailieu = tt.tailieu.matailieu " +
             "WHERE tt.taikhoan.mataikhoan = :mataikhoan")
-    List<TailieuthanhtoanDto> findTailieuthanhtoanByMataikhoan(@Param("mataikhoan") Long mataikhoan);
+    List<TailieuthanhtoanDto> findTailieuthanhtoanByMataikhoan(@Param("mataikhoan") String mataikhoan);
 
     @Query("SELECT new com.vn.edu.elearning.dto.TailieuthanhtoanAdminDto(" +
             "t.matailieu, t.tentailieu,t.giaban,tt.trangthai,tt.taikhoan.tendangnhap, tt.thoigianthanhtoan) " +
@@ -80,7 +80,7 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "JOIN t.dsdangtai dt " +
             "WHERE dt.taikhoan.mataikhoan = :mataikhoan AND tt.trangthai='Thành công'" +
             "GROUP BY t.matailieu, t.tentailieu")
-    List<ThunhaptailieuDto> findThunhaptailieuByMataikhoan(@Param("mataikhoan") Long mataikhoan);
+    List<ThunhaptailieuDto> findThunhaptailieuByMataikhoan(@Param("mataikhoan") String mataikhoan);
 
     @Query("SELECT new com.vn.edu.elearning.dto.LichsuthuchiAdminDto(" +
             "SUM(CASE WHEN dt.taikhoan.quyenhan = 'Quản trị viên' THEN (t.giaban * t.tylethunhaptacgia) / 100 ELSE 0 END), " +
@@ -115,7 +115,7 @@ public interface TailieuRepository extends JpaRepository<Tailieu, Long> {
             "t.tylephiquantri,t.tylethunhaptacgia,"+
             "t.trangthai,dt.taikhoan.mataikhoan,dt.taikhoan.tendangnhap) "+
             " from Tailieu t join t.dsdangtai dt where t.matailieu = :matailieu")
-    ThongtintailieuDto findTailieuTKDangtaiByMatailieu(Long matailieu);
+    ThongtintailieuDto findTailieuTKDangtaiByMatailieu(String matailieu);
 
 
 }

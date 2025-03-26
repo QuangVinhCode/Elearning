@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 @Data
 public class TaikhoanDto implements Serializable {
-    Long mataikhoan;
+    String mataikhoan;
     String tendangnhap;
     Long sodu;
     String gmail;

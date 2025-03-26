@@ -84,7 +84,7 @@ public class KiemduyetController {
     }
 
     @GetMapping("/document/{id}")
-    public  ResponseEntity<?> getCensorshipByDocument(@PathVariable("id") Long id){
+    public  ResponseEntity<?> getCensorshipByDocument(@PathVariable("id") String id){
         return new ResponseEntity<>(kiemduyetService.findAllByDocument(id),HttpStatus.OK);
     }
     @GetMapping()
@@ -93,7 +93,7 @@ public class KiemduyetController {
     }
 
     @GetMapping("/{id}/get")
-    public  ResponseEntity<?> getCensorship(@PathVariable("id") Long id){
+    public  ResponseEntity<?> getCensorship(@PathVariable("id") String id){
         return new ResponseEntity<>(kiemduyetService.findById(id),HttpStatus.OK);
     }
 

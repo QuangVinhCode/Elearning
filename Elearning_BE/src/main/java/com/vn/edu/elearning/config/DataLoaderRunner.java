@@ -27,7 +27,6 @@ public class DataLoaderRunner {
             // Create admin account if no accounts exist
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             Taikhoan adminAccount = new Taikhoan();
-            adminAccount.setMataikhoan(111111111111111L);
             adminAccount.setTendangnhap("admin");
             adminAccount.setMatkhau(passwordEncoder.encode("1234"));
             adminAccount.setSodienthoai("0123456789");

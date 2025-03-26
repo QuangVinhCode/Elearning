@@ -17,11 +17,9 @@ import java.util.List;
 @Table(name = "danhmuc")
 public class Danhmuc {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "madanhmuc", nullable = false)
-    private Long madanhmuc;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String madanhmuc;
 
-    @Column(name = "tendanhmuc", nullable = false, length = 50)
     private String tendanhmuc;
 
     @OneToMany(mappedBy = "danhmuc")

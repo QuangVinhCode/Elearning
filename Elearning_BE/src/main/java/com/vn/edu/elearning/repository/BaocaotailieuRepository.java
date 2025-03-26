@@ -14,9 +14,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Long> {
+public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, String> {
 
-    List<Baocaotailieu> findByTaikhoan_Mataikhoan(Long mataikhoan);
+    List<Baocaotailieu> findByTaikhoan_Mataikhoan(String mataikhoan);
 
     @Query("SELECT new com.vn.edu.elearning.dto.ThongtinbaocaotailieuDto(" +
             "COUNT(b), " +
@@ -44,7 +44,7 @@ public interface BaocaotailieuRepository extends JpaRepository<Baocaotailieu, Lo
     Optional<Baocaotailieu> findLatestReportForDocument(@Param("taikhoan") Taikhoan taikhoan,
                                                         @Param("tailieu") Tailieu tailieu);
 
-    List<Baocaotailieu> findByTailieu_Matailieu(Long matailieu);
+    List<Baocaotailieu> findByTailieu_Matailieu(String matailieu);
 
     List<Baocaotailieu> findByTailieu_Dsdangtai_Taikhoan(Taikhoan taikhoan);
 

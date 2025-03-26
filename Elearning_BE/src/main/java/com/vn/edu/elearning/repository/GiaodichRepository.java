@@ -9,9 +9,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface GiaodichRepository extends JpaRepository<Giaodich, Long> {
+public interface GiaodichRepository extends JpaRepository<Giaodich, String> {
 
-    List<Giaodich> findByTaikhoan_Mataikhoan(Long mataikhoan);
+    List<Giaodich> findByTaikhoan_Mataikhoan(String mataikhoan);
 
     @Query("SELECT new com.vn.edu.elearning.dto.LichsuthuchiDto(" +
             "SUM(CASE WHEN g.lydo LIKE 'Nạp tiền%' THEN g.sotien ELSE 0 END), " +
@@ -22,7 +22,7 @@ public interface GiaodichRepository extends JpaRepository<Giaodich, Long> {
             "FROM Giaodich g " +
             "WHERE g.taikhoan.mataikhoan = :mataikhoan AND g.trangthai='Thành công'" +
             "GROUP BY SUBSTRING(g.thoigiangiaodich, 7, 11)")
-    List<LichsuthuchiDto> findLichsuthuchiByTaikhoan(@Param("mataikhoan") Long mataikhoan);
+    List<LichsuthuchiDto> findLichsuthuchiByTaikhoan(@Param("mataikhoan") String mataikhoan);
 
     @Query("SELECT new com.vn.edu.elearning.dto.ThongtingiaodichDto(" +
             "g.magiaodich, " +

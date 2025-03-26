@@ -58,7 +58,7 @@ public class TailieuController {
             MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createDocument(@Validated @ModelAttribute TailieuDto dto, BindingResult result){
+    public ResponseEntity<?> createDocument(@Validated @ModelAttribute TailieuDto dto, BindingResult result) throws IOException {
         System.out.println(dto);
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(result);
         if (responseEntity != null) {
@@ -112,7 +112,7 @@ public class TailieuController {
             MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateDocument(
-            @PathVariable Long id,@Validated @ModelAttribute TailieuDto dto, BindingResult result){
+            @PathVariable String id,@Validated @ModelAttribute TailieuDto dto, BindingResult result) throws IOException {
 
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(result);
         if (responseEntity != null) {
@@ -138,7 +138,7 @@ public class TailieuController {
     }
 
     @GetMapping("/upload-account/{id}")
-    public ResponseEntity<?> getDocumentUploadByAccount(@PathVariable("id") Long id){
+    public ResponseEntity<?> getDocumentUploadByAccount(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findAllUploadByAccount(id),HttpStatus.OK);
     }
 
@@ -148,7 +148,7 @@ public class TailieuController {
     }
 
     @GetMapping("/pay-account/{id}")
-    public ResponseEntity<?> getDocumentPayByAccount(@PathVariable("id") Long id){
+    public ResponseEntity<?> getDocumentPayByAccount(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findAllPayByAccount(id),HttpStatus.OK);
     }
 
@@ -168,12 +168,12 @@ public class TailieuController {
     }
 
     @GetMapping("/collection-account/{id}")
-    public ResponseEntity<?> getDocumentCollectionByAccount(@PathVariable("id") Long id){
+    public ResponseEntity<?> getDocumentCollectionByAccount(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findAllDocumentCollectionByAccount(id),HttpStatus.OK);
     }
 
     @GetMapping("/category/{id}")
-    public ResponseEntity<?> getDocumentsByCategory(@PathVariable("id") Long id){
+    public ResponseEntity<?> getDocumentsByCategory(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findAllByCategory(id),HttpStatus.OK);
     }
 
@@ -188,16 +188,16 @@ public class TailieuController {
     }
 
     @GetMapping("/{id}/get")
-    public  ResponseEntity<?> getDocument(@PathVariable("id") Long id){
+    public  ResponseEntity<?> getDocument(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findById(id),HttpStatus.OK);
     }
 
     @GetMapping("/{id}/info")
-    public  ResponseEntity<?> getDocumentInfo(@PathVariable("id") Long id){
+    public  ResponseEntity<?> getDocumentInfo(@PathVariable("id") String id){
         return new ResponseEntity<>(tailieuService.findThongtintailieuById(id),HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteDocument(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteDocument(@PathVariable("id") String id) {
 
         tailieuService.deleteById(id);
 

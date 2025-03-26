@@ -39,7 +39,7 @@ public class DanhmucController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable("id") Long id, @RequestBody DanhmucDto dto){
+    public ResponseEntity<?> updateCategory(@PathVariable("id") String id, @RequestBody DanhmucDto dto){
         Danhmuc entity = new Danhmuc();
         BeanUtils.copyProperties(dto,entity);
 
@@ -56,12 +56,12 @@ public class DanhmucController {
     }
 
     @GetMapping("/{id}/get")
-    public  ResponseEntity<?> getCategory(@PathVariable("id") Long id){
+    public  ResponseEntity<?> getCategory(@PathVariable("id") String id){
         return new ResponseEntity<>(danhmucService.findById(id),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable("id") Long id)
+    public ResponseEntity<?> deleteCategory(@PathVariable("id") String id)
     {
         danhmucService.deleteById(id);
         return  new ResponseEntity<>("Danh mục có id " + id + " đã được xóa",HttpStatus.OK);
