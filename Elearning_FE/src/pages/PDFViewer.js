@@ -44,9 +44,9 @@ const PDFViewer = ({ filename, token, pageNumber, onLoadSuccess }) => {
 
   return (
     <div className="pdf-viewer-container">
-      {pdfUrl ? (
+      {filename ? (
         <div>
-          <Document file={pdfUrl} onLoadSuccess={onLoadSuccess}>
+          <Document file={filename} onLoadSuccess={onLoadSuccess}>
             <Page pageNumber={pageNumber} />
           </Document>
         </div>

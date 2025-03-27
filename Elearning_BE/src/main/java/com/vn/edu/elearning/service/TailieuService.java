@@ -72,8 +72,8 @@ public class TailieuService {
         System.out.println("entity Trạng thái :" + entity.getTrangthai());
         if (dto.getPdfFile() != null)
         {
-             String filename= fileStorageService.storePDFFile(dto.getPdfFile());
-//          String filename = cloudinaryService.uploadFile(dto.getPdfFile());
+//          String filename= fileStorageService.storePDFFile(dto.getPdfFile());
+            String filename = cloudinaryService.uploadFile(dto.getPdfFile());
             entity.setDiachiluutru(filename);
             dto.setPdfFile(null);
         }else
